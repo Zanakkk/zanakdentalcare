@@ -11,8 +11,8 @@
 
 const BASE_URL = 'https://api.apexrecord.my.id';
 
-  const CLINIC_ID       = 5;
-  const PRACTITIONER_ID = 2; // dokter aktif satu-satunya saat ini
+  const CLINIC_ID       = 2;
+  const PRACTITIONER_ID = 5; // dokter aktif satu-satunya saat ini
   const WA_NUMBER       = '089526697902'; // nomor WA resmi klinik (dikonfirmasi)
   const STATUS_URL      = 'antrian-status.html';
 
