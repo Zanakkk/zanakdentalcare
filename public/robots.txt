@@ -1,0 +1,8 @@
+# robots.txt — Zanak Dental Care
+# https://zanakdentalcare.web.app
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://zanakdentalcare.web.app/sitemap.xml

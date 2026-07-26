@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status Reservasi — Zanak Dental Care</title>
+  <meta name="robots" content="noindex">
+
+  <link rel="icon" type="image/webp" href="assets/images/logo.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:     #1E3A6E;
+      --blue-d:   #142850;
+      --blue-lt:  #D6E4F7;
+      --blue-md:  #A8C4E8;
+      --acc:      #3B5FA0;
+      --amber:    #F59E0B;
+      --amber-lt: #FEF3C7;
+      --sky:      #3B82F6;
+      --sky-lt:   #DBEAFE;
+      --red:      #EF4444;
+      --red-lt:   #FEE2E2;
+      --gray:     #64748B;
+      --gray-lt:  #F1F5F9;
+      --border:   #E2E8F0;
+      --text:     #0F172A;
+      --text-s:   #475569;
+      --white:    #fff;
+      --font:     'Poppins', sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: linear-gradient(135deg, #142850 0%, #1E3A6E 55%, #3B5FA0 100%);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--white);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.18);
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .card-head {
+      padding: 20px 24px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-head img { width: 36px; height: 36px; object-fit: contain; }
+    .card-head-text h1 { font-size: 14px; font-weight: 700; color: var(--text); }
+    .card-head-text p  { font-size: 11px; color: var(--text-s); margin-top: 1px; }
+
+    /* ── Body ── */
+    .card-body { padding: 24px; }
+
+    /* ── Loading ── */
+    .loading {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 14px; padding: 32px 0;
+    }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--blue-lt);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin .75s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading p { font-size: 13px; color: var(--text-s); }
+
+    /* ── Nama pasien ── */
+    .nama-wrap {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 4px;
+      margin-bottom: 16px; text-align: center;
+    }
+    .nama-label {
+      font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .8px;
+      color: var(--text-s);
+    }
+    .nama-pasien {
+      font-size: 24px; font-weight: 800;
+      color: var(--text); line-height: 1.2;
+    }
+
+    /* ── Status badge ── */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 16px; border-radius: 99px;
+      font-size: 13px; font-weight: 600;
+      margin: 0 auto 20px; width: fit-content;
+    }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .badge-pending   { background: var(--amber-lt); color: var(--amber); }
+    .badge-pending   .status-dot { background: var(--amber); animation: pulse 1.4s ease-in-out infinite; }
+    .badge-confirmed { background: var(--sky-lt);   color: var(--sky); }
+    .badge-confirmed .status-dot { background: var(--sky); }
+    .badge-completed { background: var(--blue-lt);  color: var(--blue-d); }
+    .badge-completed .status-dot { background: var(--blue-d); }
+    .badge-cancelled { background: var(--red-lt);   color: var(--red); }
+    .badge-cancelled .status-dot { background: var(--red); }
+    .badge-default   { background: var(--gray-lt);  color: var(--gray); }
+    .badge-default   .status-dot { background: var(--gray); }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* ── Status message box ── */
+    .status-msg {
+      display: flex; align-items: flex-start; gap: 10px;
+      border-radius: 12px; padding: 12px 14px;
+      margin-bottom: 20px; font-size: 12.5px; line-height: 1.5;
+    }
+    .status-msg i { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+    .status-msg--pending   { background: var(--amber-lt); color: #92400E; }
+    .status-msg--confirmed { background: var(--blue-lt);  color: var(--blue-d); }
+
+    /* ── Info grid ── */
+    .info-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-bottom: 20px;
+    }
+    .info-item {
+      background: var(--gray-lt); border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .info-item.full { grid-column: 1 / -1; }
+    .info-item label {
+      font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .6px;
+      color: var(--gray); display: block; margin-bottom: 3px;
+    }
+    .info-item span { font-size: 14px; font-weight: 600; color: var(--text); }
+
+    /* ── Done / Cancelled ── */
+    .done-box { text-align: center; padding: 12px 0 20px; }
+    .done-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin: 0 auto 12px;
+    }
+    .done-icon.blue { background: var(--blue-lt); color: var(--blue); }
+    .done-icon.red  { background: var(--red-lt);  color: var(--red); }
+    .done-box h3 { font-size: 16px; font-weight: 700; color: var(--text); }
+    .done-box p  { font-size: 13px; color: var(--text-s); margin-top: 4px; }
+
+    /* ── Error ── */
+    .error-box { text-align: center; padding: 24px 0; }
+    .error-box i   { font-size: 40px; color: var(--red); margin-bottom: 12px; display: block; }
+    .error-box h3  { font-size: 15px; font-weight: 700; color: var(--text); }
+    .error-box p   { font-size: 13px; color: var(--text-s); margin-top: 4px; }
+
+    /* ── Refresh info ── */
+    .refresh-info {
+      font-size: 11px; color: var(--text-s);
+      text-align: center; margin-top: 16px;
+    }
+    .refresh-info a { color: var(--blue); font-weight: 600; text-decoration: none; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center;
+      justify-content: center; gap: 8px;
+      padding: 12px 20px; border-radius: 10px;
+      font-family: var(--font); font-size: 13px;
+      font-weight: 600; text-decoration: none;
+      cursor: pointer; border: none;
+      transition: opacity .15s, transform .15s;
+      width: 100%;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover { background: var(--blue-d); }
+    .btn-wa      { background: #25D366; color: #fff; }
+    .btn-wa:hover { opacity: .9; }
+    .btn-outline {
+      background: transparent; color: var(--text-s);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-group { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+
+    /* ── Footer ── */
+    .card-foot {
+      padding: 14px 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .card-foot a {
+      font-size: 12px; color: var(--text-s); text-decoration: none;
+    }
+    .card-foot a:hover { color: var(--blue); }
+
+    /* ── Cek HP form ── */
+    .cek-form { display: flex; flex-direction: column; gap: 12px; }
+    .cek-form input {
+      padding: 12px 14px; border: 1.5px solid var(--border);
+      border-radius: 10px; font-family: var(--font); font-size: 14px;
+      outline: none; transition: border-color .15s;
+    }
+    .cek-form input:focus { border-color: var(--blue); }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <!-- Header -->
+  <div class="card-head">
+    <img src="assets/images/logo.webp" alt="Logo Zanak Dental Care"
+         onerror="this.style.display='none'">
+    <div class="card-head-text">
+      <h1>Zanak Dental Care</h1>
+      <p>Status Reservasi</p>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="card-body">
+
+    <!-- Loading -->
+    <div id="viewLoading" class="loading">
+      <div class="spinner"></div>
+      <p>Memuat status reservasi…</p>
+    </div>
+
+    <!-- Status utama -->
+    <div id="viewStatus" class="hidden">
+
+      <div class="nama-wrap">
+        <span class="nama-label">Reservasi Atas Nama</span>
+        <div class="nama-pasien" id="namaPasien">—</div>
+      </div>
+
+      <div style="display:flex;justify-content:center">
+        <div id="statusBadge" class="status-badge"></div>
+      </div>
+
+      <div id="statusMsgPending" class="status-msg status-msg--pending hidden">
+        <i class="fas fa-hourglass-half"></i>
+        <span>Reservasi Anda sedang menunggu konfirmasi dari klinik. Halaman ini akan otomatis diperbarui.</span>
+      </div>
+      <div id="statusMsgConfirmed" class="status-msg status-msg--confirmed hidden">
+        <i class="fas fa-check-circle"></i>
+        <span>Reservasi Anda sudah dikonfirmasi. Mohon datang 10 menit sebelum jadwal.</span>
+      </div>
+
+      <div id="doneBox" class="done-box hidden">
+        <div id="doneIcon" class="done-icon blue">
+          <i id="doneIconI" class="fas fa-check"></i>
+        </div>
+        <h3 id="doneTitle">—</h3>
+        <p id="doneSubtitle">—</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Tanggal</label>
+          <span id="infoTanggal">—</span>
+        </div>
+        <div class="info-item">
+          <label>Jam</label>
+          <span id="infoJam">—</span>
+        </div>
+        <div class="info-item">
+          <label>Dokter</label>
+          <span id="infoDokter">—</span>
+        </div>
+        <div class="info-item">
+          <label>Token</label>
+          <span id="infoToken" style="font-family:monospace;font-size:12px">—</span>
+        </div>
+        <div class="info-item full hidden" id="infoLayananWrap">
+          <label>Layanan</label>
+          <span id="infoLayanan">—</span>
+        </div>
+        <div class="info-item full hidden" id="infoKeluhanWrap">
+          <label>Keluhan</label>
+          <span id="infoKeluhan" style="font-size:13px;font-weight:500">—</span>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <a id="btnWA" href="#" class="btn btn-wa" target="_blank" rel="noopener">
+          <i class="fab fa-whatsapp"></i> Chat via WhatsApp
+        </a>
+        <a href="index.html" class="btn btn-outline">
+          <i class="fas fa-home"></i> Kembali ke Beranda
+        </a>
+      </div>
+
+      <p class="refresh-info" id="refreshInfo">
+        Auto-refresh tiap <span id="countdown">15</span> detik
+        &nbsp;·&nbsp;
+        <a href="#" onclick="fetchStatus();return false">Refresh sekarang</a>
+      </p>
+    </div>
+
+    <!-- Error -->
+    <div id="viewError" class="hidden">
+      <div class="error-box">
+        <i class="fas fa-exclamation-circle"></i>
+        <h3>Reservasi Tidak Ditemukan</h3>
+        <p>Token tidak valid atau reservasi tidak ada.</p>
+      </div>
+      <div class="btn-group">
+        <a href="index.html" class="btn btn-primary">
+          <i class="fas fa-home"></i> Kembali ke Beranda
+        </a>
+      </div>
+
+      <div style="margin-top:20px">
+        <p style="font-size:12px;color:var(--text-s);text-align:center;margin-bottom:10px">
+          Punya kode token reservasi? Masukkan di sini
+        </p>
+        <div class="cek-form">
+          <input type="text" id="inputToken" placeholder="Contoh: QTSREMSV" maxlength="20"
+                 style="text-transform:uppercase">
+          <button class="btn btn-primary" onclick="cekViaToken()">
+            <i class="fas fa-search"></i> Cek Reservasi
+          </button>
+        </div>
+        <p id="cekTokenResult"
+           style="font-size:12px;color:var(--text-s);margin-top:8px;text-align:center"></p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="card-foot">
+    <a href="https://wa.me/6289526697902" target="_blank" rel="noopener">
+      <i class="fab fa-whatsapp"></i> 089526697902 &nbsp;·&nbsp; Zanak Dental Care
+    </a>
+  </div>
+</div>
+
+<script>
+const BASE_URL  = 'https://api.apexrecord.my.id';
+const EP_STATUS = (tok) => `${BASE_URL}/public/reservations/status?token=${tok}`;
+const WA_NUMBER = '6289526697902';
+
+const PRACTITIONER_NAMES = { 2: 'drg. Muhammad Daffa Safra' };
+
+let token      = null;
+let countdownN = 15;
+let countdownTm = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  token = params.get('t') || params.get('token');
+  if (!token) { show('viewError'); return; }
+  fetchStatus();
+});
+
+async function fetchStatus() {
+  try {
+    const res  = await fetch(EP_STATUS(token), { signal: AbortSignal.timeout(10000) });
+    const data = await res.json();
+    if (!data.success || !data.data) { show('viewError'); return; }
+    renderStatus(data.data);
+    show('viewStatus');
+    resetCountdown();
+  } catch {
+    show('viewError');
+  }
+}
+
+function renderStatus(a) {
+  setText('namaPasien', a.patientName || '—');
+  setText('infoTanggal', formatTanggal(a.reservationDate));
+  setText('infoJam', formatJam(a.jamSlot));
+  setText('infoDokter', PRACTITIONER_NAMES[a.practitionerId] || 'Zanak Dental Care');
+  setText('infoToken', a.token || '—');
+
+  let saved = null;
+  try { saved = JSON.parse(sessionStorage.getItem('zdc_reservasi')); } catch {}
+  const isSame = saved && saved.token === a.token;
+  const layananWrap = document.getElementById('infoLayananWrap');
+  const keluhanWrap = document.getElementById('infoKeluhanWrap');
+  if (isSame && saved.layanan) { setText('infoLayanan', saved.layanan); layananWrap?.classList.remove('hidden'); }
+  else layananWrap?.classList.add('hidden');
+  if (isSame && saved.keluhan) { setText('infoKeluhan', saved.keluhan); keluhanWrap?.classList.remove('hidden'); }
+  else keluhanWrap?.classList.add('hidden');
+
+  const msg = encodeURIComponent(
+    `Halo Zanak, saya ingin menanyakan reservasi saya.\n` +
+    `Nama: ${a.patientName}\nTanggal: ${formatTanggal(a.reservationDate)}\n` +
+    `Jam: ${formatJam(a.jamSlot)}\nToken: ${a.token}`
+  );
+  const btnWA = document.getElementById('btnWA');
+  if (btnWA) btnWA.href = `https://wa.me/${WA_NUMBER}?text=${msg}`;
+
+  const badgeMap = {
+    pending:   ['badge-pending',   'Menunggu Konfirmasi'],
+    confirmed: ['badge-confirmed', 'Terkonfirmasi'],
+    completed: ['badge-completed', 'Selesai'],
+    cancelled: ['badge-cancelled', 'Dibatalkan'],
+    rejected:  ['badge-cancelled', 'Ditolak'],
+  };
+  const [cls, label] = badgeMap[a.status] ?? ['badge-default', a.status];
+  const badge = document.getElementById('statusBadge');
+  badge.className = `status-badge ${cls}`;
+  badge.innerHTML = `<span class="status-dot"></span>${label}`;
+
+  toggle('statusMsgPending',   a.status === 'pending');
+  toggle('statusMsgConfirmed', a.status === 'confirmed');
+
+  const isCompleted = a.status === 'completed';
+  const isCancelled = a.status === 'cancelled' || a.status === 'rejected';
+  const isFinal     = isCompleted || isCancelled;
+
+  toggle('doneBox', isFinal);
+  if (isFinal) {
+    const icon = document.getElementById('doneIcon');
+    const ico  = document.getElementById('doneIconI');
+    if (isCompleted) {
+      icon.className = 'done-icon blue'; ico.className = 'fas fa-check';
+      setText('doneTitle',    'Kunjungan Selesai');
+      setText('doneSubtitle', 'Terima kasih sudah berkunjung ke Zanak Dental Care 😊');
+    } else {
+      icon.className = 'done-icon red'; ico.className = 'fas fa-times';
+      setText('doneTitle',    a.status === 'rejected' ? 'Reservasi Ditolak' : 'Reservasi Dibatalkan');
+      setText('doneSubtitle', 'Hubungi kami via WhatsApp jika ada pertanyaan.');
+    }
+    clearInterval(countdownTm);
+    document.getElementById('refreshInfo')?.classList.add('hidden');
+    return;
+  }
+
+  document.getElementById('refreshInfo')?.classList.remove('hidden');
+  if (!countdownTm) startCountdown();
+}
+
+async function cekViaToken() {
+  const inputEl = document.getElementById('inputToken');
+  const resEl   = document.getElementById('cekTokenResult');
+  const tok     = inputEl?.value.trim().toUpperCase();
+
+  if (!tok) {
+    if (resEl) resEl.textContent = 'Masukkan token terlebih dahulu.';
+    return;
+  }
+
+  if (resEl) resEl.textContent = 'Memeriksa token…';
+
+  try {
+    const r = await fetch(EP_STATUS(tok), { signal: AbortSignal.timeout(10000) });
+    const data = await r.json();
+
+    if (!data.success || !data.data) {
+      if (resEl) resEl.textContent = 'Token tidak ditemukan. Periksa kembali penulisannya.';
+      return;
+    }
+
+    window.location.href = `?t=${tok}`;
+  } catch {
+    if (resEl) resEl.textContent = 'Gagal memeriksa token, coba lagi.';
+  }
+}
+
+function startCountdown() {
+  countdownTm = setInterval(() => {
+    countdownN--;
+    setText('countdown', countdownN);
+    if (countdownN <= 0) { countdownN = 15; fetchStatus(); }
+  }, 1000);
+}
+function resetCountdown() { countdownN = 15; setText('countdown', 15); }
+
+function formatTanggal(dateStr) {
+  if (!dateStr) return '—';
+  return new Date(dateStr.split('T')[0] + 'T00:00:00').toLocaleDateString('id-ID',
+    { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+}
+function formatJam(jamStr) {
+  if (!jamStr) return '—';
+  return jamStr.slice(0, 5);
+}
+
+function show(id) {
+  ['viewLoading','viewStatus','viewError'].forEach(v =>
+    document.getElementById(v)?.classList.toggle('hidden', v !== id));
+}
+function toggle(id, visible) {
+  document.getElementById(id)?.classList.toggle('hidden', !visible);
+}
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+</script>
+
+</body>
+</html>
