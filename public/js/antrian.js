@@ -11,8 +11,8 @@
 
 const BASE_URL = 'https://api.apexrecord.my.id';
 
-  const CLINIC_ID       = 2;
-  const PRACTITIONER_ID = 5; // dokter aktif satu-satunya saat ini
+  const CLINIC_ID       = 1;
+  const PRACTITIONER_ID = 1; // dokter aktif satu-satunya saat ini
   const WA_NUMBER       = '089526697902'; // nomor WA resmi klinik (dikonfirmasi)
   const STATUS_URL      = 'antrian-status.html';
 
@@ -235,10 +235,19 @@ const BASE_URL = 'https://api.apexrecord.my.id';
     }
   }
 
+  // Di antrian.js — fungsi getHoursForDate
   function getHoursForDate(dateStr) {
     if (!clinicHours) return undefined;
     const d = new Date(dateStr + 'T00:00:00');
-    const dayKey = DAY_KEY[d.getDay()];
+    
+    // getDay(): 0=Minggu, 1=Senin, ..., 6=Sabtu
+    // DAY_KEY: [senin, selasa, rabu, kamis, jumat, sabtu, minggu]
+    // ❌ d.getDay() langsung tidak cocok dengan index DAY_KEY
+    
+    const jsDay = d.getDay();
+    const idx = jsDay === 0 ? 6 : jsDay - 1; // ✅ konversi dulu
+    const dayKey = DAY_KEY[idx];
+    
     const raw = clinicHours[dayKey];
     if (!raw || raw.toLowerCase() === 'tutup') return null;
     const [open, close] = raw.split('-');
@@ -265,25 +274,38 @@ const BASE_URL = 'https://api.apexrecord.my.id';
     loadSlots(dateStr);
   }
 
-  async function loadSlots(dateStr) {
-    const grid  = document.getElementById('zdcSlotGrid');
-    const state = document.getElementById('zdcSlotState');
-    state?.classList.remove('zdc-hidden');
-    if (grid) grid.innerHTML = '';
+ async function loadSlots(dateStr) {
+  const grid  = document.getElementById('zdcSlotGrid');
+  const state = document.getElementById('zdcSlotState');
+  state?.classList.remove('zdc-hidden');
+  if (grid) grid.innerHTML = '';
 
-    try {
-      const res  = await fetch(EP.availableSlots(dateStr), { signal: AbortSignal.timeout(10000) });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message || 'Gagal memuat slot');
+  try {
+    const res  = await fetch(EP.availableSlots(dateStr), { signal: AbortSignal.timeout(10000) });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message || 'Gagal memuat slot');
 
-      state?.classList.add('zdc-hidden');
-      zdcRenderSlots(data.data || []);
-    } catch (err) {
-      console.error('[Slots]', err);
-      state?.classList.add('zdc-hidden');
-      if (grid) grid.innerHTML = '<p class="zdc-empty-slot">Gagal memuat jam. Coba pilih ulang tanggal.</p>';
+    state?.classList.add('zdc-hidden');
+
+    // ✅ Handle format baru: { isOpen, slots: ["10:00", ...] }
+    if (!data.data.isOpen) {
+      if (grid) grid.innerHTML = '<p class="zdc-empty-slot">Klinik tutup pada tanggal ini.</p>';
+      return;
     }
+
+    // ✅ Convert array string → array object yang diexpect zdcRenderSlots
+    // ✅ Convert array string → ambil hanya jam genap (xx:00)
+    const slots = (data.data.slots || [])
+      .filter(time => time.endsWith(':00'))  // ← tambah ini
+      .map(time => ({ time, available: true }));
+    zdcRenderSlots(slots);
+
+  } catch (err) {
+    console.error('[Slots]', err);
+    state?.classList.add('zdc-hidden');
+    if (grid) grid.innerHTML = '<p class="zdc-empty-slot">Gagal memuat jam. Coba pilih ulang tanggal.</p>';
   }
+}
 
   function zdcRenderSlots(slots) {
     const c = document.getElementById('zdcSlotGrid');
@@ -458,13 +480,10 @@ const BASE_URL = 'https://api.apexrecord.my.id';
     const endMin   = ch * 60 + cm;
 
     const opts = [];
-    for (let t = startMin; t + 30 <= endMin; t += 30) {
+    for (let t = startMin; t < endMin; t += 60) {  // ← 30 → 60
       const h1 = String(Math.floor(t / 60)).padStart(2, '0');
       const m1 = String(t % 60).padStart(2, '0');
-      const t2 = t + 30;
-      const h2 = String(Math.floor(t2 / 60)).padStart(2, '0');
-      const m2 = String(t2 % 60).padStart(2, '0');
-      opts.push(`<option>${h1}.${m1} – ${h2}.${m2}</option>`);
+      opts.push(`<option>${h1}:${m1}</option>`);    // ← format bersih tanpa range
     }
     return opts.join('');
   }

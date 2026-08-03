@@ -14,7 +14,7 @@ const WA_NUMBER = '6289526697902';
 
 
 const BASE_URL = 'https://api.apexrecord.my.id';
-const CLINIC_ID = 5;
+const CLINIC_ID = 1;
 const EP_CLINIC_INFO = `${BASE_URL}/public/clinic-info?clinicId=${CLINIC_ID}`;
 
 // NOTE INFRA: fetch ke IP mentah dengan HTTPS sering diblok browser
@@ -22,7 +22,8 @@ const EP_CLINIC_INFO = `${BASE_URL}/public/clinic-info?clinicId=${CLINIC_ID}`;
 // terus gagal, pindahkan backend ke domain asli dengan sertifikat
 // valid (Let's Encrypt) atau proxy lewat Firebase Hosting rewrite.
 // Sesudah
-const DAY_KEY = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+// ✅ BENAR — sesuai key dari API
+const DAY_KEY = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
 const DAY_ID  = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
 let clinicOperationalHours = null;
