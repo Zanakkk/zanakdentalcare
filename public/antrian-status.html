@@ -305,6 +305,9 @@
         <a id="btnWA" href="#" class="btn btn-wa" target="_blank" rel="noopener">
           <i class="fab fa-whatsapp"></i> Chat via WhatsApp
         </a>
+        <button id="btnCancel" class="btn btn-outline hidden" style="color:var(--red);border-color:var(--red-lt)" onclick="cancelReservation()">
+          <i class="fas fa-circle-xmark"></i> Batalkan Reservasi
+        </button>
         <a href="index.html" class="btn btn-outline">
           <i class="fas fa-home"></i> Kembali ke Beranda
         </a>
@@ -359,11 +362,15 @@
 <script>
 const BASE_URL  = 'https://api.apexrecord.my.id';
 const EP_STATUS = (tok) => `${BASE_URL}/public/reservations/status?token=${tok}`;
+const EP_CANCEL = `${BASE_URL}/public/reservations/cancel`;
 const WA_NUMBER = '6289526697902';
 
-const PRACTITIONER_NAMES = { 2: 'drg. Muhammad Daffa Safra' };
+// Fallback lama, dipakai hanya kalau backend belum mengirim practitionerName
+// (mis. saat rollout). Sumber kebenaran sekarang ada di respons API.
+const PRACTITIONER_NAMES_FALLBACK = { 2: 'drg. Muhammad Daffa Safra' };
 
 let token      = null;
+let lastStatus = null;
 let countdownN = 15;
 let countdownTm = null;
 
@@ -391,7 +398,7 @@ function renderStatus(a) {
   setText('namaPasien', a.patientName || '—');
   setText('infoTanggal', formatTanggal(a.reservationDate));
   setText('infoJam', formatJam(a.jamSlot));
-  setText('infoDokter', PRACTITIONER_NAMES[a.practitionerId] || 'Zanak Dental Care');
+  setText('infoDokter', a.practitionerName || PRACTITIONER_NAMES_FALLBACK[a.practitionerId] || 'Zanak Dental Care');
   setText('infoToken', a.token || '—');
 
   let saved = null;
@@ -427,9 +434,12 @@ function renderStatus(a) {
   toggle('statusMsgPending',   a.status === 'pending');
   toggle('statusMsgConfirmed', a.status === 'confirmed');
 
+  lastStatus = a.status;
   const isCompleted = a.status === 'completed';
   const isCancelled = a.status === 'cancelled' || a.status === 'rejected';
   const isFinal     = isCompleted || isCancelled;
+
+  toggle('btnCancel', !isFinal);
 
   toggle('doneBox', isFinal);
   if (isFinal) {
@@ -451,6 +461,36 @@ function renderStatus(a) {
 
   document.getElementById('refreshInfo')?.classList.remove('hidden');
   if (!countdownTm) startCountdown();
+}
+
+async function cancelReservation() {
+  if (!token) return;
+  const ok = window.confirm('Yakin ingin membatalkan reservasi ini? Tindakan ini tidak bisa dibatalkan.');
+  if (!ok) return;
+
+  const btn = document.getElementById('btnCancel');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Membatalkan…'; }
+
+  try {
+    const res  = await fetch(EP_CANCEL, {
+      method:  'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ token }),
+      signal:  AbortSignal.timeout(10000),
+    });
+    const data = await res.json().catch(() => null);
+
+    if (!res.ok || !data?.success) {
+      alert(data?.error?.message || data?.message || 'Gagal membatalkan reservasi. Coba lagi.');
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-circle-xmark"></i> Batalkan Reservasi'; }
+      return;
+    }
+
+    await fetchStatus();
+  } catch {
+    alert('Gagal terhubung ke server. Coba lagi.');
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-circle-xmark"></i> Batalkan Reservasi'; }
+  }
 }
 
 async function cekViaToken() {
@@ -482,12 +522,20 @@ async function cekViaToken() {
 
 function startCountdown() {
   countdownTm = setInterval(() => {
+    if (document.hidden) return; // hemat request selagi tab tidak aktif
     countdownN--;
     setText('countdown', countdownN);
     if (countdownN <= 0) { countdownN = 15; fetchStatus(); }
   }, 1000);
 }
 function resetCountdown() { countdownN = 15; setText('countdown', 15); }
+
+document.addEventListener('visibilitychange', () => {
+  // Begitu pengguna kembali ke tab ini, segarkan langsung supaya statusnya tidak basi.
+  if (!document.hidden && token && lastStatus && !['completed', 'cancelled', 'rejected'].includes(lastStatus)) {
+    fetchStatus();
+  }
+});
 
 function formatTanggal(dateStr) {
   if (!dateStr) return '—';

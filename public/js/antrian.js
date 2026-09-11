@@ -11,24 +11,25 @@
 
 const BASE_URL = 'https://api.apexrecord.my.id';
 
-  const CLINIC_ID       = 1;
-  const PRACTITIONER_ID = 1; // dokter aktif satu-satunya saat ini
-  const WA_NUMBER       = '089526697902'; // nomor WA resmi klinik (dikonfirmasi)
-  const STATUS_URL      = 'antrian-status.html';
+  const CLINIC_ID          = 1;
+  const FALLBACK_PRACTITIONER_ID = 1; // dipakai hanya jika API praktisi belum tersedia
+  const WA_NUMBER          = '089526697902'; // nomor WA resmi klinik (dikonfirmasi)
+  const STATUS_URL         = 'antrian-status.html';
 
   const EP = {
     clinicInfo:        `${BASE_URL}/public/clinic-info?clinicId=${CLINIC_ID}`,
-    availableSlots:    (date) => `${BASE_URL}/public/available-slots?clinicId=${CLINIC_ID}&date=${date}&practitionerId=${PRACTITIONER_ID}`,
+    availableSlots:    (date, practitionerId) => `${BASE_URL}/public/available-slots?clinicId=${CLINIC_ID}&date=${date}&practitionerId=${practitionerId}`,
     createReservation: `${BASE_URL}/public/reservations`,
   };
 
   const DAY_KEY = ['senin','selasa','rabu','kamis','jumat','sabtu','minggu'];
 
   // ── State
-  let selectedDate = null;
-  let selectedSlot = null;
-  let clinicHours  = null;
-  let isSubmitting = false;
+  let selectedDate    = null;
+  let selectedSlot    = null;
+  let clinicHours     = null;
+  let isSubmitting    = false;
+  let practitionerId  = FALLBACK_PRACTITIONER_ID; // diisi ulang dari /public/clinic-info bila tersedia
 
   async function initAntrian() {
     injectStyles();
@@ -81,7 +82,7 @@ const BASE_URL = 'https://api.apexrecord.my.id';
           <!-- ═══ TAB ONLINE ═══ -->
           <div id="zdcTabOnline" class="zdc-pane">
 
-            <div class="zdc-step">
+            <div class="zdc-step zdc-step--active" id="zdcStep1">
               <div class="zdc-step-label"><span class="zdc-step-num">1</span> Pilih Tanggal</div>
               <input type="date" id="zdcTanggalInput" class="zdc-date-input"
                      min="${today}" max="${maxStr}" onchange="zdcOnDateChange(this.value)">
@@ -220,6 +221,14 @@ const BASE_URL = 'https://api.apexrecord.my.id';
       if (!data.success) throw new Error(data.message || 'Gagal memuat info klinik');
 
       clinicHours = data.data.operationalHours;
+
+      // Ambil dokter aktif dari backend, bukan id yang di-hardcode di frontend —
+      // supaya kalau dokter berganti, tidak perlu ubah kode ini.
+      const practitioners = data.data.practitioners;
+      if (Array.isArray(practitioners) && practitioners.length > 0) {
+        practitionerId = practitioners[0].id;
+      }
+
       const todayKey   = DAY_KEY[new Date().getDay()];
       const todayHours = clinicHours?.[todayKey];
       const el = document.getElementById('zdcJamOperasional');
@@ -259,19 +268,36 @@ const BASE_URL = 'https://api.apexrecord.my.id';
     selectedSlot = null;
     zdcToggleDataStep(false);
     zdcUpdateSummary();
+    // Ganti tanggal berarti slot & data harus dipilih ulang dari awal.
+    document.getElementById('zdcStepData')?.classList.remove('zdc-step--active', 'zdc-step--done');
 
     const hours = getHoursForDate(dateStr);
     const warning = document.getElementById('zdcTanggalWarning');
     const stepSlot = document.getElementById('zdcStepSlot');
+    const step1 = document.getElementById('zdcStep1');
+    stepSlot?.classList.remove('zdc-step--done');
 
     if (hours === null) {
       warning?.classList.remove('zdc-hidden');
       stepSlot?.classList.add('zdc-hidden');
+      step1?.classList.remove('zdc-step--done');
+      step1?.classList.add('zdc-step--active');
       return;
     }
     warning?.classList.add('zdc-hidden');
     stepSlot?.classList.remove('zdc-hidden');
+    step1?.classList.replace('zdc-step--active', 'zdc-step--done');
+    stepSlot?.classList.add('zdc-step--active');
     loadSlots(dateStr);
+    zdcScrollToStep(stepSlot);
+  }
+
+  function zdcScrollToStep(el) {
+    if (!el) return;
+    // Beri waktu render sebelum scroll supaya posisinya akurat.
+    requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   }
 
  async function loadSlots(dateStr) {
@@ -281,7 +307,7 @@ const BASE_URL = 'https://api.apexrecord.my.id';
   if (grid) grid.innerHTML = '';
 
   try {
-    const res  = await fetch(EP.availableSlots(dateStr), { signal: AbortSignal.timeout(10000) });
+    const res  = await fetch(EP.availableSlots(dateStr, practitionerId), { signal: AbortSignal.timeout(10000) });
     const data = await res.json();
     if (!data.success) throw new Error(data.message || 'Gagal memuat slot');
 
@@ -331,6 +357,12 @@ const BASE_URL = 'https://api.apexrecord.my.id';
     );
     zdcToggleDataStep(true);
     zdcUpdateSummary();
+
+    const stepSlot = document.getElementById('zdcStepSlot');
+    const stepData = document.getElementById('zdcStepData');
+    stepSlot?.classList.replace('zdc-step--active', 'zdc-step--done');
+    stepData?.classList.add('zdc-step--active');
+    zdcScrollToStep(stepData);
   }
 
   function zdcToggleDataStep(show) {
@@ -378,16 +410,29 @@ const BASE_URL = 'https://api.apexrecord.my.id';
           clinicId:        CLINIC_ID,
           patientName:     nama,
           patientPhone:    hp,
-          practitionerId:  PRACTITIONER_ID,
+          practitionerId,
           serviceType:     'outpatient',
           reservationDate: selectedDate,
           jamSlot:         selectedSlot,
           notes,
         }),
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      if (!data.success) { zdcToast(data.message || 'Gagal membuat reservasi', 'error'); return; }
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok || !data?.success) {
+        const msg = data?.error?.message || data?.message
+          || (res.status === 409 ? 'Jam yang dipilih baru saja dipesan orang lain, silakan pilih jam lain.' : null)
+          || 'Gagal membuat reservasi. Coba lagi.';
+        zdcToast(msg, 'error');
+        // Jam yang barusan diambil orang lain — segarkan daftar slot & minta pilih ulang.
+        if (res.status === 409) {
+          selectedSlot = null;
+          zdcToggleDataStep(false);
+          zdcUpdateSummary();
+          loadSlots(selectedDate);
+        }
+        return;
+      }
 
       try {
         sessionStorage.setItem('zdc_reservasi', JSON.stringify({ ...data.data, layanan, keluhan }));
@@ -468,19 +513,29 @@ const BASE_URL = 'https://api.apexrecord.my.id';
       return;
     }
 
-    const options = zdcGenerateSlotOptions(hours.open, hours.close);
+    const isToday = dateStr === new Date().toISOString().split('T')[0];
+    const options = zdcGenerateSlotOptions(hours.open, hours.close, isToday);
+    if (!options) {
+      sel.innerHTML = '<option value="" selected>Jam operasional hari ini sudah lewat</option>';
+      sel.disabled = true;
+      return;
+    }
     sel.innerHTML = `<option value="" disabled selected>Pilih jam</option>${options}`;
     sel.disabled = false;
   }
 
-  function zdcGenerateSlotOptions(open, close) {
+  function zdcGenerateSlotOptions(open, close, isToday) {
     const [oh, om] = open.split(':').map(Number);
     const [ch, cm] = close.split(':').map(Number);
     const startMin = oh * 60 + om;
     const endMin   = ch * 60 + cm;
 
+    const now = new Date();
+    const nowMin = isToday ? now.getHours() * 60 + now.getMinutes() : -1;
+
     const opts = [];
     for (let t = startMin; t < endMin; t += 60) {  // ← 30 → 60
+      if (t <= nowMin) continue; // jangan tawarkan jam yang sudah lewat hari ini
       const h1 = String(Math.floor(t / 60)).padStart(2, '0');
       const m1 = String(t % 60).padStart(2, '0');
       opts.push(`<option>${h1}:${m1}</option>`);    // ← format bersih tanpa range
@@ -548,9 +603,14 @@ function injectStyles() {
       .zdc-tab--active { color:#1E3A6E; border-bottom-color:#1E3A6E; background:#fff; }
       .zdc-pane { padding:28px 32px; }
       @media (max-width:640px){ .zdc-pane{ padding:20px 16px; } }
-      .zdc-step { margin-bottom:24px; }
+      .zdc-step { margin-bottom:24px; padding-left:14px; border-left:3px solid #E2E8F0; transition:border-color .2s; }
+      .zdc-step--active { border-left-color:#1E3A6E; }
+      .zdc-step--done { border-left-color:#22C55E; }
       .zdc-step-label { display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700; color:#0F172A; margin-bottom:14px; }
-      .zdc-step-num { width:24px; height:24px; border-radius:50%; background:#1E3A6E; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+      .zdc-step-num { width:24px; height:24px; border-radius:50%; background:#94A3B8; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background-color .2s; }
+      .zdc-step--active .zdc-step-num { background:#1E3A6E; box-shadow:0 0 0 4px rgba(30,58,110,.14); }
+      .zdc-step--done .zdc-step-num { background:#22C55E; font-size:0; }
+      .zdc-step--done .zdc-step-num::before { content:'\\2713'; font-size:12px; }
       .zdc-date-input { width:100%; max-width:280px; padding:12px 14px; border-radius:10px; border:1.5px solid #E2E8F0; font-family:'Poppins',sans-serif; font-size:14px; color:#0F172A; outline:none; transition:border-color .15s; }
       .zdc-date-input:focus { border-color:#1E3A6E; }
       .zdc-warning { margin-top:10px; font-size:12px; color:#EF4444; display:flex; align-items:center; gap:6px; }
