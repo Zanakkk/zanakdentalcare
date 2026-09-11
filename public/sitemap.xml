@@ -5,69 +5,69 @@
   <!-- ══ HALAMAN UTAMA ══════════════════════════════════════ -->
   <url>
     <loc>https://zanakdentalcare.web.app/</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://zanakdentalcare.web.app/"/>
   </url>
 
-  <!-- ══ HALAMAN TINDAKAN ═══════════════════════════════════ -->
+  <!-- ══ HALAMAN LAYANAN (HUB) ══════════════════════════════ -->
   <url>
     <loc>https://zanakdentalcare.web.app/treatment</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="id" href="https://zanakdentalcare.web.app/treatment"/>
   </url>
 
-  <!-- ══ SECTION TINDAKAN (deep links) ═════════════════════ -->
+  <!-- ══ HALAMAN TINDAKAN — masing-masing URL sendiri ══════ -->
   <url>
-    <loc>https://zanakdentalcare.web.app/treatment#scaling</loc>
-    <lastmod>2026-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://zanakdentalcare.web.app/treatment#tambal</loc>
-    <lastmod>2026-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://zanakdentalcare.web.app/treatment#ekstraksi</loc>
-    <lastmod>2026-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://zanakdentalcare.web.app/treatment#psa</loc>
-    <lastmod>2026-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://zanakdentalcare.web.app/treatment#odontektomi</loc>
-    <lastmod>2026-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://zanakdentalcare.web.app/treatment#kawat</loc>
-    <lastmod>2026-05-25</lastmod>
+    <loc>https://zanakdentalcare.web.app/scaling-gigi-payakumbuh</loc>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://zanakdentalcare.web.app/treatment#gigi-tiruan</loc>
-    <lastmod>2026-05-25</lastmod>
+    <loc>https://zanakdentalcare.web.app/tambal-gigi-payakumbuh</loc>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://zanakdentalcare.web.app/cabut-gigi-payakumbuh</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://zanakdentalcare.web.app/saluran-akar-payakumbuh</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://zanakdentalcare.web.app/odontektomi-gigi-bungsu-payakumbuh</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://zanakdentalcare.web.app/kawat-gigi-payakumbuh</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://zanakdentalcare.web.app/gigi-tiruan-payakumbuh</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
 </urlset>

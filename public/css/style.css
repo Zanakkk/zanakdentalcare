@@ -391,6 +391,91 @@ input[type="date"]{cursor:pointer}
   .hero-overlay{background:rgba(0,0,0,.5)}
 }
 
+/* ============================================================
+   BREADCRUMB
+   ============================================================ */
+.breadcrumb{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.78rem;color:var(--g400);margin-bottom:16px}
+.breadcrumb a{color:var(--p);font-weight:600}
+.breadcrumb a:hover{text-decoration:underline}
+.breadcrumb i{font-size:.6rem;color:var(--g400)}
+.breadcrumb span[aria-current]{color:var(--g600);font-weight:600}
+.breadcrumb--light{color:rgba(255,255,255,.55)}
+.breadcrumb--light a{color:rgba(255,255,255,.85)}
+.breadcrumb--light span[aria-current]{color:rgba(255,255,255,.85)}
+
+/* ============================================================
+   TINDAKAN (halaman detail per tindakan)
+   ============================================================ */
+.treat-hero{background:var(--pd);padding:120px 0 60px;text-align:center;color:var(--white)}
+.treat-hero .breadcrumb{justify-content:center}
+.treat-hero h1{color:var(--white);margin-bottom:14px}
+.treat-hero p{color:rgba(255,255,255,.72);font-size:.95rem;max-width:540px;margin:0 auto}
+
+.treat-nav{background:var(--white);border-bottom:1px solid var(--g200);position:sticky;top:68px;z-index:100;overflow-x:auto}
+.treat-nav-inner{display:flex;gap:4px;padding:12px 24px;max-width:1160px;margin:0 auto;white-space:nowrap}
+.treat-nav-item{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:var(--rf);font-size:.8rem;font-weight:600;color:var(--g600);transition:all var(--ease);cursor:pointer;border:1.5px solid transparent;text-decoration:none}
+.treat-nav-item:hover,.treat-nav-item.active{background:var(--pl);color:var(--p);border-color:var(--p)}
+
+.treat-section{padding:72px 0;border-bottom:1px solid var(--g100)}
+.treat-section:last-child{border-bottom:none}
+.treat-section:nth-child(even){background:var(--g50)}
+
+.treat-grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:start}
+@media(min-width:768px){.treat-grid{grid-template-columns:1fr 1fr}}
+
+.treat-badge{display:inline-flex;align-items:center;gap:6px;background:var(--pl);color:var(--p);font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:var(--rf);margin-bottom:12px}
+.treat-section h2{color:var(--black);margin-bottom:14px;font-size:clamp(1.4rem,3vw,2rem)}
+.treat-lead{font-size:.95rem;color:var(--g600);margin-bottom:24px;text-align:justify;text-justify:inter-word;text-indent:2em;line-height:1.75}
+
+.treat-info-block{display:flex;flex-direction:column;gap:16px}
+.treat-info-item{background:var(--white);border:1.5px solid var(--g200);border-radius:var(--rl);padding:18px 20px}
+.treat-info-item h4{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--p);margin-bottom:6px}
+.treat-info-item p{font-size:.86rem;color:var(--g600);text-align:justify;text-justify:inter-word;line-height:1.7}
+.treat-info-item ul{font-size:.86rem;color:var(--g600);padding-left:16px;line-height:1.9}
+.treat-info-item li{list-style:disc}
+
+.treat-steps{display:flex;flex-direction:column;gap:0}
+.treat-step{display:flex;gap:16px;position:relative;padding-bottom:24px}
+.treat-step:last-child{padding-bottom:0}
+.treat-step:last-child .step-line{display:none}
+.step-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.step-num{width:34px;height:34px;background:var(--p);color:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem;flex-shrink:0}
+.step-line{width:2px;flex:1;background:var(--g200);margin-top:6px}
+.step-content{padding-top:6px}
+.step-content h4{font-size:.9rem;font-weight:700;color:var(--black);margin-bottom:4px}
+.step-content p{font-size:.83rem;color:var(--g600);line-height:1.65}
+
+.treat-cta{background:var(--p);border-radius:var(--rl);padding:28px 24px;color:var(--white);text-align:center;margin-top:24px}
+.treat-cta p{color:rgba(255,255,255,.8);font-size:.86rem;margin-bottom:16px}
+
+.indicator-list{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.indicator-item{display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:var(--g600)}
+.indicator-item i{color:var(--acc);flex-shrink:0;margin-top:3px;font-size:.85rem}
+
+.back-link{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;color:var(--p);margin-bottom:40px;transition:gap var(--ease)}
+.back-link:hover{gap:12px}
+
+/* Kartu ringkas di halaman hub /treatment */
+.treat-hub-grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:560px){.treat-hub-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:900px){.treat-hub-grid{grid-template-columns:repeat(3,1fr)}}
+.treat-hub-card{background:var(--white);border:1.5px solid var(--g200);border-radius:var(--rl);padding:24px;display:flex;flex-direction:column;gap:10px;transition:all var(--ease)}
+.treat-hub-card:hover{border-color:var(--p);box-shadow:var(--shm);transform:translateY(-3px)}
+.treat-hub-card h2{font-size:1.05rem;color:var(--black);margin:0}
+.treat-hub-card p{font-size:.85rem;flex:1}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq-list{display:flex;flex-direction:column;gap:12px;max-width:760px;margin:0 auto}
+.faq-item{background:var(--white);border:1.5px solid var(--g200);border-radius:var(--rl);padding:2px 22px;transition:border-color .15s}
+.faq-item[open]{border-color:var(--p)}
+.faq-item summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 0;font-weight:700;font-size:.92rem;color:var(--g800)}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:'\f078';font-family:'Font Awesome 6 Free';font-weight:900;font-size:.7rem;color:var(--p);transition:transform .2s;flex-shrink:0}
+.faq-item[open] summary::after{transform:rotate(180deg)}
+.faq-item p{font-size:.86rem;color:var(--g600);padding:0 0 20px;line-height:1.75}
+
 #antrianFloat {
     position: fixed;
     bottom: 90px;          /* di atas WA float */

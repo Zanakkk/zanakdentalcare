@@ -1,0 +1,22 @@
+name: Deploy to Firebase Hosting on merge
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  deploy_live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ZANAKDENTALCARE }}'
+          channelId: live
+          projectId: zanakdentalcare
