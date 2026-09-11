@@ -89,7 +89,7 @@ p{color:var(--g600);line-height:1.7}
 /* ============================================================
    NAVBAR
    ============================================================ */
-.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav);transition:background var(--ease),box-shadow var(--ease),transform .3s ease}
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav);background:linear-gradient(to bottom,rgba(10,16,30,.55) 0%,rgba(10,16,30,0) 100%);transition:background var(--ease),box-shadow var(--ease),transform .3s ease}
 .navbar.scrolled{background:var(--white);box-shadow:0 1px 0 var(--g200),var(--sh)}
 
 .navbar-menu a{font-size:.84rem;font-weight:600;color:var(--white);padding:7px 12px;border-radius:var(--r);transition:all var(--ease)}
