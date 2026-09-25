@@ -527,9 +527,7 @@ function showCek(notFound, offline = false) {
   setText('cekNotFoundTitle', offline ? 'Gagal Memuat Reservasi' : 'Reservasi Tidak Ditemukan');
   setText('cekNotFoundText', offline
     ? 'Tidak bisa terhubung ke server. Periksa koneksi internet lalu muat ulang halaman.'
-    : API.environment === 'staging'
-      ? 'Mode uji: hanya reservasi yang dibuat di ApexRecord staging yang bisa dicek di sini.'
-      : 'Token tidak valid atau reservasi tidak ada.');
+    : 'Token tidak valid atau reservasi tidak ada.');
   // Cari lewat nomor HP + nama butuh API baru (/v1, pakai API key);
   // di mode lama hanya token yang bisa dipakai.
   const byPhone = API.usingKey;
@@ -575,11 +573,7 @@ async function cekViaHP(e) {
       </a>`).join('');
     list.classList.remove('hidden');
   } catch (err) {
-    let msg = err.status ? err.message : 'Gagal terhubung ke server. Coba lagi.';
-    if (err.code === 'RESERVATION_NOT_FOUND' && API.environment === 'staging') {
-      msg += ' (Mode uji: hanya reservasi yang dibuat di ApexRecord staging.)';
-    }
-    say(msg, true);
+    say(err.status ? err.message : 'Gagal terhubung ke server. Coba lagi.', true);
   } finally {
     btn.disabled = false;
   }

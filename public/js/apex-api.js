@@ -7,32 +7,13 @@
 (function () {
   'use strict';
 
-  // Publishable key dari ApexRecord → Pengaturan → API (jenis "Publishable",
-  // domain: https://zanakdentalcare.web.app). Aman ditaruh di sini karena key
-  // ini hanya diterima dari domain yang terdaftar. JANGAN taruh secret key.
-  // apiKey kosong = pakai endpoint /public lama (tanpa key).
-  const ENVIRONMENTS = {
-    production: { baseUrl: 'https://api.apexrecord.my.id', apiKey: '' },
-    // Uji coba: buka website dengan ?apex=staging (hanya tab itu; pengunjung
-    // lain tetap di production). Keluar dengan ?apex=production.
-    staging: { baseUrl: 'https://staging.apexrecord.my.id', apiKey: 'apx_pk_1FbnIoGgXTwAoElOQ-m95u0-n6Yy1ChC' },
-  };
+  const BASE_URL = 'https://api.apexrecord.my.id';
 
-  const ENV_STORAGE_KEY = 'zdc_apex_env';
-  function pickEnvironment() {
-    const wanted = new URLSearchParams(location.search).get('apex');
-    try {
-      if (wanted === 'staging') sessionStorage.setItem(ENV_STORAGE_KEY, 'staging');
-      if (wanted === 'production' || wanted === 'prod') sessionStorage.removeItem(ENV_STORAGE_KEY);
-      return sessionStorage.getItem(ENV_STORAGE_KEY) === 'staging' ? 'staging' : 'production';
-    } catch {
-      return wanted === 'staging' ? 'staging' : 'production';
-    }
-  }
-  const ENV_NAME = pickEnvironment();
-  const { baseUrl: BASE_URL, apiKey: API_KEY } = ENVIRONMENTS[ENV_NAME];
-  // Endpoint /public lama hanya ada di API production.
-  const LEGACY_BASE_URL = ENVIRONMENTS.production.baseUrl;
+  // Publishable key dari ApexRecord PRODUCTION → Pengaturan → API (jenis
+  // "Publishable", domain: https://zanakdentalcare.web.app). Aman ditaruh di
+  // sini karena key ini hanya diterima dari domain yang terdaftar. JANGAN
+  // taruh secret key. Kosong = pakai endpoint /public lama (tanpa key).
+  const API_KEY = '';
 
   // Hanya dipakai endpoint /public lama; dengan key, klinik ditentukan key-nya.
   const CLINIC_ID = 1;
@@ -47,7 +28,7 @@
     if (body) headers['Content-Type'] = 'application/json';
     if (path.startsWith('/v1/')) headers['X-Api-Key'] = API_KEY;
 
-    const res = await fetch((path.startsWith('/v1/') ? BASE_URL : LEGACY_BASE_URL) + path, {
+    const res = await fetch(BASE_URL + path, {
       method,
       headers,
       body: body ? JSON.stringify(body) : undefined,
@@ -73,8 +54,6 @@
     try {
       return await v1();
     } catch (err) {
-      // Mode uji: tampilkan error apa adanya, jangan diam-diam pindah ke production.
-      if (ENV_NAME === 'staging') throw err;
       // Rute /v1 belum ada di server → NestJS: 404 "Cannot GET /v1/…".
       const unavailable = err.status === 404 && /^Cannot (GET|POST) \/v1\//.test(err.message);
       if (!unavailable && !FALLBACK_CODES.includes(err.code)) throw err;
@@ -96,7 +75,6 @@
 
   const api = {
     get usingKey() { return useV1; },
-    environment: ENV_NAME,
 
     /** Profil klinik + jam operasional { senin: '08:00-16:00' | 'Tutup', … }. */
     clinic: () => once('clinic', () => v1OrLegacy(() => call('/v1/clinic'), legacyInfo)),
@@ -178,23 +156,6 @@
   /** Escape teks sebelum dimasukkan ke innerHTML. */
   api.esc = (s) =>
     String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-
-  // Penanda kecil supaya mode uji tidak tertukar dengan website sungguhan.
-  if (ENV_NAME === 'staging') {
-    document.addEventListener('DOMContentLoaded', () => {
-      const bar = document.createElement('div');
-      bar.setAttribute('role', 'status');
-      bar.style.cssText =
-        'position:fixed;left:12px;bottom:12px;z-index:9999;background:#B45309;color:#fff;' +
-        'font:600 12px/1.4 system-ui,sans-serif;padding:8px 12px;border-radius:10px;' +
-        'box-shadow:0 6px 20px rgba(0,0,0,.25)';
-      const exit = new URL(location.href);
-      exit.searchParams.set('apex', 'production');
-      bar.innerHTML = 'Mode uji: data dari ApexRecord <b>staging</b> · <a style="color:#fff;text-decoration:underline">Keluar</a>';
-      bar.querySelector('a').href = exit.pathname + exit.search + exit.hash;
-      document.body.appendChild(bar);
-    });
-  }
 
   window.ZDC_API = api;
 })();
