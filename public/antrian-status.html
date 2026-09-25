@@ -352,12 +352,12 @@
 
       <div class="cek-intro">
         <h3>Cek Reservasi Anda</h3>
-        <p id="cekIntroText">Masukkan nomor WhatsApp dan nama yang dipakai saat membuat reservasi.</p>
+        <p id="cekIntroText">Cukup nomor WhatsApp dan nama Anda.</p>
       </div>
 
       <form id="cekPhoneForm" class="cek-form" onsubmit="cekViaHP(event)">
         <input type="tel" id="inputHP" placeholder="No. WhatsApp, mis. 08123456789" autocomplete="tel" maxlength="20" required>
-        <input type="text" id="inputNama" placeholder="Nama lengkap seperti saat reservasi" autocomplete="name" maxlength="100" required>
+        <input type="text" id="inputNama" placeholder="Nama Anda (nama depan saja cukup)" autocomplete="given-name" maxlength="100" required>
         <button type="submit" class="btn btn-primary" id="btnCekHP">
           <i class="fas fa-search"></i> Cari Reservasi
         </button>
@@ -529,7 +529,7 @@ function showCek(notFound) {
   const byPhone = API.usingKey;
   toggle('cekPhoneForm', byPhone);
   setText('cekIntroText', byPhone
-    ? 'Masukkan nomor WhatsApp dan nama yang dipakai saat membuat reservasi.'
+    ? 'Cukup nomor WhatsApp dan nama Anda.'
     : 'Masukkan kode token yang Anda terima saat membuat reservasi.');
   const tokenBox = document.getElementById('cekTokenBox');
   if (tokenBox && !byPhone) tokenBox.open = true;
@@ -547,7 +547,7 @@ async function cekViaHP(e) {
 
   list.classList.add('hidden');
   if (phone.replace(/\D/g, '').length < 8) return say('Masukkan nomor WhatsApp yang benar.', true);
-  if (!name) return say('Masukkan nama seperti saat reservasi.', true);
+  if (name.replace(/[^\p{L}]/gu, '').length < 3) return say('Masukkan nama Anda (minimal 3 huruf).', true);
 
   say('Mencari reservasi…');
   btn.disabled = true;
