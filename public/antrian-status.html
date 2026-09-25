@@ -221,6 +221,27 @@
     }
     .cek-form input:focus { border-color: var(--blue); }
 
+    .cek-intro { text-align: center; margin: 4px 0 16px; }
+    .cek-intro h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .cek-intro p, .cek-result { font-size: 12.5px; color: var(--text-s); }
+    .cek-result { text-align: center; margin-top: 8px; min-height: 1em; }
+    .cek-result.error { color: #DC2626; }
+    .cek-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+    .cek-item {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 12px;
+      text-decoration: none; color: var(--text); transition: border-color .15s;
+    }
+    .cek-item:hover { border-color: var(--blue); }
+    .cek-item strong { display: block; font-size: 13.5px; }
+    .cek-item span { font-size: 12px; color: var(--text-s); }
+    .cek-item i { color: var(--blue); }
+    .cek-token { margin-top: 18px; border-top: 1px solid var(--border); padding-top: 14px; }
+    .cek-token summary { font-size: 12.5px; color: var(--text-s); cursor: pointer; text-align: center; list-style: none; }
+    .cek-token summary::-webkit-details-marker { display: none; }
+    .cek-token summary:hover { color: var(--blue); }
+    .cek-token[open] summary { margin-bottom: 12px; }
+
     .hidden { display: none !important; }
   </style>
 </head>
@@ -321,32 +342,45 @@
       </p>
     </div>
 
-    <!-- Error -->
+    <!-- Cek reservasi: dibuka tanpa token, atau token tidak ditemukan -->
     <div id="viewError" class="hidden">
-      <div class="error-box">
+      <div id="cekNotFound" class="error-box hidden">
         <i class="fas fa-exclamation-circle"></i>
         <h3>Reservasi Tidak Ditemukan</h3>
         <p>Token tidak valid atau reservasi tidak ada.</p>
       </div>
-      <div class="btn-group">
-        <a href="index.html" class="btn btn-primary">
-          <i class="fas fa-home"></i> Kembali ke Beranda
-        </a>
+
+      <div class="cek-intro">
+        <h3>Cek Reservasi Anda</h3>
+        <p id="cekIntroText">Masukkan nomor WhatsApp dan nama yang dipakai saat membuat reservasi.</p>
       </div>
 
-      <div style="margin-top:20px">
-        <p style="font-size:12px;color:var(--text-s);text-align:center;margin-bottom:10px">
-          Punya kode token reservasi? Masukkan di sini
-        </p>
-        <div class="cek-form">
+      <form id="cekPhoneForm" class="cek-form" onsubmit="cekViaHP(event)">
+        <input type="tel" id="inputHP" placeholder="No. WhatsApp, mis. 08123456789" autocomplete="tel" maxlength="20" required>
+        <input type="text" id="inputNama" placeholder="Nama lengkap seperti saat reservasi" autocomplete="name" maxlength="100" required>
+        <button type="submit" class="btn btn-primary" id="btnCekHP">
+          <i class="fas fa-search"></i> Cari Reservasi
+        </button>
+      </form>
+      <p id="cekHPResult" class="cek-result"></p>
+      <div id="cekList" class="cek-list hidden"></div>
+
+      <details id="cekTokenBox" class="cek-token">
+        <summary>Punya kode token reservasi? Masukkan di sini</summary>
+        <form class="cek-form" onsubmit="cekViaToken(event)">
           <input type="text" id="inputToken" placeholder="Contoh: QTSREMSV" maxlength="20"
                  style="text-transform:uppercase">
-          <button class="btn btn-primary" onclick="cekViaToken()">
-            <i class="fas fa-search"></i> Cek Reservasi
+          <button type="submit" class="btn btn-outline">
+            <i class="fas fa-key"></i> Cek dengan Token
           </button>
-        </div>
-        <p id="cekTokenResult"
-           style="font-size:12px;color:var(--text-s);margin-top:8px;text-align:center"></p>
+        </form>
+        <p id="cekTokenResult" class="cek-result"></p>
+      </details>
+
+      <div class="btn-group">
+        <a href="index.html" class="btn btn-outline">
+          <i class="fas fa-home"></i> Kembali ke Beranda
+        </a>
       </div>
     </div>
 
@@ -383,7 +417,7 @@ let lastFetchAt = 0;
 document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   token = params.get('t') || params.get('token');
-  if (!token) { show('viewError'); return; }
+  if (!token) { showCek(false); return; }
   fetchStatus();
 });
 
@@ -396,7 +430,7 @@ async function fetchStatus() {
   } catch (err) {
     // Gangguan jaringan sesaat saat auto-refresh: tetap tampilkan data terakhir.
     if (lastStatus && !err.status) return;
-    show('viewError');
+    showCek(true);
   }
 }
 
@@ -487,16 +521,67 @@ async function cancelReservation() {
   }
 }
 
-async function cekViaToken() {
-  const inputEl = document.getElementById('inputToken');
-  const resEl   = document.getElementById('cekTokenResult');
-  const tok     = inputEl?.value.trim().toUpperCase();
+/** Form cek reservasi. notFound = token di link tidak ditemukan. */
+function showCek(notFound) {
+  toggle('cekNotFound', notFound);
+  // Cari lewat nomor HP + nama butuh API baru (/v1, pakai API key);
+  // di mode lama hanya token yang bisa dipakai.
+  const byPhone = API.usingKey;
+  toggle('cekPhoneForm', byPhone);
+  setText('cekIntroText', byPhone
+    ? 'Masukkan nomor WhatsApp dan nama yang dipakai saat membuat reservasi.'
+    : 'Masukkan kode token yang Anda terima saat membuat reservasi.');
+  const tokenBox = document.getElementById('cekTokenBox');
+  if (tokenBox && !byPhone) tokenBox.open = true;
+  show('viewError');
+}
 
+async function cekViaHP(e) {
+  e?.preventDefault();
+  const phone = document.getElementById('inputHP')?.value.trim() ?? '';
+  const name  = document.getElementById('inputNama')?.value.trim() ?? '';
+  const resEl = document.getElementById('cekHPResult');
+  const list  = document.getElementById('cekList');
+  const btn   = document.getElementById('btnCekHP');
+  const say = (msg, isError = false) => { resEl.textContent = msg; resEl.classList.toggle('error', isError); };
+
+  list.classList.add('hidden');
+  if (phone.replace(/\D/g, '').length < 8) return say('Masukkan nomor WhatsApp yang benar.', true);
+  if (!name) return say('Masukkan nama seperti saat reservasi.', true);
+
+  say('Mencari reservasi…');
+  btn.disabled = true;
+  try {
+    const found = await API.lookupReservations(phone, name);
+    if (found.length === 1) {
+      window.location.href = `?t=${encodeURIComponent(found[0].token)}`;
+      return;
+    }
+    say(`Ada ${found.length} reservasi aktif. Pilih salah satu:`);
+    list.innerHTML = found.map((r) => `
+      <a class="cek-item" href="?t=${encodeURIComponent(r.token)}">
+        <div>
+          <strong>${API.esc(formatTanggal(r.reservationDate))} · ${API.esc(formatJam(r.jamSlot))}</strong>
+          <span>${API.esc(r.practitionerName || 'Zanak Dental Care')} · ${r.status === 'confirmed' ? 'Terkonfirmasi' : 'Menunggu konfirmasi'}</span>
+        </div>
+        <i class="fas fa-chevron-right"></i>
+      </a>`).join('');
+    list.classList.remove('hidden');
+  } catch (err) {
+    say(err.status ? err.message : 'Gagal terhubung ke server. Coba lagi.', true);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function cekViaToken(e) {
+  e?.preventDefault();
+  const resEl = document.getElementById('cekTokenResult');
+  const tok   = document.getElementById('inputToken')?.value.trim().toUpperCase();
   if (!tok) {
-    if (resEl) resEl.textContent = 'Masukkan token terlebih dahulu.';
+    resEl.textContent = 'Masukkan token terlebih dahulu.';
     return;
   }
-
   // Langsung buka halaman statusnya; token yang salah tampil sebagai
   // "tidak ditemukan" di sana (hemat satu request).
   window.location.href = `?t=${encodeURIComponent(tok)}`;

@@ -135,6 +135,17 @@
         () => call(`/public/reservations/status?token=${encodeURIComponent(token)}`),
       ),
 
+    /** Reservasi aktif pasien lewat nomor HP + nama (tanpa token). Hanya ada
+     *  di /v1 — dengan endpoint lama, cek reservasi tetap lewat token. */
+    lookupReservations: (patientPhone, patientName) => {
+      if (!useV1) {
+        const err = new Error('Cek lewat nomor HP belum tersedia. Gunakan kode token reservasi.');
+        err.status = 400;
+        return Promise.reject(err);
+      }
+      return call('/v1/reservations/lookup', { method: 'POST', body: { patientPhone, patientName } });
+    },
+
     cancel: (token) =>
       v1OrLegacy(
         () => call(`/v1/reservations/${encodeURIComponent(token)}/cancel`, { method: 'POST' }),
