@@ -12,13 +12,13 @@
   // Publishable key dari ApexRecord → Pengaturan → API (jenis "Publishable",
   // domain: https://zanakdentalcare.web.app). Aman ditaruh di sini karena key
   // ini hanya diterima dari domain yang terdaftar. JANGAN taruh secret key.
-  // Selama kosong, website memakai endpoint /public lama (tanpa key).
-  const API_KEY = '';
+  // Kosongkan untuk kembali ke endpoint /public lama (tanpa key).
+  const API_KEY = 'apx_pk_1FbnIoGgXTwAoElOQ-m95u0-n6Yy1ChC';
 
   // Hanya dipakai endpoint /public lama; dengan key, klinik ditentukan key-nya.
   const CLINIC_ID = 1;
 
-  const USE_V1 = API_KEY.startsWith('apx_pk_');
+  let useV1 = API_KEY.startsWith('apx_pk_');
   const TIMEOUT_MS = 10000;
 
   /** fetch → data. Selalu segar (no-store) supaya perubahan di ApexRecord
@@ -26,7 +26,7 @@
   async function call(path, { method = 'GET', body } = {}) {
     const headers = {};
     if (body) headers['Content-Type'] = 'application/json';
-    if (USE_V1) headers['X-Api-Key'] = API_KEY;
+    if (path.startsWith('/v1/')) headers['X-Api-Key'] = API_KEY;
 
     const res = await fetch(BASE_URL + path, {
       method,
@@ -45,6 +45,24 @@
     return json.data;
   }
 
+  // Jaring pengaman: kalau /v1 belum aktif di server (404) atau key ditolak
+  // (dicabut/domain belum didaftarkan), halaman beralih ke endpoint /public
+  // lama untuk sisa kunjungan — website tetap jalan, error dicatat di console.
+  const FALLBACK_CODES = ['API_KEY_INVALID', 'ORIGIN_NOT_ALLOWED', 'SUBSCRIPTION_INACTIVE'];
+  async function v1OrLegacy(v1, legacy) {
+    if (!useV1) return legacy();
+    try {
+      return await v1();
+    } catch (err) {
+      // Rute /v1 belum ada di server → NestJS: 404 "Cannot GET /v1/…".
+      const unavailable = err.status === 404 && /^Cannot (GET|POST) \/v1\//.test(err.message);
+      if (!unavailable && !FALLBACK_CODES.includes(err.code)) throw err;
+      console.warn('[ApexRecord API] /v1 tidak bisa dipakai, beralih ke /public:', err.code || err.status, err.message);
+      useV1 = false;
+      return legacy();
+    }
+  }
+
   // Satu request per data per page view, dibagi semua script di halaman.
   const memo = {};
   const once = (key, fn) => {
@@ -56,46 +74,50 @@
   const legacyInfo = () => once('legacyInfo', () => call(`/public/clinic-info?clinicId=${CLINIC_ID}`));
 
   const api = {
-    usingKey: USE_V1,
+    get usingKey() { return useV1; },
 
     /** Profil klinik + jam operasional { senin: '08:00-16:00' | 'Tutup', … }. */
-    clinic: () => (USE_V1 ? once('clinic', () => call('/v1/clinic')) : legacyInfo()),
+    clinic: () => once('clinic', () => v1OrLegacy(() => call('/v1/clinic'), legacyInfo)),
 
     /** Dokter aktif: [{ id, name, specialization, photoUrl, jadwalPraktik }].
      *  jadwalPraktik null = mengikuti jam klinik. */
     practitioners: () =>
-      USE_V1
-        ? once('practitioners', () => call('/v1/practitioners'))
-        : legacyInfo().then((d) => d.practitioners || []),
+      once('practitioners', () =>
+        v1OrLegacy(() => call('/v1/practitioners'), () => legacyInfo().then((d) => d.practitioners || [])),
+      ),
 
     /** { date, isOpen, slots: ['09:00', …] } — tidak di-memo, slot berubah terus. */
     slots: (date, practitionerId) => {
       const q = new URLSearchParams({ date });
       if (practitionerId) q.set('practitionerId', practitionerId);
-      if (!USE_V1) q.set('clinicId', CLINIC_ID);
-      return call(USE_V1 ? `/v1/slots?${q}` : `/public/available-slots?${q}`);
+      return v1OrLegacy(
+        () => call(`/v1/slots?${q}`),
+        () => call(`/public/available-slots?${q}&clinicId=${CLINIC_ID}`),
+      );
     },
 
     /** { patientName, patientPhone, reservationDate, jamSlot, practitionerId?, notes? } */
     createReservation: (payload) =>
-      USE_V1
-        ? call('/v1/reservations', { method: 'POST', body: payload })
-        : call('/public/reservations', {
+      v1OrLegacy(
+        () => call('/v1/reservations', { method: 'POST', body: payload }),
+        () =>
+          call('/public/reservations', {
             method: 'POST',
             body: { ...payload, clinicId: CLINIC_ID, serviceType: 'outpatient' },
           }),
+      ),
 
     status: (token) =>
-      call(
-        USE_V1
-          ? `/v1/reservations/${encodeURIComponent(token)}`
-          : `/public/reservations/status?token=${encodeURIComponent(token)}`,
+      v1OrLegacy(
+        () => call(`/v1/reservations/${encodeURIComponent(token)}`),
+        () => call(`/public/reservations/status?token=${encodeURIComponent(token)}`),
       ),
 
     cancel: (token) =>
-      USE_V1
-        ? call(`/v1/reservations/${encodeURIComponent(token)}/cancel`, { method: 'POST' })
-        : call('/public/reservations/cancel', { method: 'PATCH', body: { token } }),
+      v1OrLegacy(
+        () => call(`/v1/reservations/${encodeURIComponent(token)}/cancel`, { method: 'POST' }),
+        () => call('/public/reservations/cancel', { method: 'PATCH', body: { token } }),
+      ),
   };
 
   // ── Helper tanggal & jam (dipakai semua halaman) ──────────────
