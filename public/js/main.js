@@ -28,6 +28,20 @@ const DAY_ID  = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
 
 let clinicOperationalHours = null;
 
+/**
+ * One request per page view for /public/clinic-info, shared by main.js and
+ * antrian.js (the home page loads both). Always fresh — never from cache — so
+ * changes made in ApexRecord (hours, doctors) show on the next page open.
+ */
+function zdcFetchClinicInfo(url) {
+  if (!window.__zdcClinicInfo) {
+    window.__zdcClinicInfo = fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(10000) })
+      .then((res) => res.json())
+      .catch((err) => { window.__zdcClinicInfo = null; throw err; });
+  }
+  return window.__zdcClinicInfo;
+}
+
 /* ── DOM READY ───────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   initProgressBar();
@@ -172,8 +186,7 @@ async function initClinicStatus() {
   if (!badge || !text || !dot) return;
 
   try {
-    const res  = await fetch(EP_CLINIC_INFO, { signal: AbortSignal.timeout(10000) });
-    const data = await res.json();
+    const data = await zdcFetchClinicInfo(EP_CLINIC_INFO);
     if (!data.success) throw new Error(data.message || 'Gagal memuat jam operasional');
     clinicOperationalHours = data.data.operationalHours;
   } catch (err) {

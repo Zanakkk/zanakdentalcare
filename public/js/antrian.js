@@ -16,6 +16,17 @@ const BASE_URL = 'https://api.apexrecord.my.id';
   const WA_NUMBER          = '089526697902'; // nomor WA resmi klinik (dikonfirmasi)
   const STATUS_URL         = 'antrian-status.html';
 
+  // Same helper as main.js: one shared, uncached /public/clinic-info request
+  // per page view (the home page loads both scripts).
+  function zdcFetchClinicInfo(url) {
+    if (!window.__zdcClinicInfo) {
+      window.__zdcClinicInfo = fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(10000) })
+        .then((res) => res.json())
+        .catch((err) => { window.__zdcClinicInfo = null; throw err; });
+    }
+    return window.__zdcClinicInfo;
+  }
+
   const EP = {
     clinicInfo:        `${BASE_URL}/public/clinic-info?clinicId=${CLINIC_ID}`,
     availableSlots:    (date, practitionerId) => `${BASE_URL}/public/available-slots?clinicId=${CLINIC_ID}&date=${date}&practitionerId=${practitionerId}`,
@@ -216,8 +227,7 @@ const BASE_URL = 'https://api.apexrecord.my.id';
 
   async function loadClinicInfo() {
     try {
-      const res  = await fetch(EP.clinicInfo, { signal: AbortSignal.timeout(10000) });
-      const data = await res.json();
+      const data = await zdcFetchClinicInfo(EP.clinicInfo);
       if (!data.success) throw new Error(data.message || 'Gagal memuat info klinik');
 
       clinicHours = data.data.operationalHours;
@@ -229,7 +239,9 @@ const BASE_URL = 'https://api.apexrecord.my.id';
         practitionerId = practitioners[0].id;
       }
 
-      const todayKey   = DAY_KEY[new Date().getDay()];
+      // getDay() starts at Minggu (0); DAY_KEY starts at Senin.
+      const jsDay      = new Date().getDay();
+      const todayKey   = DAY_KEY[jsDay === 0 ? 6 : jsDay - 1];
       const todayHours = clinicHours?.[todayKey];
       const el = document.getElementById('zdcJamOperasional');
       if (el) {
@@ -307,7 +319,7 @@ const BASE_URL = 'https://api.apexrecord.my.id';
   if (grid) grid.innerHTML = '';
 
   try {
-    const res  = await fetch(EP.availableSlots(dateStr, practitionerId), { signal: AbortSignal.timeout(10000) });
+    const res  = await fetch(EP.availableSlots(dateStr, practitionerId), { cache: 'no-store', signal: AbortSignal.timeout(10000) });
     const data = await res.json();
     if (!data.success) throw new Error(data.message || 'Gagal memuat slot');
 
