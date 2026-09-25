@@ -346,8 +346,8 @@
     <div id="viewError" class="hidden">
       <div id="cekNotFound" class="error-box hidden">
         <i class="fas fa-exclamation-circle"></i>
-        <h3>Reservasi Tidak Ditemukan</h3>
-        <p>Token tidak valid atau reservasi tidak ada.</p>
+        <h3 id="cekNotFoundTitle">Reservasi Tidak Ditemukan</h3>
+        <p id="cekNotFoundText">Token tidak valid atau reservasi tidak ada.</p>
       </div>
 
       <div class="cek-intro">
@@ -430,7 +430,7 @@ async function fetchStatus() {
   } catch (err) {
     // Gangguan jaringan sesaat saat auto-refresh: tetap tampilkan data terakhir.
     if (lastStatus && !err.status) return;
-    showCek(true);
+    showCek(true, !err.status);
   }
 }
 
@@ -522,8 +522,14 @@ async function cancelReservation() {
 }
 
 /** Form cek reservasi. notFound = token di link tidak ditemukan. */
-function showCek(notFound) {
+function showCek(notFound, offline = false) {
   toggle('cekNotFound', notFound);
+  setText('cekNotFoundTitle', offline ? 'Gagal Memuat Reservasi' : 'Reservasi Tidak Ditemukan');
+  setText('cekNotFoundText', offline
+    ? 'Tidak bisa terhubung ke server. Periksa koneksi internet lalu muat ulang halaman.'
+    : API.environment === 'staging'
+      ? 'Mode uji: hanya reservasi yang dibuat di ApexRecord staging yang bisa dicek di sini.'
+      : 'Token tidak valid atau reservasi tidak ada.');
   // Cari lewat nomor HP + nama butuh API baru (/v1, pakai API key);
   // di mode lama hanya token yang bisa dipakai.
   const byPhone = API.usingKey;
@@ -546,6 +552,7 @@ async function cekViaHP(e) {
   const say = (msg, isError = false) => { resEl.textContent = msg; resEl.classList.toggle('error', isError); };
 
   list.classList.add('hidden');
+  toggle('cekNotFound', false); // pesan lama (token) tidak relevan lagi
   if (phone.replace(/\D/g, '').length < 8) return say('Masukkan nomor WhatsApp yang benar.', true);
   if (name.replace(/[^\p{L}]/gu, '').length < 3) return say('Masukkan nama Anda (minimal 3 huruf).', true);
 
@@ -568,7 +575,11 @@ async function cekViaHP(e) {
       </a>`).join('');
     list.classList.remove('hidden');
   } catch (err) {
-    say(err.status ? err.message : 'Gagal terhubung ke server. Coba lagi.', true);
+    let msg = err.status ? err.message : 'Gagal terhubung ke server. Coba lagi.';
+    if (err.code === 'RESERVATION_NOT_FOUND' && API.environment === 'staging') {
+      msg += ' (Mode uji: hanya reservasi yang dibuat di ApexRecord staging.)';
+    }
+    say(msg, true);
   } finally {
     btn.disabled = false;
   }
