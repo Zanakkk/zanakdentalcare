@@ -9,38 +9,12 @@
 /* ── CONSTANTS ───────────────────────────────────────────────── */
 const WA_NUMBER = '6289526697902';
 
-//  const BASE_URL  = 'https://apexrecord.my.id';
-//  const BASE_URL  = 'http://210.79.190.195:3000';
-
-
-const BASE_URL = 'https://api.apexrecord.my.id';
-const CLINIC_ID = 1;
-const EP_CLINIC_INFO = `${BASE_URL}/public/clinic-info?clinicId=${CLINIC_ID}`;
-
-// NOTE INFRA: fetch ke IP mentah dengan HTTPS sering diblok browser
-// karena sertifikat tidak valid untuk alamat IP. Kalau badge jam buka
-// terus gagal, pindahkan backend ke domain asli dengan sertifikat
-// valid (Let's Encrypt) atau proxy lewat Firebase Hosting rewrite.
-// Sesudah
-// ✅ BENAR — sesuai key dari API
+// Data klinik (jam operasional, dokter, reservasi) diambil lewat
+// js/apex-api.js (window.ZDC_API) — URL, API key, dan fetch ada di sana.
 const DAY_KEY = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
 const DAY_ID  = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
 let clinicOperationalHours = null;
-
-/**
- * One request per page view for /public/clinic-info, shared by main.js and
- * antrian.js (the home page loads both). Always fresh — never from cache — so
- * changes made in ApexRecord (hours, doctors) show on the next page open.
- */
-function zdcFetchClinicInfo(url) {
-  if (!window.__zdcClinicInfo) {
-    window.__zdcClinicInfo = fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(10000) })
-      .then((res) => res.json())
-      .catch((err) => { window.__zdcClinicInfo = null; throw err; });
-  }
-  return window.__zdcClinicInfo;
-}
 
 /* ── DOM READY ───────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
@@ -186,9 +160,8 @@ async function initClinicStatus() {
   if (!badge || !text || !dot) return;
 
   try {
-    const data = await zdcFetchClinicInfo(EP_CLINIC_INFO);
-    if (!data.success) throw new Error(data.message || 'Gagal memuat jam operasional');
-    clinicOperationalHours = data.data.operationalHours;
+    const clinic = await window.ZDC_API.clinic();
+    clinicOperationalHours = clinic.operationalHours || {};
   } catch (err) {
     console.error('[ClinicStatus]', err);
     text.textContent = 'Jam operasional tidak tersedia';
@@ -505,8 +478,7 @@ function initReservasiForm() {
 
   const tgl = document.getElementById('tanggal');
   if (tgl) {
-    const today = new Date().toISOString().split('T')[0];
-    tgl.setAttribute('min', today);
+    tgl.setAttribute('min', window.ZDC_API.localDate());
   }
 
   form.addEventListener('submit', e => {

@@ -6,47 +6,73 @@
 (function () {
   'use strict';
 
-//  const BASE_URL  = 'https://apexrecord.my.id';
-//  const BASE_URL  = 'http://210.79.190.195:3000';
-
-const BASE_URL = 'https://api.apexrecord.my.id';
-
-  const CLINIC_ID          = 1;
-  const FALLBACK_PRACTITIONER_ID = 1; // dipakai hanya jika API praktisi belum tersedia
-  const WA_NUMBER          = '089526697902'; // nomor WA resmi klinik (dikonfirmasi)
-  const STATUS_URL         = 'antrian-status.html';
-
-  // Same helper as main.js: one shared, uncached /public/clinic-info request
-  // per page view (the home page loads both scripts).
-  function zdcFetchClinicInfo(url) {
-    if (!window.__zdcClinicInfo) {
-      window.__zdcClinicInfo = fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(10000) })
-        .then((res) => res.json())
-        .catch((err) => { window.__zdcClinicInfo = null; throw err; });
-    }
-    return window.__zdcClinicInfo;
-  }
-
-  const EP = {
-    clinicInfo:        `${BASE_URL}/public/clinic-info?clinicId=${CLINIC_ID}`,
-    availableSlots:    (date, practitionerId) => `${BASE_URL}/public/available-slots?clinicId=${CLINIC_ID}&date=${date}&practitionerId=${practitionerId}`,
-    createReservation: `${BASE_URL}/public/reservations`,
-  };
-
-  const DAY_KEY = ['senin','selasa','rabu','kamis','jumat','sabtu','minggu'];
+  // Semua panggilan ke ApexRecord lewat js/apex-api.js (window.ZDC_API).
+  const API = window.ZDC_API;
+  const WA_NUMBER  = '089526697902'; // nomor WA resmi klinik (dikonfirmasi)
+  const STATUS_URL = 'antrian-status.html';
+  const esc = API.esc;
 
   // ── State
   let selectedDate    = null;
   let selectedSlot    = null;
   let clinicHours     = null;
   let isSubmitting    = false;
-  let practitionerId  = FALLBACK_PRACTITIONER_ID; // diisi ulang dari /public/clinic-info bila tersedia
+  let doctors         = [];   // dokter aktif dari ApexRecord
+  let practitionerId  = null; // dokter terpilih (otomatis bila hanya satu)
+  let doctorsReady    = null; // Promise, dimuat saat bagian reservasi mendekati layar
 
   async function initAntrian() {
     injectStyles();
     removeOldReservasi();
     renderAntrianSection();
-    await loadClinicInfo();
+    loadClinicInfo();
+    loadDoctorsWhenNear();
+  }
+
+  // Data dokter baru diambil ketika pengunjung mendekati form reservasi
+  // (atau langsung memilih tanggal) — pengunjung yang hanya membaca halaman
+  // tidak memakan kuota API.
+  function loadDoctorsWhenNear() {
+    const section = document.getElementById('antrian-online');
+    if (!section || !('IntersectionObserver' in window)) return ensureDoctors();
+    const obs = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { obs.disconnect(); ensureDoctors(); }
+    }, { rootMargin: '400px 0px' });
+    obs.observe(section);
+  }
+
+  function ensureDoctors() {
+    if (!doctorsReady) {
+      doctorsReady = API.practitioners()
+        .then((list) => {
+          doctors = Array.isArray(list) ? list : [];
+          if (doctors.length) practitionerId = doctors[0].id;
+          renderDoctorPicker();
+        })
+        .catch((err) => {
+          console.error('[Dokter]', err);
+          doctorsReady = null; // coba lagi saat tanggal dipilih
+        });
+    }
+    return doctorsReady;
+  }
+
+  function renderDoctorPicker() {
+    const wrap = document.getElementById('zdcDokterWrap');
+    const sel  = document.getElementById('zdcDokter');
+    if (!wrap || !sel) return;
+    // Satu dokter: tidak perlu memilih.
+    wrap.classList.toggle('zdc-hidden', doctors.length < 2);
+    sel.innerHTML = doctors.map((d) =>
+      `<option value="${d.id}">${esc(d.name)}${d.specialization ? ` — ${esc(d.specialization)}` : ''}</option>`
+    ).join('');
+    if (practitionerId) sel.value = String(practitionerId);
+  }
+
+  function zdcOnDoctorChange(id) {
+    practitionerId = Number(id) || null;
+    // Jadwal tiap dokter bisa berbeda: cek ulang tanggal yang sudah dipilih.
+    if (selectedDate) zdcOnDateChange(selectedDate);
   }
 
   function removeOldReservasi() {
@@ -57,10 +83,10 @@ const BASE_URL = 'https://api.apexrecord.my.id';
     const lokasiSec = document.getElementById('lokasi');
     if (!lokasiSec) return;
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = API.localDate();
     const maxDate = new Date();
     maxDate.setDate(maxDate.getDate() + 30);
-    const maxStr = maxDate.toISOString().split('T')[0];
+    const maxStr = API.localDate(maxDate);
 
     const wrap = document.createElement('section');
     wrap.className = 'section';
@@ -95,6 +121,10 @@ const BASE_URL = 'https://api.apexrecord.my.id';
 
             <div class="zdc-step zdc-step--active" id="zdcStep1">
               <div class="zdc-step-label"><span class="zdc-step-num">1</span> Pilih Tanggal</div>
+              <div class="form-group zdc-hidden" id="zdcDokterWrap">
+                <label for="zdcDokter">Dokter</label>
+                <select id="zdcDokter" onchange="zdcOnDoctorChange(this.value)"></select>
+              </div>
               <input type="date" id="zdcTanggalInput" class="zdc-date-input"
                      min="${today}" max="${maxStr}" onchange="zdcOnDateChange(this.value)">
               <p id="zdcTanggalWarning" class="zdc-warning zdc-hidden">
@@ -226,56 +256,32 @@ const BASE_URL = 'https://api.apexrecord.my.id';
   }
 
   async function loadClinicInfo() {
+    const el = document.getElementById('zdcJamOperasional');
     try {
-      const data = await zdcFetchClinicInfo(EP.clinicInfo);
-      if (!data.success) throw new Error(data.message || 'Gagal memuat info klinik');
-
-      clinicHours = data.data.operationalHours;
-
-      // Ambil dokter aktif dari backend, bukan id yang di-hardcode di frontend —
-      // supaya kalau dokter berganti, tidak perlu ubah kode ini.
-      const practitioners = data.data.practitioners;
-      if (Array.isArray(practitioners) && practitioners.length > 0) {
-        practitionerId = practitioners[0].id;
-      }
-
-      // getDay() starts at Minggu (0); DAY_KEY starts at Senin.
-      const jsDay      = new Date().getDay();
-      const todayKey   = DAY_KEY[jsDay === 0 ? 6 : jsDay - 1];
-      const todayHours = clinicHours?.[todayKey];
-      const el = document.getElementById('zdcJamOperasional');
-      if (el) {
-        el.textContent = (!todayHours || todayHours.toLowerCase() === 'tutup')
-          ? 'Tutup hari ini'
-          : `Buka ${todayHours.replace('-', ' – ')} hari ini`;
-      }
+      const clinic = await API.clinic(); // dibagi dengan main.js: satu request
+      clinicHours = clinic.operationalHours || {};
+      const today = API.parseHours(clinicHours[API.dayKey()]);
+      if (el) el.textContent = today ? `Buka ${today.open} – ${today.close} hari ini` : 'Tutup hari ini';
     } catch (err) {
       console.error('[ClinicInfo]', err);
-      const el = document.getElementById('zdcJamOperasional');
       if (el) el.textContent = 'Info jam tidak tersedia';
     }
   }
 
-  // Di antrian.js — fungsi getHoursForDate
+  /** Jam praktik pada tanggal itu: jadwal dokter terpilih bila diatur di
+   *  ApexRecord, selain itu jam klinik (sama seperti perhitungan slot di server).
+   *  undefined = data belum termuat, null = tutup. */
   function getHoursForDate(dateStr) {
+    const day = API.dayKey(dateStr);
+    const doctor = doctors.find((d) => d.id === practitionerId);
+    if (doctor?.jadwalPraktik) return API.parseHours(doctor.jadwalPraktik[day]);
     if (!clinicHours) return undefined;
-    const d = new Date(dateStr + 'T00:00:00');
-    
-    // getDay(): 0=Minggu, 1=Senin, ..., 6=Sabtu
-    // DAY_KEY: [senin, selasa, rabu, kamis, jumat, sabtu, minggu]
-    // ❌ d.getDay() langsung tidak cocok dengan index DAY_KEY
-    
-    const jsDay = d.getDay();
-    const idx = jsDay === 0 ? 6 : jsDay - 1; // ✅ konversi dulu
-    const dayKey = DAY_KEY[idx];
-    
-    const raw = clinicHours[dayKey];
-    if (!raw || raw.toLowerCase() === 'tutup') return null;
-    const [open, close] = raw.split('-');
-    return { open, close };
+    return API.parseHours(clinicHours[day]);
   }
 
-  function zdcOnDateChange(dateStr) {
+  async function zdcOnDateChange(dateStr) {
+    await ensureDoctors();
+    if (!dateStr) return;
     selectedDate = dateStr;
     selectedSlot = null;
     zdcToggleDataStep(false);
@@ -319,21 +325,21 @@ const BASE_URL = 'https://api.apexrecord.my.id';
   if (grid) grid.innerHTML = '';
 
   try {
-    const res  = await fetch(EP.availableSlots(dateStr, practitionerId), { cache: 'no-store', signal: AbortSignal.timeout(10000) });
-    const data = await res.json();
-    if (!data.success) throw new Error(data.message || 'Gagal memuat slot');
+    const result = await API.slots(dateStr, practitionerId);
+    // Tanggal sudah diganti selagi menunggu: abaikan hasil lama.
+    if (dateStr !== selectedDate) return;
 
     state?.classList.add('zdc-hidden');
 
     // ✅ Handle format baru: { isOpen, slots: ["10:00", ...] }
-    if (!data.data.isOpen) {
+    if (!result.isOpen) {
       if (grid) grid.innerHTML = '<p class="zdc-empty-slot">Klinik tutup pada tanggal ini.</p>';
       return;
     }
 
     // ✅ Convert array string → array object yang diexpect zdcRenderSlots
     // ✅ Convert array string → ambil hanya jam genap (xx:00)
-    const slots = (data.data.slots || [])
+    const slots = (result.slots || [])
       .filter(time => time.endsWith(':00'))  // ← tambah ini
       .map(time => ({ time, available: true }));
     zdcRenderSlots(slots);
@@ -415,46 +421,34 @@ const BASE_URL = 'https://api.apexrecord.my.id';
     const notes = keluhan ? `Layanan: ${layanan}. Keluhan: ${keluhan}` : `Layanan: ${layanan}`;
 
     try {
-      const res = await fetch(EP.createReservation, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          clinicId:        CLINIC_ID,
-          patientName:     nama,
-          patientPhone:    hp,
-          practitionerId,
-          serviceType:     'outpatient',
-          reservationDate: selectedDate,
-          jamSlot:         selectedSlot,
-          notes,
-        }),
+      const reservation = await API.createReservation({
+        patientName:     nama,
+        patientPhone:    hp,
+        reservationDate: selectedDate,
+        jamSlot:         selectedSlot,
+        notes,
+        ...(practitionerId ? { practitionerId } : {}),
       });
-      const data = await res.json().catch(() => null);
-
-      if (!res.ok || !data?.success) {
-        const msg = data?.error?.message || data?.message
-          || (res.status === 409 ? 'Jam yang dipilih baru saja dipesan orang lain, silakan pilih jam lain.' : null)
-          || 'Gagal membuat reservasi. Coba lagi.';
-        zdcToast(msg, 'error');
-        // Jam yang barusan diambil orang lain — segarkan daftar slot & minta pilih ulang.
-        if (res.status === 409) {
-          selectedSlot = null;
-          zdcToggleDataStep(false);
-          zdcUpdateSummary();
-          loadSlots(selectedDate);
-        }
-        return;
-      }
 
       try {
-        sessionStorage.setItem('zdc_reservasi', JSON.stringify({ ...data.data, layanan, keluhan }));
+        sessionStorage.setItem('zdc_reservasi', JSON.stringify({ ...reservation, layanan, keluhan }));
       } catch {}
 
-      zdcShowSuccessModal(data.data, layanan);
-
+      zdcShowSuccessModal(reservation, layanan);
     } catch (err) {
       console.error('[Reservasi] submit:', err);
-      zdcToast('Gagal terhubung ke server. Coba lagi.', 'error');
+      if (!err.status) {
+        zdcToast('Gagal terhubung ke server. Coba lagi.', 'error');
+      } else if (err.status === 409) {
+        // Jam yang barusan diambil orang lain — segarkan slot & minta pilih ulang.
+        zdcToast('Jam yang dipilih baru saja dipesan orang lain, silakan pilih jam lain.', 'error');
+        selectedSlot = null;
+        zdcToggleDataStep(false);
+        zdcUpdateSummary();
+        loadSlots(selectedDate);
+      } else {
+        zdcToast(err.message || 'Gagal membuat reservasi. Coba lagi.', 'error');
+      }
     } finally {
       isSubmitting = false;
       if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-calendar-check"></i> Buat Janji Temu'; }
@@ -462,7 +456,7 @@ const BASE_URL = 'https://api.apexrecord.my.id';
   }
 
   function zdcShowSuccessModal(reservation, layanan) {
-    const link   = `${STATUS_URL}?t=${reservation.token}`;
+    const link   = `${STATUS_URL}?t=${encodeURIComponent(reservation.token)}`;
     const tglFmt = zdcFormatTanggal(reservation.reservationDate.split('T')[0]);
     const waMsg  = encodeURIComponent(
       `Halo Zanak! Saya sudah membuat reservasi online.\n` +
@@ -479,11 +473,11 @@ const BASE_URL = 'https://api.apexrecord.my.id';
         <p class="zdc-modal-eyebrow">Reservasi Berhasil Dibuat</p>
         <p class="zdc-modal-label">Status: Menunggu Konfirmasi Klinik</p>
         <div class="zdc-modal-info" style="margin-top:16px">
-          <div class="zdc-modal-info-row"><i class="fas fa-user"></i><span>${reservation.patientName}</span></div>
+          <div class="zdc-modal-info-row"><i class="fas fa-user"></i><span>${esc(reservation.patientName)}</span></div>
           <div class="zdc-modal-info-row"><i class="fas fa-calendar-day"></i><span>${tglFmt}</span></div>
-          <div class="zdc-modal-info-row"><i class="fas fa-clock"></i><span>${reservation.jamSlot}</span></div>
-          <div class="zdc-modal-info-row"><i class="fas fa-tooth"></i><span>${layanan}</span></div>
-          <div class="zdc-modal-info-row zdc-modal-token"><i class="fas fa-key"></i><span>Token: <strong>${reservation.token}</strong></span></div>
+          <div class="zdc-modal-info-row"><i class="fas fa-clock"></i><span>${esc(reservation.jamSlot)}</span></div>
+          <div class="zdc-modal-info-row"><i class="fas fa-tooth"></i><span>${esc(layanan)}</span></div>
+          <div class="zdc-modal-info-row zdc-modal-token"><i class="fas fa-key"></i><span>Token: <strong>${esc(reservation.token)}</strong></span></div>
         </div>
         <div class="zdc-modal-actions">
           <a href="${link}" class="btn btn-primary btn-full" style="text-decoration:none;text-align:center">
@@ -525,7 +519,7 @@ const BASE_URL = 'https://api.apexrecord.my.id';
       return;
     }
 
-    const isToday = dateStr === new Date().toISOString().split('T')[0];
+    const isToday = dateStr === API.localDate();
     const options = zdcGenerateSlotOptions(hours.open, hours.close, isToday);
     if (!options) {
       sel.innerHTML = '<option value="" selected>Jam operasional hari ini sudah lewat</option>';
@@ -590,7 +584,7 @@ const BASE_URL = 'https://api.apexrecord.my.id';
   function zdcToast(msg, type = 'info') {
     const t = document.createElement('div');
     t.className = `zdc-toast zdc-toast--${type}`;
-    t.innerHTML = `<i class="fas fa-${type==='error'?'exclamation-circle':'check-circle'}"></i> ${msg}`;
+    t.innerHTML = `<i class="fas fa-${type==='error'?'exclamation-circle':'check-circle'}"></i> ${esc(msg)}`;
     document.body.appendChild(t);
     requestAnimationFrame(() => t.classList.add('zdc-toast--show'));
     setTimeout(() => { t.classList.remove('zdc-toast--show'); setTimeout(() => t.remove(), 300); }, 3500);
@@ -678,6 +672,7 @@ function injectStyles() {
 
   // Expose ke window HANYA fungsi yang dipanggil dari onclick="" di HTML
   window.zdcOnDateChange   = zdcOnDateChange;
+  window.zdcOnDoctorChange = zdcOnDoctorChange;
   window.zdcSelectSlot     = zdcSelectSlot;
   window.zdcSubmitAntrian  = zdcSubmitAntrian;
   window.zdcOnWaDateChange = zdcOnWaDateChange;

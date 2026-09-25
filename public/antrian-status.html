@@ -9,6 +9,7 @@
   <link rel="icon" type="image/webp" href="assets/images/logo.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.apexrecord.my.id" crossorigin>
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet"
@@ -314,7 +315,7 @@
       </div>
 
       <p class="refresh-info" id="refreshInfo">
-        Auto-refresh tiap <span id="countdown">15</span> detik
+        Diperbarui otomatis tiap <span id="countdown">60</span> detik
         &nbsp;·&nbsp;
         <a href="#" onclick="fetchStatus();return false">Refresh sekarang</a>
       </p>
@@ -359,11 +360,15 @@
   </div>
 </div>
 
+<script src="js/apex-api.js"></script>
 <script>
-const BASE_URL  = 'https://api.apexrecord.my.id';
-const EP_STATUS = (tok) => `${BASE_URL}/public/reservations/status?token=${tok}`;
-const EP_CANCEL = `${BASE_URL}/public/reservations/cancel`;
+// Semua panggilan ke ApexRecord lewat js/apex-api.js (window.ZDC_API).
+const API = window.ZDC_API;
 const WA_NUMBER = '6289526697902';
+// Status jarang berubah dalam hitungan detik; 60 dtk cukup cepat dan hemat
+// kuota API (tab yang tidak dilihat tidak memanggil API sama sekali).
+const REFRESH_SECONDS = 60;
+const FINAL_STATUSES  = ['completed', 'cancelled', 'rejected'];
 
 // Fallback lama, dipakai hanya kalau backend belum mengirim practitionerName
 // (mis. saat rollout). Sumber kebenaran sekarang ada di respons API.
@@ -371,8 +376,9 @@ const PRACTITIONER_NAMES_FALLBACK = { 2: 'drg. Muhammad Daffa Safra' };
 
 let token      = null;
 let lastStatus = null;
-let countdownN = 15;
+let countdownN = REFRESH_SECONDS;
 let countdownTm = null;
+let lastFetchAt = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
@@ -382,14 +388,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function fetchStatus() {
+  lastFetchAt = Date.now();
   try {
-    const res  = await fetch(EP_STATUS(token), { signal: AbortSignal.timeout(10000) });
-    const data = await res.json();
-    if (!data.success || !data.data) { show('viewError'); return; }
-    renderStatus(data.data);
+    renderStatus(await API.status(token));
     show('viewStatus');
     resetCountdown();
-  } catch {
+  } catch (err) {
+    // Gangguan jaringan sesaat saat auto-refresh: tetap tampilkan data terakhir.
+    if (lastStatus && !err.status) return;
     show('viewError');
   }
 }
@@ -455,6 +461,7 @@ function renderStatus(a) {
       setText('doneSubtitle', 'Hubungi kami via WhatsApp jika ada pertanyaan.');
     }
     clearInterval(countdownTm);
+    countdownTm = null;
     document.getElementById('refreshInfo')?.classList.add('hidden');
     return;
   }
@@ -472,23 +479,10 @@ async function cancelReservation() {
   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Membatalkan…'; }
 
   try {
-    const res  = await fetch(EP_CANCEL, {
-      method:  'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ token }),
-      signal:  AbortSignal.timeout(10000),
-    });
-    const data = await res.json().catch(() => null);
-
-    if (!res.ok || !data?.success) {
-      alert(data?.error?.message || data?.message || 'Gagal membatalkan reservasi. Coba lagi.');
-      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-circle-xmark"></i> Batalkan Reservasi'; }
-      return;
-    }
-
+    await API.cancel(token);
     await fetchStatus();
-  } catch {
-    alert('Gagal terhubung ke server. Coba lagi.');
+  } catch (err) {
+    alert(err.status ? (err.message || 'Gagal membatalkan reservasi. Coba lagi.') : 'Gagal terhubung ke server. Coba lagi.');
     if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-circle-xmark"></i> Batalkan Reservasi'; }
   }
 }
@@ -503,21 +497,9 @@ async function cekViaToken() {
     return;
   }
 
-  if (resEl) resEl.textContent = 'Memeriksa token…';
-
-  try {
-    const r = await fetch(EP_STATUS(tok), { signal: AbortSignal.timeout(10000) });
-    const data = await r.json();
-
-    if (!data.success || !data.data) {
-      if (resEl) resEl.textContent = 'Token tidak ditemukan. Periksa kembali penulisannya.';
-      return;
-    }
-
-    window.location.href = `?t=${tok}`;
-  } catch {
-    if (resEl) resEl.textContent = 'Gagal memeriksa token, coba lagi.';
-  }
+  // Langsung buka halaman statusnya; token yang salah tampil sebagai
+  // "tidak ditemukan" di sana (hemat satu request).
+  window.location.href = `?t=${encodeURIComponent(tok)}`;
 }
 
 function startCountdown() {
@@ -525,14 +507,15 @@ function startCountdown() {
     if (document.hidden) return; // hemat request selagi tab tidak aktif
     countdownN--;
     setText('countdown', countdownN);
-    if (countdownN <= 0) { countdownN = 15; fetchStatus(); }
+    if (countdownN <= 0) fetchStatus();
   }, 1000);
 }
-function resetCountdown() { countdownN = 15; setText('countdown', 15); }
+function resetCountdown() { countdownN = REFRESH_SECONDS; setText('countdown', REFRESH_SECONDS); }
 
 document.addEventListener('visibilitychange', () => {
   // Begitu pengguna kembali ke tab ini, segarkan langsung supaya statusnya tidak basi.
-  if (!document.hidden && token && lastStatus && !['completed', 'cancelled', 'rejected'].includes(lastStatus)) {
+  if (!document.hidden && token && lastStatus && !FINAL_STATUSES.includes(lastStatus)
+      && Date.now() - lastFetchAt > 15000) {
     fetchStatus();
   }
 });
