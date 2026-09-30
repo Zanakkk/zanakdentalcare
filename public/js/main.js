@@ -12,7 +12,12 @@ const DAY_ID    = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu
 const DAY_SHORT = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
 const SCHEMA_DAY = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-let clinicHours = null; // { senin: '08:00-17:00' | 'Tutup', … }
+let clinicHours = null; // { senin: '10:00-21:00' | 'Tutup', … }
+
+// Hari Minggu klinik tidak buka reguler, tapi menerima pasien dengan reservasi
+// (sesuai papan nama klinik) — jadi tidak ditulis "Tutup".
+const SUNDAY = 6;
+const closedLabel = (i) => (i === SUNDAY ? 'Dengan reservasi' : 'Tutup');
 
 document.addEventListener('DOMContentLoaded', () => {
   initNav();
@@ -223,7 +228,7 @@ function renderWeek() {
     const cls = ['week-row', i === t && 'week-row--today', !h && 'week-row--closed'].filter(Boolean).join(' ');
     return `<div class="${cls}">
         <span class="day">${DAY_ID[i]}${i === t ? '<span class="today-tag">Hari ini</span>' : ''}</span>
-        <span class="hrs">${h ? fmtRange(h) : 'Tutup'}</span>
+        <span class="hrs">${h ? fmtRange(h) : closedLabel(i)}</span>
       </div>`;
   }).join('');
 }
@@ -233,10 +238,15 @@ function renderFaqJam() {
   if (!el) return;
   const runs = groupDays(clinicHours);
   const open = runs.filter((r) => r.hours).map((r) => `${runName(r)} pukul ${r.label.replace(/:/g, '.')}`);
-  const closed = runs.filter((r) => !r.hours).map(runName);
   if (!open.length) return;
-  el.textContent = `${open.join(', ')}.${closed.length ? ` Tutup pada hari ${closed.join(' dan ')}.` : ''}` +
-    ' Jadwal ini mengikuti sistem klinik dan selalu terbaru.';
+  const sundayByAppointment = !API().parseHours(clinicHours[API().DAY_KEY[SUNDAY]]);
+  const closed = runs.filter((r) => !r.hours)
+    .map((r) => ({ ...r, to: sundayByAppointment && r.to === SUNDAY ? SUNDAY - 1 : r.to }))
+    .filter((r) => r.from <= r.to)
+    .map(runName);
+  el.textContent = `${open.join(', ')}.` +
+    (closed.length ? ` Tutup pada hari ${closed.join(' dan ')}.` : '') +
+    (sundayByAppointment ? ' Hari Minggu dengan reservasi terlebih dahulu melalui WhatsApp.' : '');
 }
 
 /** Jam buka di data terstruktur (Google) ikut jadwal ApexRecord. */
@@ -284,7 +294,7 @@ const doctorHours = (d) => d.jadwalPraktik || clinicHours || {};
 function dayChips(hoursMap) {
   return API().DAY_KEY.map((key, i) => {
     const h = API().parseHours(hoursMap[key]);
-    return `<span class="doc-day${h ? '' : ' doc-day--off'}"><b>${DAY_SHORT[i]}</b>${h ? fmtRange(h) : 'Libur'}</span>`;
+    return `<span class="doc-day${h ? '' : ' doc-day--off'}"><b>${DAY_SHORT[i]}</b>${h ? fmtRange(h) : (i === SUNDAY ? 'Reservasi' : 'Libur')}</span>`;
   }).join('');
 }
 
