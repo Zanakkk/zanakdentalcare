@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initReveal();
   initStatusLinks();
   initFloatActions();
+  initReviews();
   initClinic();
   // Dokter, jam kosong & konten baru dimuat saat pengunjung mendekati
   // bagiannya — hemat kuota API untuk yang hanya melihat bagian atas.
@@ -129,6 +130,23 @@ function initFloatActions() {
     });
   }, { threshold: 0.3 });
   Object.keys(messages).forEach((id) => $(id) && obs.observe($(id)));
+}
+
+/** Ulasan: tampilkan sebagian dulu, sisanya lewat tombol (tanpa JS semua tampil). */
+function initReviews() {
+  const grid = $('testiGrid');
+  const btn = $('testiToggle');
+  if (!grid || !btn || !grid.querySelector('.testi--more')) return;
+  const label = btn.innerHTML;
+  grid.classList.add('is-collapsed');
+  btn.hidden = false;
+  btn.addEventListener('click', () => {
+    const expand = grid.classList.contains('is-collapsed');
+    grid.classList.toggle('is-collapsed', !expand);
+    btn.setAttribute('aria-expanded', expand);
+    btn.innerHTML = expand ? 'Tampilkan lebih sedikit <i class="fas fa-chevron-up"></i>' : label;
+    if (!expand) $('testimoni')?.scrollIntoView({ behavior: 'smooth' });
+  });
 }
 
 /* ── Jam buka & status ────────────────────────────────────── */
