@@ -26,7 +26,7 @@
   <meta name="geo.placename" content="Payakumbuh Utara">
   <meta name="geo.position" content="-0.210803;100.645333">
   <meta name="ICBM" content="-0.210803, 100.645333">
-  <script type="application/ld+json">
+  <script type="application/ld+json" id="ldDentist">
   {
     "@context": "https://schema.org",
     "@type": "Dentist",
@@ -107,856 +107,440 @@
 
   <link rel="icon" type="image/webp" href="assets/images/logo.webp">
   <link rel="apple-touch-icon" href="assets/images/logo.webp">
+  <meta name="theme-color" content="#F3F1EC">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="preconnect" href="https://api.apexrecord.my.id" crossorigin>
   <link rel="preload" as="image" href="assets/images/depan.webp" type="image/webp">
   <link rel="preload" as="style"
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap"
         onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"></noscript>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap"></noscript>
   <link rel="preload" as="style"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
-  <link rel="stylesheet" href="css/style.css">
-
-  <style>
-    :root {
-      --p: #1E3A6E;
-      --p-dark: #142850;
-      --acc: #3B5FA0;
-    }
-
-    @media (max-width: 559px) {
-      .footer-grid { grid-template-columns: 1fr !important; gap: 28px; }
-      .footer-links, .footer-kontak { display: none; }
-      .footer-brand { text-align: center; }
-      .footer-sosmed { justify-content: center; }
-      .footer-mobile-kontak {
-        display: flex !important;
-        flex-direction: column;
-        gap: 8px;
-        font-size: .82rem;
-        color: rgba(255,255,255,.45);
-        text-align: center;
-        padding-top: 4px;
-      }
-      .footer-mobile-kontak a { color: rgba(255,255,255,.55); }
-    }
-    .footer-mobile-kontak { display: none; }
-
-    .llink {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: .76rem;
-      font-weight: 700;
-      color: var(--p);
-      margin-top: auto;
-      padding-top: 4px;
-      transition: gap .15s;
-    }
-    .layanan-card--accent .llink { color: rgba(255,255,255,.75); }
-    .llink:hover { gap: 8px; }
-
-    /* ── Carousel (shared) ── */
-    .lcarousel { overflow: hidden; }
-    .lcarousel-track {
-      display: grid;
-      grid-auto-flow: column;
-      gap: 16px;
-      transition: transform .45s cubic-bezier(.22,.68,0,1);
-      grid-auto-columns: 100%;
-      cursor: grab;
-      touch-action: pan-y;
-    }
-    .lcarousel-track:active { cursor: grabbing; }
-    @media (min-width: 640px) { .lcarousel-track { grid-auto-columns: calc((100% - 16px) / 2); } }
-    @media (min-width: 900px) { .lcarousel-track { grid-auto-columns: calc((100% - 48px) / 4); } }
-    .lcarousel-track--dark { grid-auto-columns: 100%; }
-    @media (min-width: 640px) { .lcarousel-track--dark { grid-auto-columns: calc((100% - 16px) / 2); } }
-    @media (min-width: 900px) { .lcarousel-track--dark { grid-auto-columns: calc((100% - 32px) / 3); } }
-    .layanan-card { height: 100%; }
-
-    .lcarousel-nav { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 24px; }
-    .lnav-btn {
-      width: 38px; height: 38px; border-radius: 50%;
-      border: 1.5px solid var(--g200); background: var(--white); color: var(--p);
-      font-size: .85rem; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: all .15s; flex-shrink: 0;
-    }
-    .lnav-btn:hover:not(:disabled) { background: var(--p); color: #fff; border-color: var(--p); }
-    .lnav-btn:disabled { opacity: .3; cursor: default; }
-    .lnav-dots { display: flex; gap: 6px; }
-    .lnav-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--g200); transition: background .2s, transform .2s; }
-    .lnav-dot.active { background: var(--p); transform: scale(1.3); }
-    .lnav-btn--dark { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.2); color: #fff; }
-    .lnav-btn--dark:hover:not(:disabled) { background: var(--acc); border-color: var(--acc); }
-    .lnav-btn--dark:disabled { opacity: .25; }
-    .lcarousel-nav--dark .lnav-dot { background: rgba(255,255,255,.2); }
-    .lcarousel-nav--dark .lnav-dot.active { background: var(--acc); }
-
-    /* ── Foto fasilitas ── */
-    .fasil-photo-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-      max-width: 900px;
-      margin: 0 auto 28px;
-    }
-    @media (min-width: 640px) { .fasil-photo-grid { grid-template-columns: 1fr 1fr; } }
-    .fasil-photo {
-      position: relative;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 12px 30px rgba(0,0,0,.18);
-    }
-    .fasil-photo img { width: 100%; height: 280px; object-fit: cover; display: block; }
-    .fasil-photo span {
-      position: absolute; left: 0; right: 0; bottom: 0;
-      padding: 10px 16px;
-      background: linear-gradient(transparent, rgba(0,0,0,.65));
-      color: #fff; font-size: .8rem; font-weight: 600;
-    }
-  </style>
+  <link rel="stylesheet" href="css/home.css">
 </head>
-<body>
+<body class="home">
+  <div class="bg-grid" aria-hidden="true"></div>
 
   <!-- NAVBAR -->
-  <nav class="navbar" id="navbar">
-    <div class="container navbar-inner">
-      <a href="index.html" class="navbar-logo">
-        <img src="assets/images/logo.webp" alt="Logo Zanak Dental Care" class="logo-img" width="120" height="40">
-        <div class="logo-text">
-          <span class="logo-name">Zanak</span>
-          <span class="logo-sub">Dental Care</span>
-        </div>
+  <header class="nav" id="navbar">
+    <div class="container nav-row">
+      <a href="/" class="brand" aria-label="Zanak Dental Care — beranda">
+        <span class="brand-mark"><img src="assets/images/logo.webp" alt="" width="38" height="38"></span>
+        <span class="brand-word">Zanak<small>Dental Care</small></span>
       </a>
-      <ul class="navbar-menu">
-        <li><a href="#layanan">Layanan</a></li>
-        <li><a href="#fasilitas">Fasilitas</a></li>
-        <li><a href="#dokter">Dokter</a></li>
-        <li><a href="#jam-buka">Jam Buka</a></li>
-        <li><a href="#testimoni">Testimoni</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="#lokasi">Lokasi</a></li>
-      </ul>
-      <a href="#antrian-online" class="btn btn-primary navbar-cta">
-        <i class="fas fa-calendar-check"></i> Reservasi
-      </a>
-      <button class="hamburger" id="hamburger" aria-label="Buka menu" aria-expanded="false">
+      <nav class="nav-links" aria-label="Navigasi utama">
+        <a href="#layanan">Layanan</a>
+        <a href="#jadwal">Jadwal</a>
+        <a href="#dokter">Dokter</a>
+        <a href="#fasilitas">Fasilitas</a>
+        <a href="#faq">FAQ</a>
+        <a href="#lokasi">Lokasi</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="antrian-status.html" class="btn btn-ghost btn-sm js-status-link">Cek Reservasi</a>
+        <a href="#antrian-online" class="btn btn-primary btn-sm"><i class="fas fa-calendar-check"></i> Reservasi</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Buka menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span><span></span>
       </button>
     </div>
-    <div class="mobile-menu" id="mobileMenu">
-      <ul>
-        <li><a href="#layanan" class="mobile-link">Layanan</a></li>
-        <li><a href="#fasilitas" class="mobile-link">Fasilitas</a></li>
-        <li><a href="#dokter" class="mobile-link">Dokter</a></li>
-        <li><a href="#jam-buka" class="mobile-link">Jam Buka</a></li>
-        <li><a href="#testimoni" class="mobile-link">Testimoni</a></li>
-        <li><a href="#faq" class="mobile-link">FAQ</a></li>
-        <li><a href="#lokasi" class="mobile-link">Lokasi</a></li>
-      </ul>
-      <a href="#antrian-online" class="btn btn-primary btn-full mobile-link">
-        <i class="fas fa-calendar-check"></i> Reservasi Sekarang
-      </a>
-    </div>
-  </nav>
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Menu">
+      <a href="#layanan" class="mobile-link">Layanan</a>
+      <a href="#jadwal" class="mobile-link">Jadwal &amp; Jam Buka</a>
+      <a href="#dokter" class="mobile-link">Dokter</a>
+      <a href="#fasilitas" class="mobile-link">Fasilitas</a>
+      <a href="#faq" class="mobile-link">FAQ</a>
+      <a href="#lokasi" class="mobile-link">Lokasi</a>
+      <a href="antrian-status.html" class="mobile-link js-status-link">Cek Reservasi Saya</a>
+      <a href="#antrian-online" class="btn btn-primary btn-full mobile-link"><i class="fas fa-calendar-check"></i> Reservasi Sekarang</a>
+    </nav>
+  </header>
 
   <main>
 
     <!-- HERO -->
-   <section class="hero" id="hero">
-  <div style="
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    min-height: 560px;
-    overflow: hidden;
-  ">
-    <!-- Foto -->
-    <img src="assets/images/depan.webp"
-         alt="Tampak depan Zanak Dental Care"
-         fetchpriority="high"
-         style="
-           position: absolute;
-           inset: 0;
-           width: 100%;
-           height: 100%;
-           object-fit: cover;
-           object-position: center;
-         ">
-
-    <!-- Overlay gradient bawah saja, bukan full gelap -->
-    <div style="
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.10) 0%,
-        rgba(0,0,0,0.15) 40%,
-        rgba(0,0,0,0.72) 100%
-      );
-    "></div>
-
-    <!-- Konten teks — anchor di bawah -->
-    <div style="
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 48px 5%;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 16px;
-    ">
-      <span id="statusBadge" style="
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255,255,255,0.25);
-        border-radius: 99px;
-        padding: 6px 16px;
-        font-size: .82rem;
-        font-weight: 600;
-        color: #fff;
-      ">
-        <span class="status-dot"></span>
-        <span id="statusText">Memuat...</span>
-      </span>
-
-      <h1 style="
-        margin: 0;
-        font-size: clamp(2rem, 5vw, 3.6rem);
-        font-weight: 900;
-        color: #fff;
-        line-height: 1.1;
-        text-shadow: 0 2px 16px rgba(0,0,0,0.35);
-      ">
-        ZANAK DENTAL CARE
-      </h1>
-
-      <p style="
-        margin: 0;
-        font-size: clamp(.95rem, 2vw, 1.15rem);
-        color: rgba(255,255,255,0.88);
-        max-width: 460px;
-        line-height: 1.6;
-        text-shadow: 0 1px 8px rgba(0,0,0,0.4);
-      ">
-        Klinik Gigi di Payakumbuh.<br>
-        Dokter STR aktif · Reservasi online.
-      </p>
-
-      <a href="#antrian-online" class="btn btn-primary btn-lg" style="margin-top: 8px;">
-        <i class="fas fa-calendar-check"></i> Reservasi Sekarang
-      </a>
-    </div>
-  </div>
-</section>
-
-    <!-- TENTANG / KEUNGGULAN -->
-    <section class="section" id="tentang">
-      <div class="container">
-        <div class="iso-grid">
-          <div class="iso-text" data-aos="fade-right">
-            <span class="section-tag">Tentang Zanak</span>
-            <h2>Klinik gigi baru di Payakumbuh</h2>
-            <p>Zanak Dental Care melayani perawatan gigi sehari-hari — dari scaling, tambal, cabut, hingga perawatan saluran akar dan ortodontik.</p>
-            <p style="margin-top:12px">Nama <em>Zanak</em> berasal dari kata <em>sanak</em> — saudara dalam bahasa Minang. Filosofinya sederhana: pasien diperlakukan seperti keluarga, bukan sekadar nomor antrean.</p>
-            <div class="iso-usp">
-              <div class="iso-usp-item"><i class="fas fa-check"></i><span>Dokter STR aktif, lulusan FKG Universitas Andalas</span></div>
-              <div class="iso-usp-item"><i class="fas fa-check"></i><span>Reservasi online — pilih tanggal & jam sendiri</span></div>
-              <div class="iso-usp-item"><i class="fas fa-check"></i><span>Rekam medis digital & reminder kontrol via WhatsApp</span></div>
-              <div class="iso-usp-item"><i class="fas fa-check"></i><span>Lokasi di Jl. Sudirman, Payakumbuh Utara</span></div>
-            </div>
+    <section class="hero" id="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="pill" id="statusBadge">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">Memuat status klinik…</span>
+          </span>
+          <h1>Klinik gigi keluarga di Payakumbuh, <span class="accent">tanpa antre lama.</span></h1>
+          <p class="lead">
+            Pilih tanggal dan jam sendiri dari HP, datang sesuai jadwal, langsung ditangani
+            drg. Muhammad Daffa Safra. Jadwal di website ini selalu sama dengan jadwal di klinik.
+          </p>
+          <div class="hero-ctas">
+            <a href="#antrian-online" class="btn btn-primary btn-lg">
+              <i class="fas fa-calendar-check"></i> Buat Janji Online
+            </a>
+            <a href="#jadwal" class="btn btn-ghost btn-lg">Lihat Jam Kosong</a>
           </div>
-          <div class="iso-img-wrap" data-aos="fade-left">
-            <picture>
-              <source srcset="assets/images/isometric.webp" type="image/webp">
-              <img src="assets/images/isometric.webp" alt="Layout 3D Zanak Dental Care Payakumbuh"
-                   class="iso-img" width="600" height="400" loading="lazy">
-            </picture>
-            <div class="iso-badges">
-              <div class="iso-badge"><i class="fas fa-certificate"></i> STR Aktif</div>
-              <div class="iso-badge"><i class="fas fa-calendar-check"></i> Reservasi Online</div>
-            </div>
+          <div class="trust-row">
+            <span class="trust-item"><i class="fas fa-circle-check"></i> Dokter STR aktif</span>
+            <span class="trust-item"><i class="fas fa-circle-check"></i> Pilih jam sendiri, H-30</span>
+            <span class="trust-item"><i class="fas fa-circle-check"></i> Konfirmasi via WhatsApp</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="float-card float-1">
+            <span class="ic"><i class="fas fa-clock"></i></span>
+            <div><div class="t">Jam buka hari ini</div><div class="n" id="heroJamHariIni">Memuat…</div></div>
+          </div>
+          <div class="hero-photo">
+            <img src="assets/images/depan.webp" alt="Tampak depan Zanak Dental Care, Jl. Sudirman, Payakumbuh Utara"
+                 width="1086" height="1448" fetchpriority="high">
+          </div>
+          <div class="float-card float-2">
+            <span class="ic ic--ok"><i class="fas fa-location-dot"></i></span>
+            <div><div class="t">Jl. Sudirman No.7</div><div class="n">Payakumbuh Utara</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARA BOOKING -->
+    <section class="section" id="cara" style="padding-top:24px">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Cara reservasi</span>
+          <h2>Tiga langkah, kurang dari satu menit.</h2>
+        </div>
+        <div class="steps reveal">
+          <div class="step">
+            <span class="num">01</span>
+            <h3>Pilih tanggal &amp; jam</h3>
+            <p>Hanya jam yang masih kosong yang ditampilkan — langsung dari sistem klinik, tidak perlu tanya dulu.</p>
+          </div>
+          <div class="step">
+            <span class="num">02</span>
+            <h3>Isi nama &amp; nomor WhatsApp</h3>
+            <p>Tanpa akun, tanpa aplikasi. Ceritakan keluhan singkat bila perlu.</p>
+          </div>
+          <div class="step">
+            <span class="num">03</span>
+            <h3>Datang sesuai jadwal</h3>
+            <p>Klinik mengonfirmasi via WhatsApp. Cek atau batalkan kapan saja cukup dengan nomor WA dan nama.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- LAYANAN -->
-    <section class="section section--gray" id="layanan">
+    <section class="section section--soft" id="layanan">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
-          <span class="section-tag">Layanan</span>
-          <h2>Tindakan yang Kami Tangani</h2>
-          <p class="section-sub">Tindakan dilakukan langsung oleh dokter gigi, sesuai kebutuhan dan kondisi klinis Anda.</p>
+        <div class="section-head reveal">
+          <span class="eyebrow">Layanan</span>
+          <h2>Tindakan yang kami tangani</h2>
+          <p>Semua tindakan dilakukan langsung oleh dokter gigi, sesuai kebutuhan dan kondisi klinis Anda. Ketuk untuk penjelasan lengkap.</p>
         </div>
 
-        <div class="lcarousel" id="lcarousel">
-          <div class="lcarousel-track" id="ltrack">
-
-            <article class="layanan-card">
-              <div class="lcard-top"><div class="licon"><i class="fas fa-tooth"></i></div><span class="lbadge">Pencegahan</span></div>
-              <h3>Scaling</h3>
-              <p class="ldef">Pembersihan karang gigi dan plak yang menempel di permukaan gigi menggunakan ultrasonic scaler.</p>
-              <a href="scaling-gigi-payakumbuh.html" class="llink">Detail <i class="fas fa-arrow-right"></i></a>
-            </article>
-
-            <article class="layanan-card">
-              <div class="lcard-top"><div class="licon"><i class="fas fa-fill-drip"></i></div><span class="lbadge">Restorasi</span></div>
-              <h3>Tambal Gigi</h3>
-              <p class="ldef">Penambalan kavitas akibat karies menggunakan bahan GIC atau resin komposit, sesuai indikasi klinis.</p>
-              <a href="tambal-gigi-payakumbuh.html" class="llink">Detail <i class="fas fa-arrow-right"></i></a>
-            </article>
-
-            <article class="layanan-card">
-              <div class="lcard-top"><div class="licon"><i class="fas fa-plus-circle"></i></div><span class="lbadge">Bedah Minor</span></div>
-              <h3>Ekstraksi Gigi</h3>
-              <p class="ldef">Pencabutan gigi yang sudah tidak dapat dipertahankan karena kerusakan berat, infeksi, atau keperluan ortodontik.</p>
-              <a href="cabut-gigi-payakumbuh.html" class="llink">Detail <i class="fas fa-arrow-right"></i></a>
-            </article>
-
-            <article class="layanan-card">
-              <div class="lcard-top"><div class="licon"><i class="fas fa-syringe"></i></div><span class="lbadge">Endodontik</span></div>
-              <h3>Perawatan Saluran Akar</h3>
-              <p class="ldef">Tindakan untuk menyelamatkan gigi yang pulpanya terinfeksi atau nekrosis akibat karies dalam.</p>
-              <a href="saluran-akar-payakumbuh.html" class="llink">Detail <i class="fas fa-arrow-right"></i></a>
-            </article>
-
-            <article class="layanan-card">
-              <div class="lcard-top"><div class="licon"><i class="fas fa-procedures"></i></div><span class="lbadge">Bedah Minor</span></div>
-              <h3>Odontektomi</h3>
-              <p class="ldef">Pengangkatan gigi molar tiga (gigi bungsu) yang mengalami impaksi.</p>
-              <a href="odontektomi-gigi-bungsu-payakumbuh.html" class="llink">Detail <i class="fas fa-arrow-right"></i></a>
-            </article>
-
-            <article class="layanan-card layanan-card--accent">
-              <div class="lcard-top"><div class="licon licon--white"><i class="fas fa-smile"></i></div><span class="lbadge lbadge--white">Ortodontik</span></div>
-              <h3>Kawat Gigi</h3>
-              <p class="ldef" style="color:rgba(255,255,255,.82)">Perawatan untuk koreksi susunan gigi yang tidak rata, renggang, atau gigitan yang tidak ideal.</p>
-              <a href="kawat-gigi-payakumbuh.html" class="llink">Detail <i class="fas fa-arrow-right"></i></a>
-            </article>
-
-            <article class="layanan-card">
-              <div class="lcard-top"><div class="licon"><i class="fas fa-teeth"></i></div><span class="lbadge">Prostodonsia</span></div>
-              <h3>Gigi Tiruan</h3>
-              <p class="ldef">Pembuatan protesa lepasan untuk menggantikan gigi yang hilang.</p>
-              <a href="gigi-tiruan-payakumbuh.html" class="llink">Detail <i class="fas fa-arrow-right"></i></a>
-            </article>
-
-            <article class="layanan-card layanan-card--consult">
-              <div class="lcard-top"><div class="licon"><i class="fas fa-comments"></i></div><span class="lbadge">Pertama Kali?</span></div>
-              <h3>Konsultasi & Pemeriksaan</h3>
-              <p class="ldef">Belum tahu butuh tindakan apa? Dokter akan memeriksa dan merekomendasikan rencana perawatan. Gunakan tombol Reservasi di atas untuk membuat jadwal.</p>
-            </article>
-
-          </div>
+        <div class="svc-grid reveal">
+          <a href="scaling-gigi-payakumbuh.html" class="svc-card">
+            <div class="svc-top"><span class="svc-icon"><i class="fas fa-tooth"></i></span><span class="svc-tag">Pencegahan</span></div>
+            <h3>Scaling</h3>
+            <p>Pembersihan karang gigi dan plak dengan ultrasonic scaler.</p>
+            <span class="svc-more">Detail <i class="fas fa-arrow-right"></i></span>
+          </a>
+          <a href="tambal-gigi-payakumbuh.html" class="svc-card">
+            <div class="svc-top"><span class="svc-icon"><i class="fas fa-fill-drip"></i></span><span class="svc-tag">Restorasi</span></div>
+            <h3>Tambal Gigi</h3>
+            <p>Penambalan gigi berlubang dengan GIC atau resin komposit, sesuai indikasi.</p>
+            <span class="svc-more">Detail <i class="fas fa-arrow-right"></i></span>
+          </a>
+          <a href="cabut-gigi-payakumbuh.html" class="svc-card">
+            <div class="svc-top"><span class="svc-icon"><i class="fas fa-plus-circle"></i></span><span class="svc-tag">Bedah minor</span></div>
+            <h3>Cabut Gigi</h3>
+            <p>Pencabutan gigi yang tidak dapat dipertahankan, termasuk gigi susu anak.</p>
+            <span class="svc-more">Detail <i class="fas fa-arrow-right"></i></span>
+          </a>
+          <a href="saluran-akar-payakumbuh.html" class="svc-card">
+            <div class="svc-top"><span class="svc-icon"><i class="fas fa-syringe"></i></span><span class="svc-tag">Endodontik</span></div>
+            <h3>Perawatan Saluran Akar</h3>
+            <p>Menyelamatkan gigi yang sarafnya terinfeksi akibat lubang yang dalam.</p>
+            <span class="svc-more">Detail <i class="fas fa-arrow-right"></i></span>
+          </a>
+          <a href="odontektomi-gigi-bungsu-payakumbuh.html" class="svc-card">
+            <div class="svc-top"><span class="svc-icon"><i class="fas fa-procedures"></i></span><span class="svc-tag">Bedah minor</span></div>
+            <h3>Odontektomi</h3>
+            <p>Pengangkatan gigi bungsu (molar tiga) yang tumbuh miring atau terpendam.</p>
+            <span class="svc-more">Detail <i class="fas fa-arrow-right"></i></span>
+          </a>
+          <a href="kawat-gigi-payakumbuh.html" class="svc-card svc-card--dark">
+            <div class="svc-top"><span class="svc-icon"><i class="fas fa-face-smile"></i></span><span class="svc-tag">Ortodontik</span></div>
+            <h3>Kawat Gigi (Behel)</h3>
+            <p>Merapikan gigi tidak rata, renggang, atau gigitan yang tidak ideal.</p>
+            <span class="svc-more">Detail <i class="fas fa-arrow-right"></i></span>
+          </a>
+          <a href="gigi-tiruan-payakumbuh.html" class="svc-card">
+            <div class="svc-top"><span class="svc-icon"><i class="fas fa-teeth"></i></span><span class="svc-tag">Prostodonsia</span></div>
+            <h3>Gigi Tiruan</h3>
+            <p>Protesa lepasan untuk menggantikan gigi yang hilang.</p>
+            <span class="svc-more">Detail <i class="fas fa-arrow-right"></i></span>
+          </a>
+          <a href="#antrian-online" class="svc-card">
+            <div class="svc-top"><span class="svc-icon"><i class="fas fa-comments"></i></span><span class="svc-tag">Pertama kali?</span></div>
+            <h3>Konsultasi &amp; Pemeriksaan</h3>
+            <p>Belum tahu butuh tindakan apa? Dokter memeriksa dan menyusun rencana perawatan.</p>
+            <span class="svc-more">Buat janji <i class="fas fa-arrow-right"></i></span>
+          </a>
         </div>
-
-        <div class="lcarousel-nav">
-          <button class="lnav-btn" id="lPrev" aria-label="Sebelumnya"><i class="fas fa-chevron-left"></i></button>
-          <div class="lnav-dots" id="lDots"></div>
-          <button class="lnav-btn" id="lNext" aria-label="Berikutnya"><i class="fas fa-chevron-right"></i></button>
-        </div>
-
       </div>
     </section>
 
-    <!-- FASILITAS -->
-    <section class="section section--dark" id="fasilitas">
+    <!-- JADWAL (data langsung dari ApexRecord) -->
+    <section class="section" id="jadwal">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
-          <span class="section-tag section-tag--light">Fasilitas & Peralatan</span>
-          <h2>Fasilitas yang Kami Gunakan</h2>
-          <p class="section-sub">Peralatan standar untuk mendukung tindakan yang aman dan nyaman bagi pasien.</p>
+        <div class="section-head reveal">
+          <span class="eyebrow">Jadwal &amp; jam buka</span>
+          <h2>Cek jam kosong, lalu langsung pesan.</h2>
+          <p>Jadwal ini diambil langsung dari sistem klinik — kalau jam buka atau jadwal dokter berubah, halaman ini ikut berubah.</p>
         </div>
 
-        <div class="fasil-photo-grid" data-aos="fade-up">
-          <div class="fasil-photo">
-            <img src="assets/images/depan.webp" alt="Tampak depan klinik Zanak Dental Care" loading="lazy">
-            <span>Tampak Depan Klinik</span>
+        <div class="jadwal-grid">
+          <div class="panel reveal">
+            <div class="panel-head">
+              <h3>Jam buka minggu ini</h3>
+              <span class="chip" id="jadwalStatusChip">Memuat…</span>
+            </div>
+            <div class="week" id="jamJadwalList">
+              <div class="week-skeleton">Memuat jadwal…</div>
+            </div>
           </div>
-          <div class="fasil-photo">
-            <img src="assets/images/RuangPeriksa.webp" alt="Ruang periksa Zanak Dental Care" loading="lazy">
-            <span>Ruang Periksa</span>
-          </div>
-        </div>
 
-        <div class="lcarousel" id="fcarousel">
-          <div class="lcarousel-track lcarousel-track--dark" id="ftrack">
-            <div class="fasil-card">
-              <div class="fasil-icon"><i class="fas fa-couch"></i></div>
-              <h3>Ruang Tunggu</h3>
-              <p>Ruang tunggu dengan pencahayaan hangat dan area duduk yang nyaman.</p>
+          <div class="panel reveal" id="slotPanel">
+            <div class="panel-head">
+              <h3>Jam kosong terdekat</h3>
+              <span class="chip chip--ok"><i class="fas fa-bolt"></i> Real-time</span>
             </div>
-            <div class="fasil-card">
-              <div class="fasil-icon"><i class="fas fa-chair"></i></div>
-              <h3>Dental Chair</h3>
-              <p>Kursi perawatan dengan posisi yang dapat disesuaikan dan lampu operasi LED.</p>
-            </div>
-            <div class="fasil-card">
-              <div class="fasil-icon"><i class="fas fa-shield-virus"></i></div>
-              <h3>Sterilisasi Alat</h3>
-              <p>Instrumen disterilkan dengan autoclave sebelum digunakan pada setiap pasien.</p>
-            </div>
-            <div class="fasil-card">
-              <div class="fasil-icon"><i class="fas fa-wave-square"></i></div>
-              <h3>Ultrasonic Scaler</h3>
-              <p>Digunakan untuk pembersihan karang gigi.</p>
-            </div>
-            <div class="fasil-card">
-              <div class="fasil-icon"><i class="fas fa-syringe"></i></div>
-              <h3>Anestesi Lokal</h3>
-              <p>Dilakukan sesuai kebutuhan sebelum tindakan yang memerlukannya.</p>
-            </div>
-            <div class="fasil-card">
-              <div class="fasil-icon"><i class="fas fa-tablet-alt"></i></div>
-              <h3>Rekam Medis Digital</h3>
-              <p>Riwayat perawatan tersimpan digital, dengan reminder kontrol via WhatsApp.</p>
-            </div>
+            <p class="slot-day" id="slotDay">Memuat jam kosong…</p>
+            <div class="slot-chips" id="slotChips"></div>
+            <a href="#antrian-online" class="btn btn-primary btn-full" id="slotMore">
+              <i class="fas fa-calendar-days"></i> Pilih tanggal lain
+            </a>
+            <div class="doc-sched" id="docSched" hidden></div>
+            <p class="note"><i class="fas fa-circle-info"></i> Ketuk salah satu jam untuk langsung mengisi formulir reservasi.</p>
           </div>
-        </div>
-
-        <div class="lcarousel-nav lcarousel-nav--dark">
-          <button class="lnav-btn lnav-btn--dark" id="fPrev" aria-label="Sebelumnya"><i class="fas fa-chevron-left"></i></button>
-          <div class="lnav-dots" id="fDots"></div>
-          <button class="lnav-btn lnav-btn--dark" id="fNext" aria-label="Berikutnya"><i class="fas fa-chevron-right"></i></button>
         </div>
       </div>
     </section>
 
     <!-- DOKTER -->
-    <section class="section" id="dokter">
+    <section class="section section--soft" id="dokter">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
-          <span class="section-tag">Tim Medis</span>
-          <h2>Kenali Dokter Anda</h2>
+        <div class="section-head reveal">
+          <span class="eyebrow">Tim medis</span>
+          <h2>Kenali dokter Anda</h2>
         </div>
-        <div class="dokter-card" data-aos="fade-up">
-          <div class="dokter-photo-wrap">
-            <picture>
-              <source srcset="assets/images/dokter.webp" type="image/webp">
+        <div class="doc-list" id="docList">
+          <article class="doc-card reveal" data-doctor="daffa">
+            <div class="doc-photo">
               <img src="assets/images/dokter.webp"
                    alt="drg. Muhammad Daffa Safra — Dokter Gigi Zanak Dental Care Payakumbuh"
-                   class="dokter-photo" width="220" height="280" loading="lazy"
-                   onerror="this.closest('picture').style.display='none';document.querySelector('.dokter-placeholder').style.display='flex'">
-            </picture>
-            <div class="dokter-placeholder" style="display:none"><i class="fas fa-user-md"></i></div>
-          </div>
-          <div class="dokter-info">
-            <div class="dokter-badges">
-              <span class="badge badge-primary"><i class="fas fa-certificate"></i> STR Aktif</span>
-              <span class="badge badge-secondary"><i class="fas fa-graduation-cap"></i> FKG UNAND</span>
+                   width="240" height="300" loading="lazy">
             </div>
-            <h3 class="dokter-name">drg. Muhammad Daffa Safra</h3>
-            <p class="dokter-cred">
-              S.K.G · Universitas Andalas, 2022<br>
-              Profesi Dokter Gigi · Universitas Andalas, 2025
-            </p>
-            <p class="dokter-desc justify-indent">Menjalani internship di Puskesmas Sidorahayu, Puskesmas Sukadamai, dan RSUD Sekayu sebelum membuka praktik di Payakumbuh Utara.</p>
-          </div>
+            <div>
+              <div class="doc-badges">
+                <span class="badge badge--ok"><i class="fas fa-certificate"></i> STR Aktif</span>
+                <span class="badge"><i class="fas fa-graduation-cap"></i> FKG UNAND</span>
+              </div>
+              <h3 class="doc-name">drg. Muhammad Daffa Safra</h3>
+              <p class="doc-cred">S.K.G · Universitas Andalas, 2022<br>Profesi Dokter Gigi · Universitas Andalas, 2025</p>
+              <p class="doc-desc">Menjalani internship di Puskesmas Sidorahayu, Puskesmas Sukadamai, dan RSUD Sekayu sebelum membuka praktik di Payakumbuh Utara.</p>
+              <div class="doc-days" data-doc-days></div>
+              <a href="#antrian-online" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Buat janji dengan dokter</a>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- JAM BUKA -->
-    <section class="section section--primary" id="jam-buka">
+    <!-- HASIL PERAWATAN — muncul otomatis bila klinik menerbitkan konten di ApexRecord -->
+    <section class="section" id="hasil" hidden>
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
-          <span class="section-tag section-tag--light">Operasional</span>
-          <h2>Jam Buka Klinik</h2>
-          <p class="section-sub">Jadwal operasional kami sepanjang minggu.</p>
+        <div class="section-head reveal is-visible">
+          <span class="eyebrow">Hasil perawatan</span>
+          <h2>Sebelum &amp; sesudah di Zanak</h2>
+          <p>Cerita perawatan pasien kami, diterbitkan dengan persetujuan pasien.</p>
         </div>
-
-        <div class="jam-week-list" id="jamJadwalList" data-aos="fade-up">
-          <div class="jam-week-row jam-week-row--skeleton">
-            <span>Memuat jadwal…</span>
-          </div>
-        </div>
-
-        <div class="jam-footer" data-aos="fade-up">
-          <div class="jam-fi"><i class="fas fa-calendar-check"></i><div><strong>Booking H-30</strong><span>Reservasi hingga 30 hari ke depan</span></div></div>
-          <div class="jam-fi"><i class="fab fa-whatsapp"></i><div><strong>Booking via WhatsApp</strong><span>Konfirmasi jadwal langsung</span></div></div>
-          <div class="jam-fi"><i class="fas fa-clock"></i><div><strong id="statusJam">Memuat status...</strong><span>Status klinik saat ini</span></div></div>
-        </div>
+        <div class="story-grid" id="storyGrid"></div>
+        <p class="story-note">Hasil tiap pasien dapat berbeda, tergantung kondisi klinis masing-masing.</p>
       </div>
     </section>
 
-    <style>
-/* ═══════════════════════════════════════════════
-   JAM BUKA — Full Redesign v3
-═══════════════════════════════════════════════ */
-
-/* ── Grid jadwal 2 kolom ── */
-.jam-week-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-flow: row;   /* ← pastikan row, bukan column */
-  gap: 10px;
-  width: 100%;
-  max-width: 780px;
-  margin: 0 auto 24px;
-}
-
-/* Minggu selalu full width paling bawah */
-.jam-week-row--sunday {
-  grid-column: 1 / -1 !important;
-  order: 999 !important;  /* ← dorong ke bawah */
-}
-
-.jam-week-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.10);
-  font-size: 0.88rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.55);
-  min-height: 56px;
-  transition: background 0.15s, border-color 0.15s;
-}
-
-/* Hari ini */
-.jam-week-row--today {
-  background: #ffffff;
-  border-color: #ffffff;
-  color: #1E3A6E;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
-}
-
-/* Tutup */
-.jam-week-row--closed {
-  background: rgba(255,255,255,0.03);
-  border-color: rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.20);
-}
-
-/* Skeleton */
-.jam-week-row--skeleton {
-  grid-column: 1 / -1;
-  justify-content: center;
-  font-size: 0.82rem;
-  font-style: italic;
-  color: rgba(255,255,255,0.25);
-  font-weight: 400;
-  background: rgba(255,255,255,0.04);
-  border-color: rgba(255,255,255,0.06);
-}
-
-/* Nama hari + badge */
-.jam-week-day {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.jam-week-day-name {
-  font-weight: 600;
-  color: inherit;
-  font-size: 0.88rem;
-}
-
-.jam-week-row--closed .jam-week-day-name {
-  font-weight: 400;
-}
-
-.jam-week-today-tag {
-  font-size: 0.58rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  padding: 3px 9px;
-  border-radius: 99px;
-  line-height: 1.9;
-  background: #1E3A6E;
-  color: #fff;
-}
-
-/* Jam */
-.jam-week-hours {
-  font-size: 0.85rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.2px;
-  color: inherit;
-  flex-shrink: 0;
-}
-
-.jam-week-row--today .jam-week-hours {
-  font-weight: 700;
-  color: #1E3A6E;
-}
-
-.jam-week-row--closed .jam-week-hours {
-  font-weight: 400;
-}
-
-/* ── Footer 3 card — lebar penuh ── */
-.jam-footer {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  width: 100%;
-  max-width: 780px;
-  margin: 0 auto;
-}
-
-.jam-fi {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 20px 22px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 16px;
-  min-width: 0;
-  transition: background 0.15s;
-}
-
-.jam-fi + .jam-fi::before { display: none; }
-
-/* Icon wrapper */
-.jam-fi > i {
-  font-size: 1.3rem;
-  color: rgba(255,255,255,0.50);
-  flex-shrink: 0;
-  margin-top: 1px;
-  width: auto;
-}
-
-.jam-fi > .fa-whatsapp {
-  color: #4ADE80;
-  font-size: 1.4rem;
-}
-
-.jam-fi > .fa-clock {
-  color: rgba(255,255,255,0.50);
-}
-
-/* Pulse dot untuk status */
-.jam-fi > .fa-circle {
-  font-size: 0.45rem;
-  color: #4ADE80;
-  filter: drop-shadow(0 0 4px rgba(74,222,128,0.7));
-  animation: jamPulse 2.2s ease infinite;
-  margin-top: 6px;
-}
-
-@keyframes jamPulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.3; }
-}
-
-/* Text group */
-.jam-fi > div {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-}
-
-.jam-fi strong {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.90);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.jam-fi span {
-  display: block;
-  font-size: 0.74rem;
-  color: rgba(255,255,255,0.38);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* ── Responsive ── */
-@media (max-width: 640px) {
-  .jam-week-list {
-    grid-template-columns: 1fr;
-    max-width: 100%;
-  }
-  .jam-footer {
-    grid-template-columns: 1fr;
-    max-width: 100%;
-  }
-  .jam-fi {
-    padding: 16px 18px;
-  }
-}
-
-@media (max-width: 780px) and (min-width: 641px) {
-  .jam-week-list,
-  .jam-footer {
-    max-width: 100%;
-  }
-}
-</style>
+    <!-- FASILITAS -->
+    <section class="section" id="fasilitas">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Fasilitas &amp; peralatan</span>
+          <h2>Bersih, nyaman, dan tercatat digital.</h2>
+          <p>Nama <em>Zanak</em> berasal dari kata <em>sanak</em> — saudara dalam bahasa Minang. Pasien diperlakukan seperti keluarga, bukan sekadar nomor antrean.</p>
+        </div>
+        <div class="bento">
+          <div class="bento-photo bento-photo--tall reveal">
+            <img src="assets/images/RuangPeriksa.webp" alt="Ruang periksa Zanak Dental Care" loading="lazy">
+            <span>Ruang periksa</span>
+          </div>
+          <div class="fac-grid reveal">
+            <div class="fac"><i class="fas fa-shield-virus"></i><h3>Sterilisasi autoclave</h3><p>Instrumen disterilkan sebelum dipakai untuk setiap pasien.</p></div>
+            <div class="fac"><i class="fas fa-chair"></i><h3>Dental chair</h3><p>Posisi dapat disesuaikan, dengan lampu LED.</p></div>
+            <div class="fac"><i class="fas fa-wave-square"></i><h3>Ultrasonic scaler</h3><p>Untuk pembersihan karang gigi yang cepat.</p></div>
+            <div class="fac"><i class="fas fa-tablet-screen-button"></i><h3>Rekam medis digital</h3><p>Riwayat perawatan tersimpan, pengingat kontrol via WhatsApp.</p></div>
+          </div>
+          <div class="bento-photo reveal">
+            <img src="assets/images/isometric.webp" alt="Denah 3D Zanak Dental Care" loading="lazy">
+            <span>Denah klinik</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- TESTIMONI -->
-    <section class="section section--gray" id="testimoni">
+    <section class="section section--soft" id="testimoni">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
-          <span class="section-tag">Testimoni</span>
-          <h2>Apa Kata Pasien Kami</h2>
-          <p class="section-sub">Kepercayaan pasien adalah ukuran paling jujur untuk kualitas layanan kami.</p>
+        <div class="section-head reveal">
+          <span class="eyebrow">Testimoni</span>
+          <h2>Apa kata pasien kami</h2>
         </div>
-
-        <div class="lcarousel" id="tcarousel">
-          <div class="lcarousel-track" id="ttrack">
-            <article class="testi-card">
-              <div class="testi-stars">⭐⭐⭐⭐⭐</div>
-              <p class="testi-text">"Pertama kali ke dokter gigi tanpa rasa takut berlebihan. Dokternya menjelaskan setiap langkah prosedur sebelum dilakukan. Scaling selesai cepat dan tidak sakit sama sekali."</p>
-              <div class="testi-author"><div class="testi-av">RA</div><div><div class="testi-name">Rina A.</div><div class="testi-proc">Scaling</div></div></div>
-            </article>
-            <article class="testi-card">
-              <div class="testi-stars">⭐⭐⭐⭐⭐</div>
-              <p class="testi-text">"Akhirnya ada klinik gigi yang benar-benar dekat dari rumah di Payakumbuh Utara. Prosedur kawat gigi dijelaskan dengan jelas, termasuk estimasi durasi dan progresnya."</p>
-              <div class="testi-author"><div class="testi-av">FH</div><div><div class="testi-name">Farhan H.</div><div class="testi-proc">Kawat Gigi</div></div></div>
-            </article>
-            <article class="testi-card">
-              <div class="testi-stars">⭐⭐⭐⭐⭐</div>
-              <p class="testi-text">"Saya bawa anak yang sangat takut dokter gigi. Dokter Daffa sabar dan mengajak ngobrol dulu sebelum memulai tindakan. Hasilnya anak saya tidak menangis sama sekali."</p>
-              <div class="testi-author"><div class="testi-av">SN</div><div><div class="testi-name">Sri N.</div><div class="testi-proc">Tambal Gigi Anak</div></div></div>
-            </article>
-            <article class="testi-card">
-              <div class="testi-stars">⭐⭐⭐⭐⭐</div>
-              <p class="testi-text">"Booking online-nya gampang, tinggal pilih tanggal dan jam sendiri. Gigi tiruan yang saya pasang presisi dan nyaman sejak hari pertama."</p>
-              <div class="testi-author"><div class="testi-av">BW</div><div><div class="testi-name">Bapak Wahyu</div><div class="testi-proc">Gigi Tiruan</div></div></div>
-            </article>
-            <article class="testi-card">
-              <div class="testi-stars">⭐⭐⭐⭐⭐</div>
-              <p class="testi-text">"Odontektomi gigi bungsu jauh lebih terencana dari ekspektasi saya. Ada konsultasi dulu, baru prosedur. Dokternya jelasin semua risikonya dengan tenang. Pemulihannya juga lancar."</p>
-              <div class="testi-author"><div class="testi-av">DM</div><div><div class="testi-name">Dian M.</div><div class="testi-proc">Odontektomi</div></div></div>
-            </article>
-            <article class="testi-card testi-cta">
-              <i class="fas fa-star testi-cta-icon"></i>
-              <h3>Pernah Berobat di Sini?</h3>
-              <p>Ulasan Anda membantu pasien lain mengambil keputusan yang tepat.</p>
-              <a href="https://g.page/r/zanakdentalcare/review" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Tulis Ulasan di Google</a>
-            </article>
-          </div>
-        </div>
-
-        <div class="lcarousel-nav">
-          <button class="lnav-btn" id="tPrev" aria-label="Sebelumnya"><i class="fas fa-chevron-left"></i></button>
-          <div class="lnav-dots" id="tDots"></div>
-          <button class="lnav-btn" id="tNext" aria-label="Berikutnya"><i class="fas fa-chevron-right"></i></button>
+        <div class="testi-grid reveal">
+          <article class="testi">
+            <div class="testi-stars" aria-label="5 bintang">★★★★★</div>
+            <p class="testi-text">"Pertama kali ke dokter gigi tanpa rasa takut berlebihan. Dokternya menjelaskan setiap langkah prosedur sebelum dilakukan. Scaling selesai cepat dan tidak sakit sama sekali."</p>
+            <div class="testi-author"><div class="testi-av">RA</div><div><div class="testi-name">Rina A.</div><div class="testi-proc">Scaling</div></div></div>
+          </article>
+          <article class="testi">
+            <div class="testi-stars" aria-label="5 bintang">★★★★★</div>
+            <p class="testi-text">"Saya bawa anak yang sangat takut dokter gigi. Dokter Daffa sabar dan mengajak ngobrol dulu sebelum memulai tindakan. Hasilnya anak saya tidak menangis sama sekali."</p>
+            <div class="testi-author"><div class="testi-av">SN</div><div><div class="testi-name">Sri N.</div><div class="testi-proc">Tambal Gigi Anak</div></div></div>
+          </article>
+          <article class="testi">
+            <div class="testi-stars" aria-label="5 bintang">★★★★★</div>
+            <p class="testi-text">"Booking online-nya gampang, tinggal pilih tanggal dan jam sendiri. Gigi tiruan yang saya pasang presisi dan nyaman sejak hari pertama."</p>
+            <div class="testi-author"><div class="testi-av">BW</div><div><div class="testi-name">Bapak Wahyu</div><div class="testi-proc">Gigi Tiruan</div></div></div>
+          </article>
+          <article class="testi">
+            <div class="testi-stars" aria-label="5 bintang">★★★★★</div>
+            <p class="testi-text">"Akhirnya ada klinik gigi yang benar-benar dekat dari rumah di Payakumbuh Utara. Prosedur kawat gigi dijelaskan dengan jelas, termasuk estimasi durasi dan progresnya."</p>
+            <div class="testi-author"><div class="testi-av">FH</div><div><div class="testi-name">Farhan H.</div><div class="testi-proc">Kawat Gigi</div></div></div>
+          </article>
+          <article class="testi">
+            <div class="testi-stars" aria-label="5 bintang">★★★★★</div>
+            <p class="testi-text">"Odontektomi gigi bungsu jauh lebih terencana dari ekspektasi saya. Ada konsultasi dulu, baru prosedur. Pemulihannya juga lancar."</p>
+            <div class="testi-author"><div class="testi-av">DM</div><div><div class="testi-name">Dian M.</div><div class="testi-proc">Odontektomi</div></div></div>
+          </article>
+          <article class="testi testi--cta">
+            <h3>Pernah berobat di sini?</h3>
+            <p>Ulasan Anda membantu pasien lain mengambil keputusan yang tepat.</p>
+            <a href="https://g.page/r/zanakdentalcare/review" class="btn btn-white btn-sm" target="_blank" rel="noopener">Tulis ulasan di Google</a>
+          </article>
         </div>
       </div>
     </section>
 
     <!-- FAQ -->
     <section class="section" id="faq">
-      <div class="container">
-        <div class="section-header" data-aos="fade-up">
-          <span class="section-tag">FAQ</span>
-          <h2>Pertanyaan yang Sering Diajukan</h2>
-          <p class="section-sub">Belum menemukan jawaban? Hubungi kami langsung melalui WhatsApp.</p>
+      <div class="container faq-grid">
+        <div class="section-head reveal">
+          <span class="eyebrow">FAQ</span>
+          <h2>Pertanyaan yang sering diajukan</h2>
+          <p>Belum menemukan jawaban? Tanyakan langsung lewat WhatsApp.</p>
+          <a href="https://wa.me/6289526697902?text=Halo%20Zanak%2C%20saya%20mau%20bertanya" class="btn btn-wa" target="_blank" rel="noopener" style="margin-top:18px"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
         </div>
-        <div class="faq-list" data-aos="fade-up">
+        <div class="faq-list reveal">
           <details class="faq-item">
-            <summary>Bagaimana cara membuat reservasi di Zanak Dental Care?</summary>
-            <p>Reservasi dapat dilakukan online melalui tombol "Reservasi" di website ini — pilih tanggal dan jam sendiri hingga 30 hari ke depan, lalu konfirmasi akan dikirim melalui WhatsApp.</p>
+            <summary>Bagaimana cara membuat reservasi?</summary>
+            <p>Tekan tombol "Reservasi", pilih tanggal dan jam yang masih kosong (hingga 30 hari ke depan), lalu isi nama dan nomor WhatsApp. Klinik akan mengonfirmasi melalui WhatsApp.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Jam berapa Zanak Dental Care buka?</summary>
+            <p id="faqJam">Senin–Kamis pukul 08.00–17.00, Jumat pukul 08.00–16.00, dan Sabtu pukul 08.00–12.00. Klinik tutup pada hari Minggu.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Bagaimana cara mengecek atau membatalkan reservasi?</summary>
+            <p>Tekan "Cek Reservasi" di bagian atas halaman, lalu masukkan nomor WhatsApp dan nama yang dipakai saat reservasi — atau buka link status yang Anda terima setelah reservasi.</p>
           </details>
           <details class="faq-item">
             <summary>Apakah drg. Muhammad Daffa Safra memiliki izin praktik yang aktif?</summary>
             <p>Ya. drg. Muhammad Daffa Safra memiliki STR (Surat Tanda Registrasi) aktif dan merupakan lulusan Profesi Dokter Gigi Universitas Andalas.</p>
           </details>
           <details class="faq-item">
-            <summary>Jam berapa Zanak Dental Care buka?</summary>
-            <p>Senin–Kamis pukul 08.00–17.00, Jumat pukul 08.00–16.00, dan Sabtu pukul 08.00–12.00. Klinik tutup pada hari Minggu.</p>
-          </details>
-          <details class="faq-item">
             <summary>Metode pembayaran apa saja yang diterima?</summary>
             <p>Pembayaran dapat dilakukan secara tunai (cash) atau transfer bank.</p>
           </details>
           <details class="faq-item">
-            <summary>Apakah Zanak Dental Care melayani perawatan gigi anak?</summary>
-            <p>Ya, kami melayani perawatan gigi anak, termasuk tambal gigi susu dan pencabutan gigi susu yang tidak mau tanggal sendiri.</p>
-          </details>
-          <details class="faq-item">
-            <summary>Bagaimana cara mengecek status reservasi yang sudah dibuat?</summary>
-            <p>Gunakan tombol "Cek Reservasi" yang tersedia di seluruh halaman website untuk melihat status antrean menggunakan kode reservasi Anda.</p>
+            <summary>Apakah melayani perawatan gigi anak?</summary>
+            <p>Ya, termasuk tambal gigi susu dan pencabutan gigi susu yang tidak mau tanggal sendiri.</p>
           </details>
           <details class="faq-item">
             <summary>Apakah tersedia perawatan kawat gigi (behel)?</summary>
-            <p>Ya, tersedia layanan pemasangan dan kontrol rutin kawat gigi (ortodontik) dengan konsultasi awal terlebih dahulu.</p>
+            <p>Ya, tersedia pemasangan dan kontrol rutin kawat gigi, diawali dengan konsultasi.</p>
           </details>
           <details class="faq-item">
             <summary>Di mana lokasi Zanak Dental Care?</summary>
-            <p>Kami berlokasi di Jl. Sudirman No.7, Kaniang Bukik, Kecamatan Payakumbuh Utara, Kota Payakumbuh, Sumatera Barat.</p>
+            <p>Jl. Sudirman No.7, Kaniang Bukik, Kecamatan Payakumbuh Utara, Kota Payakumbuh, Sumatera Barat.</p>
           </details>
         </div>
       </div>
     </section>
 
+    <!-- (antrian.js menyisipkan section #antrian-online di sini, sebelum #lokasi) -->
+
     <!-- LOKASI -->
-    <section class="section section--gray" id="lokasi">
+    <section class="section" id="lokasi">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
-          <span class="section-tag">Lokasi</span>
-          <h2>Temukan Kami</h2>
-          <p class="section-sub">Jl. Sudirman, Payakumbuh Utara.</p>
+        <div class="section-head reveal">
+          <span class="eyebrow">Lokasi</span>
+          <h2>Temukan kami</h2>
         </div>
         <div class="lokasi-grid">
-          <div class="lokasi-map" data-aos="fade-right">
-            <iframe title="Lokasi Zanak Dental Care Payakumbuh Utara"
+          <div class="lokasi-map reveal">
+            <iframe title="Peta lokasi Zanak Dental Care Payakumbuh Utara"
               src="https://maps.google.com/maps?q=-0.21035325857654713,100.64543721729375&z=17&output=embed"
-              width="100%" height="420" style="border:0;"
-              allowfullscreen="" loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+              allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
-          <div class="lokasi-info" data-aos="fade-left">
+          <div class="panel kontak reveal">
             <div class="kontak-item">
               <div class="kontak-icon"><i class="fas fa-map-marker-alt"></i></div>
-              <div><div class="kontak-label">Alamat</div><div class="kontak-val">Jl. Sudirman No.7, Kaniang Bukik,<br>Kec. Payakumbuh Utara, Kota Payakumbuh,<br>Sumatera Barat</div></div>
+              <div><div class="kontak-label">Alamat</div><div class="kontak-val">Jl. Sudirman No.7, Kaniang Bukik,<br>Kec. Payakumbuh Utara, Kota Payakumbuh, Sumatera Barat</div></div>
             </div>
             <div class="kontak-item">
-              <div class="kontak-icon kontak-wa"><i class="fab fa-whatsapp"></i></div>
-              <div><div class="kontak-label">WhatsApp</div><div class="kontak-val"><a href="https://wa.me/6289526697902">089526697902</a></div></div>
+              <div class="kontak-icon"><i class="fas fa-clock"></i></div>
+              <div><div class="kontak-label">Hari ini</div><div class="kontak-val" id="footerJamDesktop">Memuat jam operasional…</div></div>
             </div>
             <div class="kontak-item">
-              <div class="kontak-icon kontak-email"><i class="fas fa-envelope"></i></div>
-              <div><div class="kontak-label">Email</div><div class="kontak-val"><a href="mailto:zanakdentalcare@gmail.com">zanakdentalcare@gmail.com</a></div></div>
+              <div class="kontak-icon kontak-icon--wa"><i class="fab fa-whatsapp"></i></div>
+              <div><div class="kontak-label">WhatsApp</div><div class="kontak-val"><a href="https://wa.me/6289526697902">0895-2669-7902</a></div></div>
             </div>
             <div class="kontak-item">
-              <div class="kontak-icon kontak-ig"><i class="fab fa-instagram"></i></div>
-              <div><div class="kontak-label">Instagram & TikTok</div><div class="kontak-val"><a href="https://instagram.com/zanakdentalcare" target="_blank" rel="noopener">@zanakdentalcare</a></div></div>
+              <div class="kontak-icon"><i class="fab fa-instagram"></i></div>
+              <div><div class="kontak-label">Instagram &amp; TikTok</div><div class="kontak-val"><a href="https://instagram.com/zanakdentalcare" target="_blank" rel="noopener">@zanakdentalcare</a></div></div>
             </div>
-            <div class="lokasi-btns">
-              <a href="https://maps.google.com/?q=-0.210803,100.645333" class="btn btn-primary" target="_blank" rel="noopener">
-                <i class="fas fa-directions"></i> Buka Google Maps
-              </a>
-            </div>
+            <a href="https://maps.google.com/?q=-0.210803,100.645333" class="btn btn-primary" target="_blank" rel="noopener">
+              <i class="fas fa-diamond-turn-right"></i> Petunjuk arah
+            </a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA FINAL -->
-    <section class="cta-final">
-      <div class="container" data-aos="fade-up">
-        <h2>Mulai Perawatan Gigi Anda.</h2>
-        <p>Buat jadwal sekarang. Kami siap melayani.</p>
-        <a href="#antrian-online" class="btn btn-white btn-lg">
-          <i class="fas fa-calendar-check"></i> Reservasi Sekarang
-        </a>
+    <!-- CTA AKHIR -->
+    <section class="section" style="padding-top:0;padding-bottom:0">
+      <div class="container">
+        <div class="cta-box reveal">
+          <h2>Gigi sehat dimulai dari satu janji.</h2>
+          <p>Pilih jam yang pas untuk Anda — kami siapkan sisanya.</p>
+          <div class="hero-ctas">
+            <a href="#antrian-online" class="btn btn-white btn-lg"><i class="fas fa-calendar-check"></i> Reservasi Sekarang</a>
+            <a href="https://wa.me/6289526697902?text=Halo%20Zanak%20Dental%20Care%2C%20saya%20mau%20buat%20janji" class="btn btn-wa btn-lg" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -966,102 +550,69 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-
-        <div class="footer-brand">
-          <div class="footer-logo">
-            <img src="assets/images/logo.webp" alt="Logo Zanak Dental Care"
-                 class="logo-img logo-img--sm" width="80" height="34" loading="lazy">
-            <div class="logo-text"><span class="logo-name">Zanak</span><span class="logo-sub">Dental Care</span></div>
-          </div>
+        <div>
+          <a href="/" class="brand">
+            <span class="brand-mark"><img src="assets/images/logo.webp" alt="" width="38" height="38" loading="lazy"></span>
+            <span class="brand-word">Zanak<small>Dental Care</small></span>
+          </a>
           <p class="footer-tagline">Zanak sado Urang</p>
-          <p class="footer-desc">Klinik gigi keluarga.</p>
+          <p class="footer-desc">Klinik gigi keluarga di Payakumbuh Utara.</p>
           <div class="footer-sosmed">
             <a href="https://instagram.com/zanakdentalcare" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
             <a href="https://tiktok.com/@zanakdentalcare" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
             <a href="https://wa.me/6289526697902" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
             <a href="mailto:zanakdentalcare@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
           </div>
-          <div class="footer-mobile-kontak">
-            <span><i class="fas fa-clock" style="color:#1E3A6E;margin-right:6px"></i><span id="footerJamMobile">Memuat jam operasional…</span></span>
-            <span><a href="https://wa.me/6289526697902"><i class="fab fa-whatsapp" style="color:#1E3A6E;margin-right:6px"></i>089526697902</a></span>
-          </div>
         </div>
-
         <div class="footer-links">
           <h4>Layanan</h4>
           <ul>
             <li><a href="scaling-gigi-payakumbuh.html">Scaling</a></li>
             <li><a href="tambal-gigi-payakumbuh.html">Tambal Gigi</a></li>
-            <li><a href="cabut-gigi-payakumbuh.html">Ekstraksi Gigi</a></li>
+            <li><a href="cabut-gigi-payakumbuh.html">Cabut Gigi</a></li>
             <li><a href="kawat-gigi-payakumbuh.html">Kawat Gigi</a></li>
             <li><a href="gigi-tiruan-payakumbuh.html">Gigi Tiruan</a></li>
             <li><a href="saluran-akar-payakumbuh.html">Saluran Akar</a></li>
             <li><a href="odontektomi-gigi-bungsu-payakumbuh.html">Odontektomi</a></li>
           </ul>
         </div>
-
         <div class="footer-links">
-          <h4>Informasi</h4>
+          <h4>Pasien</h4>
           <ul>
-            <li><a href="#tentang">Tentang Zanak</a></li>
-            <li><a href="#fasilitas">Fasilitas</a></li>
+            <li><a href="#antrian-online">Reservasi Online</a></li>
+            <li><a href="antrian-status.html" class="js-status-link">Cek Reservasi</a></li>
+            <li><a href="#jadwal">Jadwal &amp; Jam Buka</a></li>
             <li><a href="#dokter">Profil Dokter</a></li>
-            <li><a href="#jam-buka">Jam Operasional</a></li>
-            <li><a href="#testimoni">Testimoni</a></li>
-            <li><a href="#antrian-online">Reservasi</a></li>
+            <li><a href="#faq">FAQ</a></li>
           </ul>
         </div>
-
         <div class="footer-kontak">
           <h4>Kontak</h4>
           <p><i class="fas fa-map-marker-alt"></i> Jl. Sudirman No.7, Payakumbuh Utara, Sumbar</p>
-          <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/6289526697902">089526697902</a></p>
-          <p><i class="fas fa-clock"></i> <span id="footerJamDesktop">Memuat jam operasional…</span></p>
+          <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/6289526697902">0895-2669-7902</a></p>
+          <p><i class="fas fa-clock"></i> <span id="footerJamMobile">Memuat jam operasional…</span></p>
           <p><i class="fas fa-envelope"></i> <a href="mailto:zanakdentalcare@gmail.com">zanakdentalcare@gmail.com</a></p>
         </div>
-
       </div>
       <div class="footer-bottom">
-        <p>© 2026 <strong>Zanak Dental Care</strong> · Payakumbuh Utara, Sumatera Barat</p>
-        <p><em>Zanak sado Urang</em></p>
+        <span>© 2026 <strong>Zanak Dental Care</strong> · Payakumbuh Utara, Sumatera Barat</span>
+        <span>Jadwal &amp; reservasi terhubung dengan ApexRecord</span>
       </div>
     </div>
   </footer>
 
-  <!-- WA FLOAT -->
-  <a href="https://wa.me/6289526697902?text=Halo%20Zanak%20Dental%20Care%2C%20saya%20ingin%20buat%20janji"
-     class="wa-float" id="waFloat" target="_blank" rel="noopener" aria-label="Chat WhatsApp Zanak Dental Care">
-    <i class="fab fa-whatsapp wa-float-icon"></i>
-    <span class="wa-float-text">Chat WA</span>
-  </a>
+  <!-- Tombol cepat: melayang di desktop, bar bawah di HP -->
+  <div class="float-actions" id="floatActions">
+    <a href="antrian-status.html" class="fa-check-res js-status-link"><i class="fas fa-ticket"></i> Cek Reservasi</a>
+    <a href="#antrian-online" class="fa-book"><i class="fas fa-calendar-check"></i> Reservasi</a>
+    <a href="https://wa.me/6289526697902?text=Halo%20Zanak%20Dental%20Care%2C%20saya%20ingin%20buat%20janji"
+       class="fa-wa" id="waFloat" target="_blank" rel="noopener" aria-label="Chat WhatsApp Zanak Dental Care">
+      <i class="fab fa-whatsapp"></i> <span>WhatsApp</span>
+    </a>
+  </div>
 
   <script src="js/apex-api.js" defer></script>
   <script src="js/antrian.js" defer></script>
-
-  <!-- CEK RESERVASI FLOAT -->
-  <a href="antrian-status.html" id="antrianFloat"
-     onclick="zdcGoToStatus(event)"
-     aria-label="Cek Status Reservasi Anda">
-    <i class="fas fa-ticket-alt"></i>
-    <span>Cek Reservasi</span>
-  </a>
-
-  <script>
-    function zdcGoToStatus(e) {
-      try {
-        const saved = sessionStorage.getItem('zdc_reservasi');
-        if (saved) {
-          const d = JSON.parse(saved);
-          if (d?.token) {
-            e.preventDefault();
-            window.location.href = `antrian-status.html?t=${d.token}`;
-          }
-        }
-      } catch {}
-    }
-    
-  </script>
-
   <script src="js/main.js" defer></script>
 </body>
 </html>

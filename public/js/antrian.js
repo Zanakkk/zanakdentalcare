@@ -306,8 +306,21 @@
     stepSlot?.classList.remove('zdc-hidden');
     step1?.classList.replace('zdc-step--active', 'zdc-step--done');
     stepSlot?.classList.add('zdc-step--active');
-    loadSlots(dateStr);
     zdcScrollToStep(stepSlot);
+    return loadSlots(dateStr);
+  }
+
+  /** Dipanggil dari bagian "Jam kosong terdekat": isi tanggal & jam di form. */
+  async function zdcPrefill(dateStr, time) {
+    zdcSwitchTab('online');
+    const input = document.getElementById('zdcTanggalInput');
+    if (input) input.value = dateStr;
+    await zdcOnDateChange(dateStr);
+    if (time && document.getElementById(`zdcSlot_${time.replace(':', '')}`)) {
+      zdcSelectSlot(time);
+    } else {
+      zdcScrollToStep(document.getElementById('zdcStepSlot'));
+    }
   }
 
   function zdcScrollToStep(el) {
@@ -679,6 +692,7 @@ function injectStyles() {
   window.zdcSubmitWA       = zdcSubmitWA;
   window.zdcSwitchTab      = zdcSwitchTab;
   window.zdcCloseModal     = zdcCloseModal;
+  window.zdcPrefill        = zdcPrefill;
 
   document.addEventListener('DOMContentLoaded', initAntrian);
 })();

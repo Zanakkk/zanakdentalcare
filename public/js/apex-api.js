@@ -13,7 +13,7 @@
   // "Publishable", domain: https://zanakdentalcare.web.app). Aman ditaruh di
   // sini karena key ini hanya diterima dari domain yang terdaftar. JANGAN
   // taruh secret key. Kosong = pakai endpoint /public lama (tanpa key).
-  const API_KEY = '';
+  const API_KEY = 'apx_pk_KAs90MmUFwzu9YyUJNu-H0k8NEZ_lIag';
 
   // Hanya dipakai endpoint /public lama; dengan key, klinik ditentukan key-nya.
   const CLINIC_ID = 1;
@@ -86,6 +86,12 @@
         v1OrLegacy(() => call('/v1/practitioners'), () => legacyInfo().then((d) => d.practitioners || [])),
       ),
 
+    /** Konten before–after yang diterbitkan klinik di ApexRecord (menu Konten):
+     *  [{ id, title, caption, imageUrl, publishedAt }]. Hanya ada di /v1 —
+     *  tanpa API key hasilnya kosong dan bagiannya tidak ditampilkan. */
+    contents: () =>
+      once('contents', () => (useV1 ? v1OrLegacy(() => call('/v1/contents'), () => []) : Promise.resolve([]))),
+
     /** { date, isOpen, slots: ['09:00', …] } — tidak di-memo, slot berubah terus. */
     slots: (date, practitionerId) => {
       const q = new URLSearchParams({ date });
@@ -152,6 +158,9 @@
     const [open, close] = raw.split('-').map((s) => s.trim());
     return open && close ? { open, close } : null;
   };
+
+  /** Foto dari ApexRecord: endpoint lama bisa memberi path relatif ('/files/…'). */
+  api.fileUrl = (url) => (url && url.startsWith('/') ? BASE_URL + url : url || null);
 
   /** Escape teks sebelum dimasukkan ke innerHTML. */
   api.esc = (s) =>
