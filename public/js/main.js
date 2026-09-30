@@ -19,14 +19,14 @@ let clinicHours = null; // { senin: '10:00-21:00' | 'Tutup', … }
 const SUNDAY = 6;
 const closedLabel = (i) => (i === SUNDAY ? 'Dengan reservasi' : 'Tutup');
 
+// Satu bagian yang gagal tidak boleh menghentikan bagian lain.
+function safe(fn) {
+  try { const r = fn(); if (r && r.catch) r.catch((err) => console.error(`[${fn.name}]`, err)); }
+  catch (err) { console.error(`[${fn.name}]`, err); }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  initNav();
-  initActiveNav();
-  initReveal();
-  initStatusLinks();
-  initFloatActions();
-  initReviews();
-  initClinic();
+  [initReveal, initNav, initActiveNav, initStatusLinks, initFloatActions, initReviews, initClinic].forEach(safe);
   // Dokter, jam kosong & konten baru dimuat saat pengunjung mendekati
   // bagiannya — hemat kuota API untuk yang hanya melihat bagian atas.
   whenNear('jadwal', () => { loadDoctors(); loadNextSlots(); });
@@ -90,9 +90,12 @@ function initActiveNav() {
   document.querySelectorAll('main section[id]').forEach((s) => obs.observe(s));
 }
 
+/** Animasi muncul saat scroll. Konten baru disembunyikan setelah observer
+ *  siap (html.reveal-on) — kalau script ini tidak jalan, semua tetap tampil. */
 function initReveal() {
   const els = document.querySelectorAll('.reveal');
-  if (!('IntersectionObserver' in window)) return els.forEach((el) => el.classList.add('is-visible'));
+  if (!('IntersectionObserver' in window)) return;
+  document.documentElement.classList.add('reveal-on');
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((en) => {
       if (en.isIntersecting) { en.target.classList.add('is-visible'); obs.unobserve(en.target); }
