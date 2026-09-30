@@ -13,7 +13,7 @@
   // "Publishable", domain: https://zanakdentalcare.web.app). Aman ditaruh di
   // sini karena key ini hanya diterima dari domain yang terdaftar. JANGAN
   // taruh secret key. Kosong = pakai endpoint /public lama (tanpa key).
-  const API_KEY = '';
+  const API_KEY = 'apx_pk_KAs90MmUFwzu9YyUJNu-H0k8NEZ_lIag';
 
   // Hanya dipakai endpoint /public lama; dengan key, klinik ditentukan key-nya.
   const CLINIC_ID = 1;
