@@ -1,577 +1,406 @@
 /* ============================================================
-   ZANAK DENTAL CARE — main.js
-   Vanilla JS ES6+ | Zero dependencies (AOS loaded separately)
-   v2.1 — carousel reusable + swipe, WA number disatukan
+   ZANAK DENTAL CARE — main.js (khusus index.html)
+   Vanilla JS, tanpa dependensi. Semua data klinik (jam buka,
+   dokter & jadwal praktik, jam kosong, konten before–after)
+   diambil lewat js/apex-api.js (window.ZDC_API) dari ApexRecord.
    ============================================================ */
 
 'use strict';
 
-/* ── CONSTANTS ───────────────────────────────────────────────── */
 const WA_NUMBER = '6289526697902';
+const DAY_ID    = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+const DAY_SHORT = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
+const SCHEMA_DAY = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-// Data klinik (jam operasional, dokter, reservasi) diambil lewat
-// js/apex-api.js (window.ZDC_API) — URL, API key, dan fetch ada di sana.
-const DAY_KEY = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
-const DAY_ID  = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+let clinicHours = null; // { senin: '08:00-17:00' | 'Tutup', … }
 
-let clinicOperationalHours = null;
-
-/* ── DOM READY ───────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
-  initProgressBar();
-  initNavbar();
-  initHamburger();
-  initSmoothScroll();
+  initNav();
   initActiveNav();
-  initClinicStatus();
-  initCounters();
-  initAOS();
-  initWAFloat();
-  initReservasiForm();
-  initLazyImages();
-
-  // Carousels
-  initCarousel({ trackId: 'ltrack', prevId: 'lPrev', nextId: 'lNext', dotsId: 'lDots',
-    breakpoints: { 0: 1, 640: 2, 900: 4 } });
-  initCarousel({ trackId: 'ftrack', prevId: 'fPrev', nextId: 'fNext', dotsId: 'fDots',
-    breakpoints: { 0: 1, 640: 2, 900: 3 } });
-  initCarousel({ trackId: 'ttrack', prevId: 'tPrev', nextId: 'tNext', dotsId: 'tDots',
-    breakpoints: { 0: 1, 640: 2, 900: 3 } });
+  initReveal();
+  initStatusLinks();
+  initFloatActions();
+  initClinic();
+  // Dokter, jam kosong & konten baru dimuat saat pengunjung mendekati
+  // bagiannya — hemat kuota API untuk yang hanya melihat bagian atas.
+  whenNear('jadwal', () => { loadDoctors(); loadNextSlots(); });
+  whenNear('dokter', () => { loadDoctors(); loadStories(); });
 });
 
-/* ============================================================
-   1. SCROLL PROGRESS BAR
-   ============================================================ */
-function initProgressBar() {
-  const bar = document.createElement('div');
-  bar.id = 'progressBar';
-  document.body.prepend(bar);
+/* ── Util ─────────────────────────────────────────────────── */
+const $ = (id) => document.getElementById(id);
+const API = () => window.ZDC_API;
+const fmtRange = (h) => `${h.open}–${h.close}`;
+const todayIdx = () => (new Date().getDay() + 6) % 7; // Senin = 0
+const toMin = (hhmm) => { const [h, m] = hhmm.split(':').map(Number); return h * 60 + m; };
 
-  const update = () => {
-    const scrolled = window.scrollY;
-    const total    = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = total > 0 ? `${(scrolled / total) * 100}%` : '0%';
-  };
-  window.addEventListener('scroll', update, { passive: true });
+function whenNear(id, fn) {
+  const el = $(id);
+  if (!el || !('IntersectionObserver' in window)) return fn();
+  const obs = new IntersectionObserver((entries) => {
+    if (entries.some((e) => e.isIntersecting)) { obs.disconnect(); fn(); }
+  }, { rootMargin: '600px 0px' });
+  obs.observe(el);
 }
 
-/* ============================================================
-   2. NAVBAR — scroll effect + hide/show on direction
-   ============================================================ */
-function initNavbar() {
-  const nav = document.getElementById('navbar');
-  if (!nav) return;
-
-  let lastY   = 0;
-  let ticking = false;
-
-  const onScroll = () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        const y = window.scrollY;
-        nav.classList.toggle('scrolled', y > 20);
-        if (y > 80) {
-          nav.style.transform = y > lastY ? 'translateY(-100%)' : 'translateY(0)';
-        } else {
-          nav.style.transform = 'translateY(0)';
-        }
-        lastY   = y;
-        ticking = false;
-      });
-      ticking = true;
-    }
-  };
-
-  nav.style.transition = 'transform .3s ease, background .25s ease, box-shadow .25s ease';
-  window.addEventListener('scroll', onScroll, { passive: true });
+/** Hari berurutan dengan jam sama digabung: [{ from, to, hours|null }]. */
+function groupDays(map) {
+  const runs = [];
+  API().DAY_KEY.forEach((key, i) => {
+    const h = API().parseHours(map?.[key]);
+    const label = h ? fmtRange(h) : null;
+    const last = runs[runs.length - 1];
+    if (last && last.label === label) last.to = i;
+    else runs.push({ from: i, to: i, hours: h, label });
+  });
+  return runs;
 }
+const runName = (r) => (r.from === r.to ? DAY_ID[r.from] : `${DAY_ID[r.from]}–${DAY_ID[r.to]}`);
 
-/* ============================================================
-   3. HAMBURGER MENU
-   ============================================================ */
-function initHamburger() {
-  const btn  = document.getElementById('hamburger');
-  const menu = document.getElementById('mobileMenu');
+/* ── Navigasi ─────────────────────────────────────────────── */
+function initNav() {
+  const btn = $('hamburger');
+  const menu = $('mobileMenu');
   if (!btn || !menu) return;
-
-  const toggle = (force) => {
-    const open = force !== undefined ? force : !btn.classList.contains('open');
+  const toggle = (open = !menu.classList.contains('open')) => {
     btn.classList.toggle('open', open);
     menu.classList.toggle('open', open);
     btn.setAttribute('aria-expanded', open);
-    document.body.style.overflow = open ? 'hidden' : '';
   };
-
   btn.addEventListener('click', () => toggle());
-  menu.querySelectorAll('.mobile-link').forEach(link => {
-    link.addEventListener('click', () => toggle(false));
-  });
-  document.addEventListener('click', e => {
-    if (!btn.contains(e.target) && !menu.contains(e.target)) toggle(false);
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') toggle(false);
-  });
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => toggle(false)));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggle(false); });
 }
 
-/* ============================================================
-   4. SMOOTH SCROLL — anchor links
-   ============================================================ */
-function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const id = a.getAttribute('href');
-      if (id === '#') return;
-      const el = document.querySelector(id);
-      if (!el) return;
-      e.preventDefault();
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
-}
-
-/* ============================================================
-   5. ACTIVE NAV LINK — Intersection Observer
-   ============================================================ */
 function initActiveNav() {
-  const sections = document.querySelectorAll('section[id]');
-  const links    = document.querySelectorAll('.navbar-menu a[href^="#"]');
-  if (!sections.length || !links.length) return;
-
-  const setActive = id => {
-    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
-  };
-
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(en => { if (en.isIntersecting) setActive(en.target.id); });
+  const links = document.querySelectorAll('.nav-links a[href^="#"]');
+  if (!links.length || !('IntersectionObserver' in window)) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      links.forEach((l) => l.classList.toggle('active', l.getAttribute('href') === `#${en.target.id}`));
+    });
   }, { rootMargin: '-40% 0px -55% 0px' });
-
-  sections.forEach(s => obs.observe(s));
+  document.querySelectorAll('main section[id]').forEach((s) => obs.observe(s));
 }
 
-/* ============================================================
-   6. CLINIC STATUS — real-time buka / tutup
-   ============================================================ */
-async function initClinicStatus() {
-  const badge = document.getElementById('statusBadge');
-  const text  = document.getElementById('statusText');
-  const dot   = badge?.querySelector('.status-dot');
-  const jamEl = document.getElementById('statusJam');
-  if (!badge || !text || !dot) return;
+function initReveal() {
+  const els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) return els.forEach((el) => el.classList.add('is-visible'));
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (en.isIntersecting) { en.target.classList.add('is-visible'); obs.unobserve(en.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px' });
+  els.forEach((el) => obs.observe(el));
+}
 
+/** Pasien yang baru reservasi di tab ini langsung dibawa ke status reservasinya. */
+function initStatusLinks() {
+  let token = null;
+  try { token = JSON.parse(sessionStorage.getItem('zdc_reservasi') || 'null')?.token; } catch {}
+  if (!token) return;
+  document.querySelectorAll('.js-status-link').forEach((a) => {
+    a.href = `antrian-status.html?t=${encodeURIComponent(token)}`;
+  });
+}
+
+/** Tombol cepat muncul setelah hero terlewati; pesan WA menyesuaikan bagian. */
+function initFloatActions() {
+  const bar = $('floatActions');
+  const wa = $('waFloat');
+  if (!bar) return;
+  const onScroll = () => bar.classList.toggle('is-visible', window.scrollY > 420);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const messages = {
+    layanan: 'Halo Zanak, saya mau tanya soal layanan',
+    jadwal:  'Halo Zanak, saya mau tanya jadwal klinik',
+    dokter:  'Halo Zanak, saya mau konsultasi dengan dokter',
+    lokasi:  'Halo Zanak, saya mau tanya arah ke klinik',
+  };
+  if (!wa || !('IntersectionObserver' in window)) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      const msg = messages[en.target.id] || 'Halo Zanak Dental Care, saya ingin buat janji';
+      wa.href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+    });
+  }, { threshold: 0.3 });
+  Object.keys(messages).forEach((id) => $(id) && obs.observe($(id)));
+}
+
+/* ── Jam buka & status ────────────────────────────────────── */
+async function initClinic() {
   try {
-    const clinic = await window.ZDC_API.clinic();
-    clinicOperationalHours = clinic.operationalHours || {};
+    const clinic = await API().clinic();
+    clinicHours = clinic.operationalHours || {};
   } catch (err) {
-    console.error('[ClinicStatus]', err);
-    text.textContent = 'Jam operasional tidak tersedia';
-    if (jamEl) jamEl.textContent = 'Info jam tidak tersedia';
-
-    const list = document.getElementById('jamJadwalList');
-    if (list) list.innerHTML = '<div class="jam-week-row jam-week-row--skeleton"><span>Jadwal tidak tersedia</span></div>';
-
+    console.error('[Klinik]', err);
+    setText('statusText', 'Info jam buka tidak tersedia');
+    setText('heroJamHariIni', 'Tanya via WhatsApp');
+    setText('jadwalStatusChip', 'Offline');
+    const list = $('jamJadwalList');
+    if (list) list.innerHTML = '<div class="week-skeleton">Jadwal belum bisa dimuat. Silakan tanya via WhatsApp.</div>';
+    ['footerJamDesktop', 'footerJamMobile'].forEach((id) => setText(id, 'Tanya jam buka via WhatsApp'));
     return;
   }
-
-  const update = () => renderClinicStatus(badge, text, dot, jamEl);
-  update();
-  setInterval(update, 60_000);
-
-  renderJamMingguan();
-  renderFooterJam();
+  renderStatus();
+  setInterval(renderStatus, 60_000);
+  renderWeek();
+  renderFaqJam();
+  updateStructuredData();
 }
 
-function renderJamMingguan() {
-  const list = document.getElementById('jamJadwalList');
-  if (!list || !clinicOperationalHours) return;
+function setText(id, text) { const el = $(id); if (el) el.textContent = text; }
 
-  const jsDay    = new Date().getDay();
-  const todayIdx = jsDay === 0 ? 6 : jsDay - 1;
+/** Status saat ini: { open, text } — "Buka · tutup 17:00" / "Tutup · buka Senin 08:00". */
+function currentStatus() {
+  const now = new Date();
+  const idx = todayIdx();
+  const mins = now.getHours() * 60 + now.getMinutes();
+  const today = API().parseHours(clinicHours[API().DAY_KEY[idx]]);
 
-  // Paksa render sesuai urutan DAY_KEY (Senin→Minggu), abaikan urutan dari API
-  list.innerHTML = DAY_KEY.map((key, idx) => {
-    const raw      = clinicOperationalHours[key];
-    const isToday  = idx === todayIdx;
-    const isClosed = !raw || raw.toLowerCase() === 'tutup';
-    const isSunday = key === 'sunday';
-    const jamText  = isClosed ? 'Tutup' : raw.replace('-', ' – ');
+  if (today && mins >= toMin(today.open) && mins < toMin(today.close)) {
+    return { open: true, text: `Buka sekarang · tutup ${today.close}` };
+  }
+  if (today && mins < toMin(today.open)) {
+    return { open: false, text: `Tutup · buka hari ini ${today.open}` };
+  }
+  for (let i = 1; i <= 7; i++) {
+    const d = (idx + i) % 7;
+    const h = API().parseHours(clinicHours[API().DAY_KEY[d]]);
+    if (h) return { open: false, text: `Tutup · buka ${i === 1 ? 'besok' : DAY_ID[d]} ${h.open}` };
+  }
+  return { open: false, text: 'Tutup' };
+}
 
-    const classes = [
-      'jam-week-row',
-      isToday  ? 'jam-week-row--today'  : '',
-      isClosed ? 'jam-week-row--closed' : '',
-      isSunday ? 'jam-week-row--sunday' : '',
-    ].filter(Boolean).join(' ');
+function renderStatus() {
+  if (!clinicHours) return;
+  const s = currentStatus();
+  setText('statusText', s.text);
+  const dot = $('statusDot');
+  if (dot) dot.className = `status-dot ${s.open ? 'is-open' : 'is-closed'}`;
 
-    return `
-      <div class="${classes}">
-        <span class="jam-week-day">
-          <span class="jam-week-day-name">${DAY_ID[idx]}</span>
-          ${isToday ? '<span class="jam-week-today-tag">Hari Ini</span>' : ''}
-        </span>
-        <span class="jam-week-hours">${jamText}</span>
+  const chip = $('jadwalStatusChip');
+  if (chip) {
+    chip.className = `chip ${s.open ? 'chip--ok' : 'chip--closed'}`;
+    chip.textContent = s.open ? 'Buka sekarang' : 'Sedang tutup';
+  }
+
+  const today = API().parseHours(clinicHours[API().DAY_KEY[todayIdx()]]);
+  setText('heroJamHariIni', today ? `${fmtRange(today)} WIB` : 'Tutup hari ini');
+  const footer = today ? `Buka ${fmtRange(today)} hari ini` : 'Tutup hari ini';
+  setText('footerJamDesktop', footer);
+  setText('footerJamMobile', footer);
+}
+
+function renderWeek() {
+  const list = $('jamJadwalList');
+  if (!list) return;
+  const t = todayIdx();
+  list.innerHTML = API().DAY_KEY.map((key, i) => {
+    const h = API().parseHours(clinicHours[key]);
+    const cls = ['week-row', i === t && 'week-row--today', !h && 'week-row--closed'].filter(Boolean).join(' ');
+    return `<div class="${cls}">
+        <span class="day">${DAY_ID[i]}${i === t ? '<span class="today-tag">Hari ini</span>' : ''}</span>
+        <span class="hrs">${h ? fmtRange(h) : 'Tutup'}</span>
       </div>`;
   }).join('');
 }
 
-function renderFooterJam() {
-  const mobileEl  = document.getElementById('footerJamMobile');
-  const desktopEl = document.getElementById('footerJamDesktop');
-  if (!clinicOperationalHours) return;
-
-  // Konversi getDay() ke index array baru (Senin=0...Sabtu=5, Minggu=6)
-  const jsDay    = new Date().getDay();
-  const todayIdx = jsDay === 0 ? 6 : jsDay - 1;
-  const raw      = clinicOperationalHours[DAY_KEY[todayIdx]];
-
-  const text = (!raw || raw.toLowerCase() === 'tutup')
-    ? 'Tutup hari ini'
-    : `Buka ${raw.replace('-', ' – ')} hari ini`;
-
-  if (mobileEl)  mobileEl.textContent  = text;
-  if (desktopEl) desktopEl.textContent = text;
+function renderFaqJam() {
+  const el = $('faqJam');
+  if (!el) return;
+  const runs = groupDays(clinicHours);
+  const open = runs.filter((r) => r.hours).map((r) => `${runName(r)} pukul ${r.label.replace(/:/g, '.')}`);
+  const closed = runs.filter((r) => !r.hours).map(runName);
+  if (!open.length) return;
+  el.textContent = `${open.join(', ')}.${closed.length ? ` Tutup pada hari ${closed.join(' dan ')}.` : ''}` +
+    ' Jadwal ini mengikuti sistem klinik dan selalu terbaru.';
 }
 
-function renderClinicStatus(badge, text, dot, jamEl) {
-  if (!clinicOperationalHours) return;
+/** Jam buka di data terstruktur (Google) ikut jadwal ApexRecord. */
+function updateStructuredData() {
+  const el = $('ldDentist');
+  if (!el) return;
+  try {
+    const data = JSON.parse(el.textContent);
+    data.openingHoursSpecification = groupDays(clinicHours)
+      .filter((r) => r.hours)
+      .map((r) => ({
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: SCHEMA_DAY.slice(r.from, r.to + 1),
+        opens: r.hours.open,
+        closes: r.hours.close,
+      }));
+    el.textContent = JSON.stringify(data);
+  } catch (err) {
+    console.warn('[JSON-LD]', err);
+  }
+}
 
-  const now      = new Date();
-  const jsDay    = now.getDay();
-  const todayIdx = jsDay === 0 ? 6 : jsDay - 1; // ← konversi
-  const total    = now.getHours() * 60 + now.getMinutes();
+/* ── Dokter & jadwal praktik ──────────────────────────────── */
+let doctorsPromise = null;
+function loadDoctors() {
+  if (!doctorsPromise) {
+    // Dokter tanpa jadwal sendiri mengikuti jam klinik, jadi tunggu keduanya
+    // (clinic() di-memo apex-api.js: tidak menambah request).
+    doctorsPromise = Promise.all([API().practitioners(), API().clinic().catch(() => null)])
+      .then(([list, clinic]) => {
+        if (!clinicHours && clinic) clinicHours = clinic.operationalHours || {};
+        const doctors = Array.isArray(list) ? list : [];
+        renderDoctorCards(doctors);
+        renderDoctorSchedules(doctors);
+        return doctors;
+      })
+      .catch((err) => { console.error('[Dokter]', err); doctorsPromise = null; return []; });
+  }
+  return doctorsPromise;
+}
 
-  const dayKey = DAY_KEY[todayIdx]; // ← pakai index baru
-  const raw    = clinicOperationalHours[dayKey];
+/** Jadwal dokter; null (belum diatur) berarti mengikuti jam klinik. */
+const doctorHours = (d) => d.jadwalPraktik || clinicHours || {};
 
-  let open = false;
-  let nextInfo = '';
+function dayChips(hoursMap) {
+  return API().DAY_KEY.map((key, i) => {
+    const h = API().parseHours(hoursMap[key]);
+    return `<span class="doc-day${h ? '' : ' doc-day--off'}"><b>${DAY_SHORT[i]}</b>${h ? fmtRange(h) : 'Libur'}</span>`;
+  }).join('');
+}
 
-  if (raw && raw.toLowerCase() !== 'tutup') {
-    const [openStr, closeStr] = raw.split('-');
-    const [oh, om] = openStr.split(':').map(Number);
-    const [ch, cm] = closeStr.split(':').map(Number);
-    const start = oh * 60 + om;
-    const end   = ch * 60 + cm;
+function renderDoctorCards(doctors) {
+  const listEl = $('docList');
+  if (!listEl || !doctors.length) return;
+  const esc = API().esc;
+  const staticCard = listEl.querySelector('[data-doctor="daffa"]');
 
-    if (total >= start && total < end) {
-      open = true;
-    } else if (total < start) {
-      nextInfo = ` · Buka pukul ${openStr} hari ini`;
+  doctors.forEach((d) => {
+    // Profil drg. Daffa sudah ditulis lengkap di HTML: cukup tambahkan jadwalnya.
+    if (staticCard && /daffa/i.test(d.name)) {
+      const days = staticCard.querySelector('[data-doc-days]');
+      if (days) days.innerHTML = dayChips(doctorHours(d));
+      return;
     }
-  }
-
-  if (!open && !nextInfo) {
-    const next = findNextOpenDay(todayIdx); // ← pakai index baru
-    if (next) nextInfo = ` · Buka ${DAY_ID[next.idx]} pukul ${next.open}`;
-  }
-
-  if (open) {
-    text.textContent = 'Buka Sekarang';
-    dot.className    = 'status-dot';
-    if (jamEl) jamEl.textContent = 'Buka Sekarang ✓';
-  } else {
-    text.textContent = `Tutup${nextInfo}`;
-    dot.className    = 'status-dot closed';
-    if (jamEl) jamEl.textContent = `Tutup${nextInfo}`;
-  }
-}
-
-function findNextOpenDay(fromIdx) {
-  for (let i = 1; i <= 7; i++) {
-    const idx = (fromIdx + i) % 7;
-    const raw = clinicOperationalHours[DAY_KEY[idx]];
-    if (raw && raw.toLowerCase() !== 'tutup') {
-      return { idx, open: raw.split('-')[0] };
-    }
-  }
-  return null;
-}
-
-/* ============================================================
-   7. ANIMATED COUNTERS
-   ============================================================ */
-function initCounters() {
-  const els = document.querySelectorAll('.counter[data-target]');
-  if (!els.length) return;
-
-  const animate = (el) => {
-    const target = parseInt(el.dataset.target, 10);
-    const dur    = 2000;
-    const step   = 16;
-    const inc    = target / (dur / step);
-    let current  = 0;
-
-    const tick = () => {
-      current += inc;
-      if (current >= target) { el.textContent = target.toLocaleString('id-ID'); return; }
-      el.textContent = Math.floor(current).toLocaleString('id-ID');
-      requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(en => {
-      if (en.isIntersecting) { animate(en.target); obs.unobserve(en.target); }
-    });
-  }, { threshold: 0.5 });
-
-  els.forEach(el => obs.observe(el));
-}
-
-/* ============================================================
-   8. AOS INIT
-   ============================================================ */
-function initAOS() {
-  const tryInit = () => {
-    if (typeof AOS !== 'undefined') {
-      AOS.init({ duration: 650, easing: 'ease-out-cubic', once: true, offset: 60, delay: 0 });
-    } else {
-      setTimeout(tryInit, 100);
-    }
-  };
-  tryInit();
-}
-
-/* ============================================================
-   9. WA FLOAT — show after scroll, message tergantung section
-   ============================================================ */
-function initWAFloat() {
-  const btn = document.getElementById('waFloat');
-  if (!btn) return;
-
-  btn.style.opacity    = '0';
-  btn.style.transform  = 'translateY(20px)';
-  btn.style.transition = 'opacity .4s ease, transform .4s ease';
-
-  const show = () => { btn.style.opacity = '1'; btn.style.transform = 'translateY(0)'; };
-  setTimeout(show, 2000);
-  window.addEventListener('scroll', show, { once: true, passive: true });
-
-  const sections = {
-    layanan:    `Halo%20Zanak%2C%20saya%20mau%20tanya%20soal%20layanan`,
-    dokter:     `Halo%20Zanak%2C%20saya%20mau%20konsultasi%20dengan%20dokter`,
-    'jam-buka': `Halo%20Zanak%2C%20saya%20mau%20tanya%20jadwal%20klinik`,
-    testimoni:  `Halo%20Zanak%2C%20saya%20mau%20buat%20janji`,
-    lokasi:     `Halo%20Zanak%2C%20saya%20mau%20tanya%20arah%20ke%20klinik`,
-  };
-
-  const updateMsg = (id) => {
-    const msg = sections[id] || `Halo%20Zanak%20Dental%20Care%2C%20saya%20mau%20buat%20janji`;
-    btn.href = `https://wa.me/${WA_NUMBER}?text=${msg}`;
-  };
-
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(en => { if (en.isIntersecting) updateMsg(en.target.id); });
-  }, { threshold: 0.3 });
-
-  Object.keys(sections).forEach(id => {
-    const el = document.getElementById(id);
-    if (el) obs.observe(el);
+    const photo = API().fileUrl(d.photoUrl);
+    const card = document.createElement('article');
+    card.className = 'doc-card reveal is-visible';
+    card.innerHTML = `
+      <div class="doc-photo">${photo
+        ? `<img src="${esc(photo)}" alt="${esc(d.name)}" loading="lazy">`
+        : '<i class="fas fa-user-doctor"></i>'}</div>
+      <div>
+        ${d.specialization ? `<div class="doc-badges"><span class="badge">${esc(d.specialization)}</span></div>` : ''}
+        <h3 class="doc-name">${esc(d.name)}</h3>
+        <div class="doc-days">${dayChips(doctorHours(d))}</div>
+        <a href="#antrian-online" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Buat janji</a>
+      </div>`;
+    listEl.appendChild(card);
   });
 }
 
-/* ============================================================
-   10. CAROUSEL — reusable untuk Layanan / Fasilitas / Testimoni
-   Fitur: paging responsif, dots, prev/next, drag & swipe (mouse+touch)
-   ============================================================ */
-function initCarousel({ trackId, prevId, nextId, dotsId, gap = 16, breakpoints = { 0: 1, 640: 2, 900: 4 } }) {
-  const track  = document.getElementById(trackId);
-  const prev   = document.getElementById(prevId);
-  const next   = document.getElementById(nextId);
-  const dotsEl = document.getElementById(dotsId);
-  if (!track) return;
+/** Di panel jadwal: jadwal praktik per dokter, bila ada yang berbeda dari jam klinik. */
+function renderDoctorSchedules(doctors) {
+  const box = $('docSched');
+  // Satu dokter tanpa jadwal sendiri = sama dengan jam klinik, tak perlu diulang.
+  if (!box || !doctors.length || (doctors.length === 1 && !doctors[0].jadwalPraktik)) return;
+  const esc = API().esc;
+  box.innerHTML = doctors.map((d) => {
+    const runs = groupDays(doctorHours(d)).filter((r) => r.hours);
+    const text = runs.length ? runs.map((r) => `${runName(r)} ${r.label}`).join(' · ') : 'Jadwal belum tersedia';
+    const photo = API().fileUrl(d.photoUrl);
+    return `<div class="doc-sched-row">
+        <span class="av">${photo ? `<img src="${esc(photo)}" alt="" loading="lazy">` : '<i class="fas fa-user-doctor"></i>'}</span>
+        <div><b>${esc(d.name)}</b><span>${esc(text)}${d.jadwalPraktik ? '' : ' (mengikuti jam klinik)'}</span></div>
+      </div>`;
+  }).join('');
+  box.hidden = false;
+}
 
-  const cards = track.children;
-  let page = 0;
+/* ── Jam kosong terdekat ──────────────────────────────────── */
+async function loadNextSlots() {
+  const dayEl = $('slotDay');
+  const chips = $('slotChips');
+  if (!dayEl || !chips) return;
 
-  const bpKeys = Object.keys(breakpoints).map(Number).sort((a, b) => a - b);
-  const perPage = () => {
-    let v = breakpoints[bpKeys[0]];
-    for (const k of bpKeys) if (window.innerWidth >= k) v = breakpoints[k];
-    return v;
-  };
-  const totalPages = () => Math.max(1, Math.ceil(cards.length / perPage()));
+  const doctors = await loadDoctors();
+  const doctor = doctors[0] || null; // sama dengan dokter default di form reservasi
+  const hoursMap = doctor ? doctorHours(doctor) : clinicHours || {};
+  const MAX_CALLS = 3;
+  let calls = 0;
 
-  function buildDots() {
-    if (!dotsEl) return;
-    dotsEl.innerHTML = '';
-    for (let i = 0; i < totalPages(); i++) {
-      const d = document.createElement('span');
-      d.className = 'lnav-dot' + (i === page ? ' active' : '');
-      d.addEventListener('click', () => goTo(i));
-      dotsEl.appendChild(d);
+  try {
+    for (let i = 0; i < 14 && calls < MAX_CALLS; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() + i);
+      const key = API().dayKey(date);
+      if (Object.keys(hoursMap).length && !API().parseHours(hoursMap[key])) continue; // libur
+
+      const dateStr = API().localDate(date);
+      calls++;
+      const res = await API().slots(dateStr, doctor?.id);
+      const nowMin = new Date().getHours() * 60 + new Date().getMinutes();
+      const slots = (res?.isOpen ? res.slots || [] : [])
+        .filter((t) => t.endsWith(':00'))                    // sama dengan form reservasi
+        .filter((t) => i > 0 || toMin(t) > nowMin);          // jam yang sudah lewat hari ini
+      if (!slots.length) continue;
+
+      const label = i === 0 ? 'Hari ini' : i === 1 ? 'Besok' : DAY_ID[(date.getDay() + 6) % 7];
+      const tgl = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long' });
+      dayEl.innerHTML = `<b>${label}</b>, ${tgl} — ${slots.length} jam masih kosong`;
+      chips.innerHTML = slots.slice(0, 8).map((t) =>
+        `<button type="button" class="slot-chip" data-date="${dateStr}" data-time="${t}">${t}</button>`).join('');
+      chips.querySelectorAll('.slot-chip').forEach((b) => b.addEventListener('click', () => pickSlot(b.dataset.date, b.dataset.time)));
+      return;
     }
+    dayEl.textContent = 'Belum ada jam kosong dalam beberapa hari ke depan.';
+    chips.innerHTML = '<p class="slot-empty">Coba pilih tanggal lain di formulir, atau tanyakan via WhatsApp.</p>';
+  } catch (err) {
+    console.error('[Jam kosong]', err);
+    dayEl.textContent = 'Jam kosong belum bisa dimuat.';
+    chips.innerHTML = '<p class="slot-empty">Silakan pilih tanggal langsung di formulir reservasi.</p>';
   }
+}
 
-  function goTo(p) {
-    page = Math.max(0, Math.min(p, totalPages() - 1));
-    const pp = perPage();
-    const w  = track.parentElement.offsetWidth;
-    const cardW = (w - gap * (pp - 1)) / pp;
-    track.style.transform = `translateX(-${page * (cardW + gap) * pp}px)`;
-    if (prev) prev.disabled = page === 0;
-    if (next) next.disabled = page >= totalPages() - 1;
-    dotsEl?.querySelectorAll('.lnav-dot').forEach((d, i) => d.classList.toggle('active', i === page));
+function pickSlot(date, time) {
+  trackEvent('slot_quick_pick', { date, time });
+  const section = $('antrian-online');
+  if (typeof window.zdcPrefill === 'function' && section) {
+    window.zdcPrefill(date, time);
+  } else if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
   }
-
-  prev?.addEventListener('click', () => goTo(page - 1));
-  next?.addEventListener('click', () => goTo(page + 1));
-
-  // ── Swipe / drag support (mouse + touch) ──
-  let startX = 0, currentX = 0, dragging = false;
-
-  const getX = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
-
-  const onDown = (e) => {
-    dragging = true;
-    startX = currentX = getX(e);
-    track.style.transition = 'none';
-  };
-
-  const onMove = (e) => {
-    if (!dragging) return;
-    currentX = getX(e);
-    const pp = perPage();
-    const w  = track.parentElement.offsetWidth;
-    const cardW = (w - gap * (pp - 1)) / pp;
-    const base = -(page * (cardW + gap) * pp);
-    track.style.transform = `translateX(${base + (currentX - startX)}px)`;
-  };
-
-  const onUp = () => {
-    if (!dragging) return;
-    dragging = false;
-    track.style.transition = '';
-    const dx = currentX - startX;
-    if (Math.abs(dx) > 50) {
-      goTo(dx < 0 ? page + 1 : page - 1);
-    } else {
-      goTo(page); // snap back
-    }
-  };
-
-  track.addEventListener('mousedown', onDown);
-  window.addEventListener('mousemove', onMove);
-  window.addEventListener('mouseup', onUp);
-  track.addEventListener('touchstart', onDown, { passive: true });
-  track.addEventListener('touchmove', onMove, { passive: true });
-  track.addEventListener('touchend', onUp);
-
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { page = 0; buildDots(); goTo(0); }, 150);
-  });
-
-  buildDots();
-  goTo(0);
 }
 
-/* ============================================================
-   11. FORM RESERVASI LAMA → WhatsApp (fallback jika masih dipakai)
-   ============================================================ */
-function initReservasiForm() {
-  const form = document.getElementById('reservasiForm');
-  const btn  = document.getElementById('submitBtn');
-  if (!form) return;
+/* ── Hasil perawatan (konten ApexRecord) ──────────────────── */
+async function loadStories() {
+  const section = $('hasil');
+  const grid = $('storyGrid');
+  if (!section || !grid) return;
+  let items = [];
+  try { items = await API().contents(); } catch (err) { console.error('[Konten]', err); }
+  if (!Array.isArray(items) || !items.length) return;
 
-  const tgl = document.getElementById('tanggal');
-  if (tgl) {
-    tgl.setAttribute('min', window.ZDC_API.localDate());
-  }
-
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    if (!form.checkValidity()) { form.reportValidity(); return; }
-
-    const nama    = form.nama.value.trim();
-    const wa      = form.wa.value.trim();
-    const tanggal = form.tanggal.value;
-    const jam     = form.jam.value;
-    const layanan = form.layanan.value;
-    const keluhan = form.keluhan.value.trim();
-
-    const tglFmt = new Date(tanggal).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-    const msg = [
-      `Halo Zanak Dental Care,`,
-      ``,
-      `Saya ingin melakukan reservasi kunjungan:`,
-      ``,
-      `Nama       : ${nama}`,
-      `WhatsApp   : ${wa}`,
-      `Tanggal    : ${tglFmt}`,
-      `Jam        : ${jam} WIB`,
-      `Layanan    : ${layanan}`,
-      keluhan ? `Keluhan    : ${keluhan}` : '',
-      ``,
-      `Mohon dikonfirmasi ketersediaan jadwalnya. Terima kasih.`
-    ].filter(Boolean).join('\n');
-
-    btn.disabled  = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
-
-    setTimeout(() => {
-      window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-      btn.disabled  = false;
-      btn.innerHTML = '<i class="fab fa-whatsapp"></i> Kirim Reservasi via WhatsApp';
-      form.reset();
-      trackEvent('reservasi_submit', { layanan });
-    }, 600);
-  });
+  const esc = API().esc;
+  grid.innerHTML = items.slice(0, 6).map((c) => `
+    <article class="story">
+      ${c.imageUrl ? `<img src="${esc(API().fileUrl(c.imageUrl))}" alt="${esc(c.title || 'Hasil perawatan')}" loading="lazy">` : ''}
+      <div class="story-body">
+        <h3>${esc(c.title || 'Hasil perawatan')}</h3>
+        ${c.caption ? `<p>${esc(c.caption)}</p>` : ''}
+      </div>
+    </article>`).join('');
+  section.hidden = false;
 }
 
-/* ============================================================
-   12. LAZY IMAGE FALLBACK
-   ============================================================ */
-function initLazyImages() {
-  document.querySelectorAll('img[loading="lazy"]').forEach(img => {
-    img.addEventListener('error', () => { img.style.visibility = 'hidden'; });
-  });
-}
-
-/* ============================================================
-   13. UTILITY — debounce & throttle
-   ============================================================ */
-function debounce(fn, wait) {
-  let t;
-  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
-}
-
-function throttle(fn, limit) {
-  let last = 0;
-  return (...args) => {
-    const now = Date.now();
-    if (now - last >= limit) { last = now; fn(...args); }
-  };
-}
-
-/* ============================================================
-   14. GOOGLE ANALYTICS 4 — event helpers
-   ============================================================ */
+/* ── Google Analytics 4 (bila gtag terpasang) ─────────────── */
 function trackEvent(name, params = {}) {
   if (typeof gtag === 'function') gtag('event', name, params);
 }
 
-document.addEventListener('click', e => {
-  const a = e.target.closest('a[href*="wa.me"]');
-  if (!a) return;
-  const section = a.closest('section')?.id || 'unknown';
-  const label   = a.textContent.trim().slice(0, 50);
-  trackEvent('whatsapp_click', { section, label });
-});
-
-document.addEventListener('click', e => {
+document.addEventListener('click', (e) => {
+  const wa = e.target.closest('a[href*="wa.me"]');
+  if (wa) trackEvent('whatsapp_click', { section: wa.closest('section')?.id || 'float', label: wa.textContent.trim().slice(0, 50) });
   if (e.target.closest('a[href*="maps.google"]')) trackEvent('maps_click');
 });
-
-const depthMarks   = new Set();
-const depthHandler = throttle(() => {
-  const pct = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
-  [25, 50, 75, 90].forEach(mark => {
-    if (pct >= mark && !depthMarks.has(mark)) { depthMarks.add(mark); trackEvent('scroll_depth', { percent: mark }); }
-  });
-}, 500);
-
-window.addEventListener('scroll', depthHandler, { passive: true });

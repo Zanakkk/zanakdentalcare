@@ -86,6 +86,12 @@
         v1OrLegacy(() => call('/v1/practitioners'), () => legacyInfo().then((d) => d.practitioners || [])),
       ),
 
+    /** Konten before–after yang diterbitkan klinik di ApexRecord (menu Konten):
+     *  [{ id, title, caption, imageUrl, publishedAt }]. Hanya ada di /v1 —
+     *  tanpa API key hasilnya kosong dan bagiannya tidak ditampilkan. */
+    contents: () =>
+      once('contents', () => (useV1 ? v1OrLegacy(() => call('/v1/contents'), () => []) : Promise.resolve([]))),
+
     /** { date, isOpen, slots: ['09:00', …] } — tidak di-memo, slot berubah terus. */
     slots: (date, practitionerId) => {
       const q = new URLSearchParams({ date });
@@ -152,6 +158,9 @@
     const [open, close] = raw.split('-').map((s) => s.trim());
     return open && close ? { open, close } : null;
   };
+
+  /** Foto dari ApexRecord: endpoint lama bisa memberi path relatif ('/files/…'). */
+  api.fileUrl = (url) => (url && url.startsWith('/') ? BASE_URL + url : url || null);
 
   /** Escape teks sebelum dimasukkan ke innerHTML. */
   api.esc = (s) =>
