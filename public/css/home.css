@@ -321,10 +321,9 @@ a.svc-card:hover .svc-more { gap: 10px; }
 .testi--cta h3 { color: #fff; font-size: 18px; }
 .testi--cta p { color: rgba(255, 255, 255, .8); font-size: 14px; }
 .testi--cta .btn { align-self: flex-start; }
-.testi-cta-icon { color: #fff; font-size: 22px; }
-.testi-cta-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-.testi-cta-link { color: #fff; border-color: rgba(255, 255, 255, .4); }
-.testi-cta-link:hover { background: rgba(255, 255, 255, .12); }
+.testi-grid.is-collapsed .testi--more { display: none; }
+.testi-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 24px; }
+.testi-actions .btn-ghost { background: var(--surface); }
 .testi-proc i { font-size: 11px; }
 .testi-av { font-size: 11px; letter-spacing: .02em; }
 .testi-name { letter-spacing: .12em; }
