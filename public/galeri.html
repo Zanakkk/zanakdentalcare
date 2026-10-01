@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galeri Hasil Perawatan — Zanak Dental Care Payakumbuh</title>
+  <meta name="description" content="Foto sebelum dan sesudah perawatan gigi di Zanak Dental Care Payakumbuh, dikelompokkan per tindakan: tambal, cabut, scaling, dan lainnya. Diterbitkan atas izin pasien.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://zanakdentalcare.web.app/galeri">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Galeri Hasil Perawatan — Zanak Dental Care">
+  <meta property="og:description" content="Sebelum dan sesudah perawatan gigi di Zanak Dental Care Payakumbuh, per tindakan.">
+  <meta property="og:image" content="https://zanakdentalcare.web.app/assets/images/depan.webp">
+  <meta property="og:url" content="https://zanakdentalcare.web.app/galeri">
+  <meta property="og:site_name" content="Zanak Dental Care">
+  <meta property="og:locale" content="id_ID">
+  <link rel="icon" type="image/webp" href="assets/images/logo.webp">
+  <link rel="apple-touch-icon" href="assets/images/logo.webp">
+  <meta name="theme-color" content="#F3F1EC">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://api.apexrecord.my.id" crossorigin>
+  <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap"
+        onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700&family=JetBrains+Mono:wght@500;600&display=swap"></noscript>
+  <link rel="preload" as="style"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+  <link rel="stylesheet" href="css/home.css?v=20261001a">
+</head>
+<body class="home">
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <header class="nav" id="navbar">
+    <div class="container nav-row">
+      <a href="/" class="brand" aria-label="Zanak Dental Care — beranda">
+        <span class="brand-mark"><img src="assets/images/logo.webp" alt="" width="38" height="38"></span>
+        <span class="brand-word">Zanak<small>Dental Care</small></span>
+      </a>
+      <nav class="nav-links" aria-label="Navigasi utama">
+        <a href="index.html#layanan">Layanan</a>
+        <a href="galeri.html" class="active" aria-current="page">Galeri</a>
+        <a href="index.html#dokter">Dokter</a>
+        <a href="index.html#jadwal">Jadwal</a>
+        <a href="index.html#lokasi">Lokasi</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="index.html#antrian-online" class="btn btn-primary btn-sm"><i class="fas fa-calendar-check"></i> Reservasi</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Buka menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Menu">
+      <a href="index.html" class="mobile-link">Beranda</a>
+      <a href="index.html#layanan" class="mobile-link">Layanan</a>
+      <a href="galeri.html" class="mobile-link">Galeri hasil perawatan</a>
+      <a href="index.html#dokter" class="mobile-link">Dokter</a>
+      <a href="index.html#lokasi" class="mobile-link">Lokasi</a>
+      <a href="index.html#antrian-online" class="btn btn-primary btn-full mobile-link"><i class="fas fa-calendar-check"></i> Reservasi Sekarang</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section gallery-page">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Galeri hasil perawatan</span>
+          <h1>Sebelum &amp; sesudah di Zanak</h1>
+          <p>Cerita perawatan pasien kami per tindakan, diterbitkan dengan persetujuan pasien. Ketuk gambar untuk melihat lebih besar.</p>
+        </div>
+
+        <div class="gallery-filter" id="galleryFilter" role="group" aria-label="Pilih tindakan"></div>
+        <p class="gallery-status" id="galleryLoading">Memuat galeri…</p>
+        <div class="gallery-empty" id="galleryEmpty" hidden>
+          <p>Belum ada cerita perawatan yang diterbitkan. Silakan kembali lagi nanti.</p>
+          <a href="index.html#antrian-online" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Buat janji</a>
+        </div>
+        <div id="galleryGroups"></div>
+
+        <p class="story-note">Hasil tiap pasien dapat berbeda, tergantung kondisi klinis masing-masing.</p>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="story-dialog" id="storyDialog" aria-labelledby="dlgTitle">
+    <div class="story-dialog-inner">
+      <button type="button" class="story-dialog-close" id="dlgClose" aria-label="Tutup"><i class="fas fa-xmark"></i></button>
+      <img id="dlgImage" alt="">
+      <div class="story-dialog-body">
+        <span class="story-tag" id="dlgTag"></span>
+        <h2 id="dlgTitle"></h2>
+        <p id="dlgCaption"></p>
+        <p class="story-dialog-date" id="dlgDate"></p>
+        <div class="story-dialog-nav">
+          <button type="button" class="btn btn-ghost btn-sm" id="dlgPrev" aria-label="Sebelumnya"><i class="fas fa-chevron-left"></i></button>
+          <span id="dlgCount"></span>
+          <button type="button" class="btn btn-ghost btn-sm" id="dlgNext" aria-label="Berikutnya"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <a href="index.html#antrian-online" class="btn btn-primary btn-full"><i class="fas fa-calendar-check"></i> Konsultasi untuk perawatan ini</a>
+      </div>
+    </div>
+  </dialog>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <span>© 2026 <strong>Zanak Dental Care</strong> · Payakumbuh Utara, Sumatera Barat</span>
+        <span><a href="index.html">← Kembali ke beranda</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/apex-api.js?v=20261001a" defer></script>
+  <script src="js/stories.js?v=20261001a" defer></script>
+  <script src="js/galeri.js?v=20261001a" defer></script>
+</body>
+</html>

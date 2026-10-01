@@ -11,6 +11,15 @@
     <xhtml:link rel="alternate" hreflang="id" href="https://zanakdentalcare.web.app/"/>
   </url>
 
+  <!-- ══ GALERI HASIL PERAWATAN ═════════════════════════════ -->
+  <url>
+    <loc>https://zanakdentalcare.web.app/galeri</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="id" href="https://zanakdentalcare.web.app/galeri"/>
+  </url>
+
   <!-- ══ HALAMAN LAYANAN (HUB) ══════════════════════════════ -->
   <url>
     <loc>https://zanakdentalcare.web.app/treatment</loc>

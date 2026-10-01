@@ -119,7 +119,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
-  <link rel="stylesheet" href="css/home.css?v=20260930d">
+  <link rel="stylesheet" href="css/home.css?v=20261001a">
 </head>
 <body class="home">
   <div class="bg-grid" aria-hidden="true"></div>
@@ -135,6 +135,7 @@
         <a href="#layanan">Layanan</a>
         <a href="#jadwal">Jadwal</a>
         <a href="#dokter">Dokter</a>
+        <a href="galeri.html">Galeri</a>
         <a href="#fasilitas">Fasilitas</a>
         <a href="#faq">FAQ</a>
         <a href="#lokasi">Lokasi</a>
@@ -151,6 +152,7 @@
       <a href="#layanan" class="mobile-link">Layanan</a>
       <a href="#jadwal" class="mobile-link">Jadwal &amp; Jam Buka</a>
       <a href="#dokter" class="mobile-link">Dokter</a>
+      <a href="galeri.html" class="mobile-link">Galeri hasil perawatan</a>
       <a href="#fasilitas" class="mobile-link">Fasilitas</a>
       <a href="#faq" class="mobile-link">FAQ</a>
       <a href="#lokasi" class="mobile-link">Lokasi</a>
@@ -368,7 +370,10 @@
           <h2>Sebelum &amp; sesudah di Zanak</h2>
           <p>Cerita perawatan pasien kami, diterbitkan dengan persetujuan pasien.</p>
         </div>
-        <div class="story-grid" id="storyGrid"></div>
+        <div class="story-grid story-grid--tall" id="storyGrid"></div>
+        <div class="story-more">
+          <a href="galeri.html" class="btn btn-outline"><i class="fas fa-images"></i> Lihat galeri lengkap per tindakan</a>
+        </div>
         <p class="story-note">Hasil tiap pasien dapat berbeda, tergantung kondisi klinis masing-masing.</p>
       </div>
     </section>
@@ -719,8 +724,9 @@
     </a>
   </div>
 
-  <script src="js/apex-api.js?v=20260930d" defer></script>
-  <script src="js/antrian.js?v=20260930d" defer></script>
-  <script src="js/main.js?v=20260930d" defer></script>
+  <script src="js/apex-api.js?v=20261001a" defer></script>
+  <script src="js/stories.js?v=20261001a" defer></script>
+  <script src="js/antrian.js?v=20261001a" defer></script>
+  <script src="js/main.js?v=20261001a" defer></script>
 </body>
 </html>

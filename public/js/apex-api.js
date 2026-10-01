@@ -87,7 +87,9 @@
       ),
 
     /** Konten before–after yang diterbitkan klinik di ApexRecord (menu Konten):
-     *  [{ id, title, caption, imageUrl, publishedAt }]. Hanya ada di /v1 —
+     *  [{ id, title, caption, imageUrl, publishedAt, treatment: { id, name } | null }].
+     *  treatment = template tindakan di ApexRecord (Tambal, Cabut, …), untuk
+     *  galeri per tindakan (stories.js). Hanya ada di /v1 —
      *  tanpa API key hasilnya kosong dan bagiannya tidak ditampilkan. */
     contents: () =>
       once('contents', () => (useV1 ? v1OrLegacy(() => call('/v1/contents'), () => []) : Promise.resolve([]))),

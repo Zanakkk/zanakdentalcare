@@ -245,6 +245,17 @@
       </div>
     </section>
 
+    <!-- Hasil perawatan dari ApexRecord (menu Konten) — muncul bila ada konten tindakan ini -->
+    <section class="treat-stories" id="hasil" data-treatment="kawat,behel,ortodon" hidden>
+      <div class="container">
+        <span class="section-tag">Hasil perawatan</span>
+        <h2>Sebelum &amp; sesudah: Kawat Gigi</h2>
+        <p>Cerita perawatan pasien Zanak, diterbitkan dengan persetujuan pasien. Hasil tiap pasien dapat berbeda.</p>
+        <div class="treat-story-grid" id="treatStories"></div>
+        <a href="galeri.html" class="btn btn-outline" id="treatStoriesMore"><i class="fas fa-images"></i> Lihat semua di galeri</a>
+      </div>
+    </section>
+
     <section style="background:var(--pd);padding:72px 0;text-align:center;color:var(--white)">
       <div class="container">
         <h2 style="color:var(--white);margin-bottom:14px">Siap Mulai Perawatan?</h2>
@@ -297,5 +308,8 @@
     }, { rootMargin: '-30% 0px -60% 0px' });
     localSections.forEach(s => obs.observe(s));
   </script>
+  <script src="js/apex-api.js?v=20261001a" defer></script>
+  <script src="js/stories.js?v=20261001a" defer></script>
+  <script src="js/treatment-stories.js?v=20261001a" defer></script>
 </body>
 </html>

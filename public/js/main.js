@@ -413,15 +413,13 @@ async function loadStories() {
   try { items = await API().contents(); } catch (err) { console.error('[Konten]', err); }
   if (!Array.isArray(items) || !items.length) return;
 
-  const esc = API().esc;
-  grid.innerHTML = items.slice(0, 6).map((c) => `
-    <article class="story">
-      ${c.imageUrl ? `<img src="${esc(API().fileUrl(c.imageUrl))}" alt="${esc(c.title || 'Hasil perawatan')}" loading="lazy">` : ''}
-      <div class="story-body">
-        <h3>${esc(c.title || 'Hasil perawatan')}</h3>
-        ${c.caption ? `<p>${esc(c.caption)}</p>` : ''}
-      </div>
-    </article>`).join('');
+  // Story 9:16 dari ApexRecord; klik → galeri, langsung di kelompok tindakannya.
+  const S = window.ZDC_STORIES;
+  grid.innerHTML = items.slice(0, 8).map((c) => {
+    const name = S.groupName(c);
+    const href = name === S.OTHER ? 'galeri.html' : `galeri.html?tindakan=${encodeURIComponent(name)}`;
+    return S.card(c, { href });
+  }).join('');
   section.hidden = false;
 }
 
