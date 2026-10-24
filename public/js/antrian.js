@@ -9,7 +9,7 @@
   // Semua panggilan ke ApexRecord lewat js/apex-api.js (window.ZDC_API).
   const API = window.ZDC_API;
   const WA_NUMBER  = '089526697902'; // nomor WA resmi klinik (dikonfirmasi)
-  const STATUS_URL = 'antrian-status.html';
+  const STATUS_URL = '/antrian-status';
   const esc = API.esc;
 
   // ── State

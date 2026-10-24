@@ -110,7 +110,7 @@ function initStatusLinks() {
   try { token = JSON.parse(sessionStorage.getItem('zdc_reservasi') || 'null')?.token; } catch {}
   if (!token) return;
   document.querySelectorAll('.js-status-link').forEach((a) => {
-    a.href = `antrian-status.html?t=${encodeURIComponent(token)}`;
+    a.href = `/antrian-status?t=${encodeURIComponent(token)}`;
   });
 }
 
@@ -417,7 +417,7 @@ async function loadStories() {
   const S = window.ZDC_STORIES;
   grid.innerHTML = items.slice(0, 8).map((c) => {
     const name = S.groupName(c);
-    const href = name === S.OTHER ? 'galeri.html' : `galeri.html?tindakan=${encodeURIComponent(name)}`;
+    const href = name === S.OTHER ? '/galeri' : `/galeri?tindakan=${encodeURIComponent(name)}`;
     return S.card(c, { href });
   }).join('');
   section.hidden = false;

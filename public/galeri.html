@@ -10,7 +10,9 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Galeri Hasil Perawatan — Zanak Dental Care">
   <meta property="og:description" content="Sebelum dan sesudah perawatan gigi di Zanak Dental Care Payakumbuh, per tindakan.">
-  <meta property="og:image" content="https://zanakdentalcare.web.app/assets/images/depan.webp">
+  <meta property="og:image" content="https://zanakdentalcare.web.app/assets/images/og-zanak.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://zanakdentalcare.web.app/galeri">
   <meta property="og:site_name" content="Zanak Dental Care">
   <meta property="og:locale" content="id_ID">
@@ -29,7 +31,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
-  <link rel="stylesheet" href="css/home.css?v=20261001a">
+  <link rel="stylesheet" href="css/home.css?v=20261024a">
 </head>
 <body class="home">
   <div class="bg-grid" aria-hidden="true"></div>
@@ -41,26 +43,28 @@
         <span class="brand-word">Zanak<small>Dental Care</small></span>
       </a>
       <nav class="nav-links" aria-label="Navigasi utama">
-        <a href="index.html#layanan">Layanan</a>
-        <a href="galeri.html" class="active" aria-current="page">Galeri</a>
-        <a href="index.html#dokter">Dokter</a>
-        <a href="index.html#jadwal">Jadwal</a>
-        <a href="index.html#lokasi">Lokasi</a>
+        <a href="/#layanan">Layanan</a>
+        <a href="/galeri" class="active" aria-current="page">Galeri</a>
+        <a href="/blog">Blog</a>
+        <a href="/#dokter">Dokter</a>
+        <a href="/#jadwal">Jadwal</a>
+        <a href="/#lokasi">Lokasi</a>
       </nav>
       <div class="nav-cta">
-        <a href="index.html#antrian-online" class="btn btn-primary btn-sm"><i class="fas fa-calendar-check"></i> Reservasi</a>
+        <a href="/#antrian-online" class="btn btn-primary btn-sm"><i class="fas fa-calendar-check"></i> Reservasi</a>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Buka menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span><span></span>
       </button>
     </div>
     <nav class="mobile-menu" id="mobileMenu" aria-label="Menu">
-      <a href="index.html" class="mobile-link">Beranda</a>
-      <a href="index.html#layanan" class="mobile-link">Layanan</a>
-      <a href="galeri.html" class="mobile-link">Galeri hasil perawatan</a>
-      <a href="index.html#dokter" class="mobile-link">Dokter</a>
-      <a href="index.html#lokasi" class="mobile-link">Lokasi</a>
-      <a href="index.html#antrian-online" class="btn btn-primary btn-full mobile-link"><i class="fas fa-calendar-check"></i> Reservasi Sekarang</a>
+      <a href="/" class="mobile-link">Beranda</a>
+      <a href="/#layanan" class="mobile-link">Layanan</a>
+      <a href="/galeri" class="mobile-link">Galeri hasil perawatan</a>
+      <a href="/blog" class="mobile-link">Blog kesehatan gigi</a>
+      <a href="/#dokter" class="mobile-link">Dokter</a>
+      <a href="/#lokasi" class="mobile-link">Lokasi</a>
+      <a href="/#antrian-online" class="btn btn-primary btn-full mobile-link"><i class="fas fa-calendar-check"></i> Reservasi Sekarang</a>
     </nav>
   </header>
 
@@ -77,7 +81,7 @@
         <p class="gallery-status" id="galleryLoading">Memuat galeri…</p>
         <div class="gallery-empty" id="galleryEmpty" hidden>
           <p>Belum ada cerita perawatan yang diterbitkan. Silakan kembali lagi nanti.</p>
-          <a href="index.html#antrian-online" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Buat janji</a>
+          <a href="/#antrian-online" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Buat janji</a>
         </div>
         <div id="galleryGroups"></div>
 
@@ -100,7 +104,7 @@
           <span id="dlgCount"></span>
           <button type="button" class="btn btn-ghost btn-sm" id="dlgNext" aria-label="Berikutnya"><i class="fas fa-chevron-right"></i></button>
         </div>
-        <a href="index.html#antrian-online" class="btn btn-primary btn-full"><i class="fas fa-calendar-check"></i> Konsultasi untuk perawatan ini</a>
+        <a href="/#antrian-online" class="btn btn-primary btn-full"><i class="fas fa-calendar-check"></i> Konsultasi untuk perawatan ini</a>
       </div>
     </div>
   </dialog>
@@ -109,7 +113,7 @@
     <div class="container">
       <div class="footer-bottom">
         <span>© 2026 <strong>Zanak Dental Care</strong> · Payakumbuh Utara, Sumatera Barat</span>
-        <span><a href="index.html">← Kembali ke beranda</a></span>
+        <span><a href="/">← Kembali ke beranda</a></span>
       </div>
     </div>
   </footer>

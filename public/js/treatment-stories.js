@@ -21,7 +21,7 @@
 
     // Galeri dibuka di kelompok tindakannya (nama template di ApexRecord).
     const group = S.groupName(mine[0]);
-    const href = group === S.OTHER ? 'galeri.html' : `galeri.html?tindakan=${encodeURIComponent(group)}`;
+    const href = group === S.OTHER ? '/galeri' : `/galeri?tindakan=${encodeURIComponent(group)}`;
     grid.innerHTML = mine.slice(0, 4).map((c) => S.card(c, { href, showGroup: false })).join('');
     const more = document.getElementById('treatStoriesMore');
     if (more) more.href = href;
