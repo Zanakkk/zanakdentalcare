@@ -3,6 +3,7 @@ title: Sakit Gigi Tengah Malam? Ini Pertolongan Pertama yang Aman Sebelum ke Dok
 seoTitle: Sakit Gigi Malam Hari: Pertolongan Pertama yang Aman | Zanak Dental Care Payakumbuh
 description: Cara meredakan sakit gigi di malam hari dengan aman, kebiasaan yang justru memperparah, dan tanda bengkak yang harus segera dibawa ke IGD. Panduan untuk warga Payakumbuh.
 date: 2026-10-24
+featured: true
 category: Sakit gigi & darurat
 service: saluran-akar-payakumbuh
 alsoService: tambal-gigi-payakumbuh

@@ -3,6 +3,7 @@ title: "Karang Gigi: Kenapa Muncul, Apa Bahayanya, dan Berapa Kali Perlu Scaling
 seoTitle: Karang Gigi & Scaling Gigi di Payakumbuh — Penyebab, Bahaya, Mitos
 description: Karang gigi tidak bisa hilang dengan sikat gigi biasa. Kenali penyebabnya, dampaknya bagi gusi, mitos "scaling bikin gigi renggang", dan jadwal scaling yang dianjurkan.
 date: 2026-10-24
+featured: true
 category: Pencegahan
 service: scaling-gigi-payakumbuh
 ---

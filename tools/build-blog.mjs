@@ -80,7 +80,7 @@ function parsePost(file) {
   const body = m[2].trim();
   const { html, toc } = markdown(body);
   const words = body.replace(/[#>*\-\[\]()]/g, ' ').split(/\s+/).filter(Boolean).length;
-  return { ...meta, html, toc, minutes: Math.max(1, Math.ceil(words / 180)), draft: meta.draft === 'true' };
+  return { ...meta, html, toc, minutes: Math.max(1, Math.ceil(words / 180)), draft: meta.draft === 'true', featured: meta.featured === 'true' };
 }
 
 function inline(s) {
@@ -541,6 +541,7 @@ function inject(file, name, html) {
 }
 
 function latestBlock(posts) {
+  const picks = [...posts.filter((p) => p.featured), ...posts.filter((p) => !p.featured)].slice(0, 3);
   return `    <section class="section section--soft" id="blog">
       <div class="container">
         <div class="section-head reveal">
@@ -549,7 +550,7 @@ function latestBlock(posts) {
           <p>Tips singkat dari klinik untuk keluhan yang paling sering ditanyakan warga Payakumbuh dan Lima Puluh Kota.</p>
         </div>
         <div class="post-list reveal">
-          ${posts.slice(0, 3).map((p) => card(p)).join('\n          ')}
+          ${picks.map((p) => card(p)).join('\n          ')}
         </div>
         <div class="story-more">
           <a href="/blog" class="btn btn-outline"><i class="fas fa-book-open"></i> Semua artikel</a>
