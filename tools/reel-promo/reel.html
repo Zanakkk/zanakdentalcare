@@ -5,7 +5,7 @@
 <title>Reel Promo Zanak</title>
 <style>
   :root{
-    --bg:#F4F1EA; --ink:#14294D; --navy:#1E3A6E; --acc:#4C7FDB; --hot:#E8492F;
+    --bg:#F4F1EA; --ink:#14294D; --navy:#1E3A6E; --hot:#4C7FDB; --hotDark:#2F4F8C; --hotSoft:#E9EEF7;
     --card:#FFFFFF; --muted:#6B7A90;
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -25,7 +25,7 @@
 
   /* S1 hook */
   .hook{left:80px;right:80px;font-size:104px}
-  .hook span.u{display:inline-block;background:linear-gradient(transparent 62%,#F9C9BE 62%)}
+  .hook span.u{display:inline-block;background:linear-gradient(transparent 62%,#C9D8F5 62%)}
 
   /* S2 brand */
   #logo{width:380px;height:380px;left:350px;top:520px;border-radius:60px;background:#fff;
@@ -33,7 +33,7 @@
   #logo img{width:300px}
   #brand{left:0;right:0;top:980px;text-align:center;font-size:110px}
   #brand span{display:inline-block}
-  #brandSub{left:0;right:0;top:1230px;text-align:center;font-size:44px;font-weight:600;color:var(--navy)}
+  #brandSub{left:0;right:0;top:1230px;text-align:center;font-size:44px;font-weight:600;color:var(--hotDark)}
   #stamp{left:620px;top:420px;padding:18px 30px;border:6px solid var(--hot);color:var(--hot);
     font-weight:900;font-size:40px;border-radius:14px;background:rgba(244,241,234,.9);line-height:1.05;text-align:center}
 
@@ -49,15 +49,15 @@
     display:flex;align-items:center;justify-content:center}
 
   /* S4 doctor */
-  #docBg{left:90px;top:300px;width:900px;height:1150px;border-radius:50px;background:var(--navy);overflow:hidden}
+  #docBg{left:90px;top:300px;width:900px;height:1150px;border-radius:50px;background:linear-gradient(160deg,#2F4F8C,#14294D);overflow:hidden}
   #docBg:before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(255,255,255,.08) 2px,transparent 2.5px) 0 0/40px 40px}
   #docImg{left:250px;top:340px;height:1110px}
   #docTag{left:60px;top:1330px;width:960px;background:#fff;border-radius:34px;padding:40px 46px;
     box-shadow:0 24px 50px rgba(20,41,77,.2)}
   #docTag .t1{font-size:30px;color:var(--muted);font-weight:600}
   #docTag .t2{font-size:62px;font-weight:900;margin-top:6px;letter-spacing:-1px}
-  .chip{display:inline-block;margin:22px 14px 0 0;padding:12px 24px;border-radius:999px;background:#E9EEF7;
-    color:var(--navy);font-weight:700;font-size:30px}
+  .chip{display:inline-block;margin:22px 14px 0 0;padding:12px 24px;border-radius:999px;background:var(--hotSoft);
+    color:var(--hotDark);font-weight:700;font-size:30px}
   #docHead{left:70px;top:150px;font-size:84px}
 
   /* S5 photos */
@@ -69,15 +69,15 @@
 
   /* S6 CTA */
   #ctaHead{left:70px;top:170px;font-size:132px}
-  #ctaSub{left:74px;top:470px;font-size:48px;font-weight:600;color:var(--navy)}
+  #ctaSub{left:74px;top:470px;font-size:48px;font-weight:600;color:var(--hotDark)}
   #btn{left:90px;top:620px;width:900px;height:170px;border-radius:85px;background:var(--hot);color:#fff;
     display:flex;align-items:center;justify-content:center;font-weight:900;font-size:58px;
-    box-shadow:0 14px 0 #A9301C;overflow:hidden}
+    box-shadow:0 14px 0 #2F4F8C;overflow:hidden}
   #ripple{position:absolute;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.5)}
   #cursor{left:700px;top:760px;width:70px}
   .row{position:absolute;left:90px;width:900px;height:150px;background:#fff;border-radius:28px;border:3px solid #E6E1D6;
     display:flex;align-items:center;padding:0 36px;gap:30px}
-  .row .ic{width:86px;height:86px;border-radius:22px;background:#E9EEF7;display:flex;align-items:center;justify-content:center;flex:none;font-size:46px}
+  .row .ic{width:86px;height:86px;border-radius:22px;background:var(--hotSoft);display:flex;align-items:center;justify-content:center;flex:none;font-size:46px}
   .row .k{font-size:26px;color:var(--muted);font-weight:600}
   .row .v{font-size:40px;font-weight:800;margin-top:2px}
   #endLogo{left:0;right:0;top:1660px;display:flex;justify-content:center;align-items:center;gap:22px;font-weight:900;font-size:44px}
@@ -129,7 +129,7 @@
     <div class="abs" id="docTag">
       <div class="t1">Dokter gigi kami</div>
       <div class="t2">drg. Muhammad Daffa Safra</div>
-      <span class="chip" id="c1">🎓 Alumni Universitas Andalas</span><span class="chip" id="c2">✅ STR aktif</span>
+      <span class="chip" id="c1">😊 Ramah &amp; sabar</span><span class="chip" id="c2">💬 Penjelasan jelas</span>
     </div>
   </section>
 
@@ -154,7 +154,7 @@
     <div class="abs" id="ctaSub">Pilih tanggal &amp; jam sendiri.</div>
     <div class="abs" id="btn">Reservasi Sekarang<div id="ripple"></div></div>
     <svg class="abs" id="cursor" viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z" fill="#14294D" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
-    <div class="row" id="r1" style="top:880px"><div class="ic">🕙</div><div><div class="k">Jam buka</div><div class="v">Senin–Sabtu · 10.00–21.00</div></div></div>
+    <div class="row" id="r1" style="top:880px"><div class="ic">🕙</div><div><div class="k">Jam buka</div><div class="v">Setiap hari · 10.00–21.00</div></div></div>
     <div class="row" id="r2" style="top:1060px"><div class="ic">📍</div><div><div class="k">Alamat</div><div class="v">Jl. Sudirman No.7, Payakumbuh</div></div></div>
     <div class="row" id="r3" style="top:1240px"><div class="ic">💬</div><div><div class="k">WhatsApp</div><div class="v">0895-2669-7902</div></div></div>
     <div class="row" id="r4" style="top:1420px"><div class="ic">📷</div><div><div class="k">Instagram &amp; TikTok</div><div class="v">@zanakdentalcare</div></div></div>
@@ -208,7 +208,7 @@ const brand = $("brand");
 "ZANAK".split("").forEach(ch => { const s = document.createElement("span"); s.textContent = ch; brand.appendChild(s); });
 brand.appendChild(document.createElement("br"));
 const brand2 = document.createElement("span");
-brand2.style.fontSize = "62px"; brand2.style.letterSpacing = "8px"; brand2.style.color = "#1E3A6E";
+brand2.style.fontSize = "62px"; brand2.style.letterSpacing = "8px"; brand2.style.color = "#4C7FDB";
 brand2.textContent = "DENTAL CARE"; brand.appendChild(brand2);
 
 const cards = $("cards");
@@ -297,7 +297,7 @@ function render(t) {
   const click = l6 + 1.8;
   const press = t > click && t < click + .15 ? 1 : 0;
   style("btn", { opacity: clamp(bt * 3), transform: `scale(${bt ? back(bt) * (press ? .96 : 1) : 0}) translateY(${press * 8}px)`,
-                  boxShadow: press ? "0 6px 0 #A9301C" : "0 14px 0 #A9301C" });
+                  boxShadow: press ? "0 6px 0 #2F4F8C" : "0 14px 0 #2F4F8C" });
   const cp = easeInOut(prog(t, l6 + 1.1, .7));
   style("cursor", { opacity: t > l6 + 1.0 ? 1 : 0, transform: `translate(${(1 - cp) * 220}px,${(1 - cp) * 420}px) scale(${press ? .85 : 1})` });
   const rp = prog(t, click, .6);
