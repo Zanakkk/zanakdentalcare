@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Reel Gigi Berlubang</title>
+<style>
+  :root{
+    --bg:#F4F1EA; --ink:#14294D; --navy:#1E3A6E; --hot:#4C7FDB; --hotDark:#2F4F8C; --soft:#E9EEF7;
+    --card:#FFFFFF; --muted:#6B7A90; --bad:#D93636; --cavity:#3A2A1F;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+  body{font-family:"Inter Display","Inter",sans-serif;color:var(--ink)}
+  #stage{position:relative;width:1080px;height:1920px;overflow:hidden;
+    background:radial-gradient(circle,#d9d3c4 1.6px,transparent 1.7px) 0 0/36px 36px,var(--bg)}
+  .scene{position:absolute;inset:0;opacity:0}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .label{position:absolute;top:70px;left:70px;font-size:26px;color:var(--muted)}
+  .step{position:absolute;top:70px;right:70px;font-size:26px;color:var(--hot);font-weight:700}
+  .big{font-weight:900;letter-spacing:-2px;line-height:.95}
+  .hl{color:var(--hot)}
+  .red{color:var(--bad)}
+  .abs{position:absolute}
+  .head{left:70px;right:70px;top:160px;font-size:112px}
+  .u{display:inline-block;background:linear-gradient(transparent 62%,#C9D8F5 62%)}
+  .wipe{position:absolute;top:-200px;height:2400px;width:1500px;background:var(--navy);transform:skewX(-12deg);z-index:50}
+  .wipe2{position:absolute;top:-200px;height:2400px;width:1500px;background:var(--hot);transform:skewX(-12deg);z-index:49}
+  #bar{position:absolute;left:0;bottom:0;height:12px;background:var(--hot);z-index:60}
+
+  .note{left:70px;right:70px;font-size:48px;font-weight:700;line-height:1.2}
+  .tag{position:absolute;padding:16px 26px;border-radius:20px;background:#fff;font-weight:800;font-size:36px;
+    box-shadow:0 14px 30px rgba(20,41,77,.15);border:3px solid #E6E1D6;white-space:nowrap}
+
+  .flow{position:absolute;left:90px;width:900px;height:200px;background:#fff;border-radius:30px;border:3px solid #E6E1D6;
+    box-shadow:0 18px 40px rgba(20,41,77,.12);display:flex;align-items:center;gap:34px;padding:0 40px}
+  .flow .lv{width:110px;height:110px;border-radius:28px;font-size:58px;display:flex;align-items:center;justify-content:center;flex:none}
+  .flow .k{font-size:50px;font-weight:900}
+  .flow .v{font-size:32px;color:var(--muted);margin-top:6px}
+  .arrow{position:absolute;left:520px;width:40px;height:70px}
+
+  #stageBox{left:90px;width:900px;top:1260px;height:230px;background:#fff;border-radius:30px;border:3px solid #E6E1D6;
+    box-shadow:0 18px 40px rgba(20,41,77,.12);padding:34px 40px}
+  .stg{position:absolute;left:40px;right:40px;top:34px}
+  .stg .k{font-size:54px;font-weight:900}
+  .stg .v{font-size:36px;color:var(--muted);margin-top:10px}
+
+  .lvl{position:absolute;left:70px;width:940px;height:240px;background:#fff;border-radius:30px;border:3px solid #E6E1D6;
+    box-shadow:0 18px 40px rgba(20,41,77,.12);display:flex;align-items:center;gap:30px;padding:0 34px}
+  .lvl .n{width:96px;height:96px;border-radius:26px;color:#fff;font-weight:900;font-size:48px;display:flex;align-items:center;justify-content:center;flex:none}
+  .lvl .k{font-size:44px;font-weight:900;line-height:1.05}
+  .lvl .v{font-size:29px;color:var(--muted);margin-top:6px}
+  .lvl .tx{display:inline-block;margin-top:12px;padding:8px 20px;border-radius:999px;background:var(--soft);color:var(--hotDark);font-weight:800;font-size:28px}
+
+  .row{position:absolute;left:90px;width:900px;min-height:170px;background:#fff;border-radius:28px;border:3px solid #E6E1D6;
+    display:flex;align-items:center;padding:24px 36px;gap:30px}
+  .row .ck{width:86px;height:86px;border-radius:50%;background:var(--hot);display:flex;align-items:center;justify-content:center;flex:none}
+  .row .k{font-size:44px;font-weight:800;line-height:1.1}
+  .row .v{font-size:30px;color:var(--muted);margin-top:6px}
+
+  .info{position:absolute;left:90px;width:900px;height:130px;background:#fff;border-radius:28px;border:3px solid #E6E1D6;
+    display:flex;align-items:center;padding:0 36px;gap:28px}
+  .info .ic{width:76px;height:76px;border-radius:20px;background:var(--soft);display:flex;align-items:center;justify-content:center;flex:none;font-size:40px}
+  .info .k{font-size:24px;color:var(--muted);font-weight:600}
+  .info .v{font-size:38px;font-weight:800;margin-top:2px}
+  #btn{left:90px;top:640px;width:900px;height:170px;border-radius:85px;background:var(--hot);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:900;font-size:58px;
+    box-shadow:0 14px 0 var(--hotDark);overflow:hidden}
+  #ripple{position:absolute;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.5)}
+  #cursor{left:700px;top:780px;width:70px}
+  #endLogo{left:0;right:0;top:1440px;display:flex;justify-content:center;align-items:center;gap:22px;font-weight:900;font-size:44px}
+  #endLogo img{width:84px;border-radius:16px;background:#fff}
+  #disc{left:0;right:0;top:1580px;text-align:center;font-size:26px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- S1: hook -->
+  <section class="scene" id="s1">
+    <div class="label mono">// edukasi gigi · gigi berlubang</div>
+    <div class="abs head big" id="h1">Gigi <span class="red">berlubang?</span></div>
+    <div class="abs head big" id="h2" style="top:280px">Jangan tunggu sakit.</div>
+    <div class="abs note" id="h3" style="top:600px">⏳ Lubang kecil bisa jadi masalah besar.</div>
+    <svg class="abs" id="g1" style="left:290px;top:800px" width="500" height="560" viewBox="0 0 200 224">
+      <path d="M58 150C52 105 42 62 54 36c8-18 30-22 46-11 16-11 38-7 46 11 12 26 2 69-4 114z" fill="#fff" stroke="#14294D" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M72 50q10-10 22-4" fill="none" stroke="#C9D8F5" stroke-width="6" stroke-linecap="round"/>
+      <path id="hole1" d="" fill="#3A2A1F"/>
+      <path d="M0 112Q22 96 48 110Q100 152 152 110Q178 96 200 112L200 224L0 224z" fill="#F4A3A8" stroke="#14294D" stroke-width="5" stroke-linejoin="round"/>
+    </svg>
+    <div class="tag" id="t0" style="left:640px;top:920px">← lubang</div>
+  </section>
+
+  <!-- S2: cause -->
+  <section class="scene" id="s2">
+    <div class="label mono">// penyebabnya</div>
+    <div class="abs head big" id="s2h">Kok bisa<br><span class="u">berlubang?</span></div>
+    <div class="flow" id="f1" style="top:520px"><div class="lv" style="background:#FDE7EC">🍬</div><div><div class="k">Gula &amp; sisa makanan</div><div class="v">Menempel di gigi</div></div></div>
+    <svg class="arrow" id="a1" style="top:740px" viewBox="0 0 40 70"><path d="M20 4v52M6 44l14 16 14-16" fill="none" stroke="#14294D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="flow" id="f2" style="top:830px"><div class="lv" style="background:#FFF4D6">🦠</div><div><div class="k">Bakteri bikin asam</div><div class="v">Dari gula yang dimakan bakteri</div></div></div>
+    <svg class="arrow" id="a2" style="top:1050px" viewBox="0 0 40 70"><path d="M20 4v52M6 44l14 16 14-16" fill="none" stroke="#14294D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="flow" id="f3" style="top:1140px"><div class="lv" style="background:#EDE4DE">🕳️</div><div><div class="k">Email terkikis</div><div class="v">Lama-lama jadi lubang</div></div></div>
+    <div class="abs note" id="s2n" style="top:1420px">Makin sering ngemil manis, makin sering gigi “diserang” asam.</div>
+  </section>
+
+  <!-- S3: cross-section, cavity grows -->
+  <section class="scene" id="s3">
+    <div class="label mono">// di dalam gigi</div>
+    <div class="abs head big" id="s3h" style="font-size:100px">Lubangnya<br>makin <span class="red">dalam.</span></div>
+    <svg class="abs" id="xs" style="left:240px;top:420px" width="600" height="780" viewBox="0 0 200 260">
+      <rect x="0" y="128" width="200" height="132" fill="#F4A3A8"/>
+      <path d="M0 128H200" stroke="#14294D" stroke-width="3"/>
+      <path d="M40 50Q38 14 72 16Q100 28 128 16Q162 14 160 50Q160 100 146 120L134 236Q130 252 118 244L104 150L96 150L82 244Q70 252 66 236L54 120Q40 100 40 50Z" fill="#fff" stroke="#14294D" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M54 56Q54 32 76 32Q100 42 124 32Q146 32 146 56Q146 98 134 116L124 226Q120 236 114 228L104 140L96 140L86 228Q80 236 76 226L66 116Q54 98 54 56Z" fill="#F6E7C1"/>
+      <path id="pulp" d="M82 72Q100 62 118 72L118 110L112 200Q110 208 106 200L102 130L98 130L94 200Q90 208 88 200L82 110Z" fill="#F08A8A"/>
+      <path id="hole3" d="" fill="#3A2A1F"/>
+    </svg>
+    <div class="tag" id="lb1" style="left:770px;top:440px">Email</div>
+    <div class="tag" id="lb2" style="left:770px;top:620px">Dentin</div>
+    <div class="tag" id="lb3" style="left:40px;top:690px">Saraf (pulpa)</div>
+    <div class="abs" id="stageBox">
+      <div class="stg" id="st1"><div class="k">1 · Di email</div><div class="v">Belum terasa apa-apa</div></div>
+      <div class="stg" id="st2"><div class="k">2 · Sampai dentin</div><div class="v">Ngilu kena manis atau dingin</div></div>
+      <div class="stg" id="st3"><div class="k red">3 · Kena saraf</div><div class="v">Sakit berdenyut, bisa sampai bengkak</div></div>
+    </div>
+  </section>
+
+  <!-- S4: treatment by stage -->
+  <section class="scene" id="s4">
+    <div class="label mono">// perawatannya</div>
+    <div class="abs head big" id="s4h" style="font-size:96px">Makin dalam,<br>makin <span class="red">rumit.</span></div>
+    <div class="lvl" id="l1" style="top:460px"><div class="n" style="background:#7FA6E8">1</div><div><div class="k">Lubang kecil</div><div class="v">Email &amp; dentin</div><span class="tx">✅ Cukup tambal gigi</span></div></div>
+    <div class="lvl" id="l2" style="top:730px"><div class="n" style="background:#E05252">2</div><div><div class="k">Kena saraf</div><div class="v">Sakit berdenyut</div><span class="tx">🔧 Perawatan saluran akar</span></div></div>
+    <div class="lvl" id="l3" style="top:1000px"><div class="n" style="background:#B32020">3</div><div><div class="k">Rusak parah / infeksi</div><div class="v">Gigi tidak bisa dipertahankan</div><span class="tx">⚠️ Bisa harus dicabut</span></div></div>
+    <div class="abs note" id="s4n" style="top:1310px">❌ Lubang gigi <span class="red">tidak bisa menutup sendiri.</span> Makin cepat ditambal, makin simpel.</div>
+  </section>
+
+  <!-- S5: prevention -->
+  <section class="scene" id="s5">
+    <div class="label mono">// cara mencegah</div>
+    <div class="abs head big" id="s5h">Cara <span class="hl">mencegahnya.</span></div>
+    <div id="tips"></div>
+  </section>
+
+  <!-- S6: CTA -->
+  <section class="scene" id="s6">
+    <div class="label mono">// yuk, periksa</div>
+    <div class="abs head big" id="s6h">Ada yang <span class="red">bolong?</span></div>
+    <div class="abs note" id="s6n" style="top:420px;font-size:52px">Tambal sebelum makin dalam.</div>
+    <div class="abs" id="btn">Reservasi Sekarang<div id="ripple"></div></div>
+    <svg class="abs" id="cursor" viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z" fill="#14294D" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <div class="info" id="i1" style="top:900px"><div class="ic">🕙</div><div><div class="k">Jam buka</div><div class="v">Setiap hari · 10.00–21.00</div></div></div>
+    <div class="info" id="i2" style="top:1060px"><div class="ic">📍</div><div><div class="k">Alamat</div><div class="v">Jl. Sudirman No.7, Payakumbuh</div></div></div>
+    <div class="info" id="i3" style="top:1220px"><div class="ic">💬</div><div><div class="k">WhatsApp</div><div class="v">0895-2669-7902</div></div></div>
+    <div class="abs" id="endLogo"><img src="../../public/assets/images/logo.webp" alt="">ZANAK DENTAL CARE</div>
+    <div class="abs" id="disc">Konten edukasi, bukan pengganti pemeriksaan langsung.</div>
+  </section>
+
+  <div class="wipe2" id="wipe2"></div>
+  <div class="wipe" id="wipe"></div>
+  <div id="bar"></div>
+</div>
+
+<script>
+const DURATION = 33;
+const B = [0, 3.6, 9.8, 16.0, 22.0, 27.6, DURATION];
+
+const TIPS = [
+  ["Sikat gigi 2× sehari", "Pakai pasta gigi ber-fluoride"],
+  ["Kurangi ngemil manis", "Termasuk minuman manis"],
+  ["Bersihkan sela gigi", "Pakai benang gigi"],
+  ["Periksa tiap 6 bulan", "Lubang kecil ketahuan lebih awal"],
+];
+const STAGE_T = [B[2] + .9, B[2] + 2.6, B[2] + 4.3];
+const TIP_T0 = B[4] + .8, TIP_GAP = 1.0;
+const CLICK = B[5] + 1.9;
+
+// ---- helpers
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, d) => clamp((t - a) / d);
+const easeOut = p => 1 - Math.pow(1 - p, 3);
+const easeInOut = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const back = p => { const c = 1.9; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+const style = (el, o) => Object.assign((typeof el === "string" ? $(el) : el).style, o);
+function rise(el, t, at, d = .5, dist = 80) {
+  const p = easeOut(prog(t, at, d));
+  style(el, { opacity: p, transform: `translateY(${(1 - p) * dist}px)` });
+}
+function pop(el, t, at, d = .5) {
+  const p = prog(t, at, d);
+  style(el, { opacity: clamp(p * 3), transform: `scale(${p ? back(p) : 0})` });
+}
+// an irregular dark hole that starts at the biting surface (y0) and digs down `depth`
+function holePath(cx, y0, rx, depth) {
+  if (depth <= 0) return "";
+  return `M${cx - rx} ${y0 - 2}Q${cx - rx * 1.15} ${y0 + depth * .7} ${cx - rx * .3} ${y0 + depth}` +
+         `Q${cx} ${y0 + depth * 1.08} ${cx + rx * .4} ${y0 + depth * .95}Q${cx + rx * 1.2} ${y0 + depth * .6} ${cx + rx} ${y0 - 2}Z`;
+}
+
+const tips = $("tips");
+TIPS.forEach(([k, v], i) => {
+  const r = document.createElement("div");
+  r.className = "row";
+  r.style.top = (470 + i * 230) + "px";
+  r.innerHTML = `<div class="ck"><svg width="46" height="46" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="24" stroke-dashoffset="24"/></svg></div>
+    <div><div class="k">${k}</div><div class="v">${v}</div></div>`;
+  tips.appendChild(r);
+});
+
+function render(t) {
+  for (let i = 1; i <= 6; i++) $("s" + i).style.opacity = (t >= B[i - 1] && t < B[i]) || (i === 6 && t >= B[6]) ? 1 : 0;
+  let wx = 2000;
+  for (let i = 1; i < B.length - 1; i++) {
+    const p = prog(t, B[i] - .32, .64);
+    if (p > 0 && p < 1) wx = 1300 - easeInOut(p) * 3000;
+  }
+  style("wipe", { left: wx + "px" });
+  style("wipe2", { left: (wx === 2000 ? 2000 : wx - 140) + "px" });
+  style("bar", { width: (t / DURATION * 1080) + "px" });
+
+  // S1 hook: a hole appears on the tooth
+  rise("h1", t, .1, .45, 120); rise("h2", t, .5, .45, 120); rise("h3", t, 1.9, .4, 40);
+  const gp = easeOut(prog(t, .2, .6));
+  style("g1", { opacity: gp, transform: `translateY(${(1 - gp) * 200}px)` });
+  const hp = easeOut(prog(t, .9, 1.2));
+  $("hole1").setAttribute("d", holePath(118, 30, 6 + hp * 10, hp * 26));
+  pop("t0", t, 2.0, .4);
+
+  // S2 cause flow
+  const l2 = B[1];
+  rise("s2h", t, l2 + .1, .45, 100);
+  [["f1", .6], ["a1", 1.3], ["f2", 1.6], ["a2", 2.4], ["f3", 2.7]].forEach(([id, d]) => rise(id, t, l2 + d, .45, 60));
+  rise("s2n", t, l2 + 3.6, .5, 40);
+
+  // S3 cross-section: cavity deepens enamel -> dentin -> pulp
+  const l3 = B[2];
+  rise("s3h", t, l3 + .1, .45, 100);
+  rise("xs", t, l3 + .2, .5, 120);
+  pop("lb1", t, l3 + .6, .35); pop("lb2", t, l3 + .75, .35); pop("lb3", t, l3 + .9, .35);
+  rise("stageBox", t, l3 + .8, .4, 60);
+  const depths = [10, 30, 56];
+  let depth = 0;
+  STAGE_T.forEach((at, i) => { depth += (depths[i] - (i ? depths[i - 1] : 0)) * easeInOut(prog(t, at, .9)); });
+  $("hole3").setAttribute("d", holePath(100, 20, 10 + depth * .25, depth));
+  const pulpHit = prog(t, STAGE_T[2] + .7, .3);
+  style("pulp", { fill: pulpHit ? `rgb(${240 - 40 * pulpHit},${138 - 90 * pulpHit},${138 - 90 * pulpHit})` : "#F08A8A",
+                  opacity: pulpHit ? .75 + .25 * Math.abs(Math.sin(t * 8)) : 1 });
+  ["st1", "st2", "st3"].forEach((s, i) => {
+    const on = t >= STAGE_T[i] && (i === 2 || t < STAGE_T[i + 1]);
+    const p = easeOut(prog(t, STAGE_T[i], .35));
+    style(s, { opacity: on ? p : 0, transform: `translateY(${(1 - p) * 30}px)` });
+  });
+
+  // S4 treatment levels
+  const l4 = B[3];
+  rise("s4h", t, l4 + .1, .45, 100);
+  ["l1", "l2", "l3"].forEach((l, i) => {
+    const p = easeOut(prog(t, l4 + .7 + i * .9, .45));
+    style(l, { opacity: p, transform: `translateX(${(1 - p) * (i % 2 ? 600 : -600)}px)` });
+  });
+  rise("s4n", t, l4 + 3.6, .5, 40);
+
+  // S5 tips
+  const l5 = B[4];
+  rise("s5h", t, l5 + .1, .45, 100);
+  [...tips.children].forEach((r, i) => {
+    const at = TIP_T0 + i * TIP_GAP;
+    const p = easeOut(prog(t, at, .45));
+    style(r, { opacity: p, transform: `translateX(${(1 - p) * (i % 2 ? 600 : -600)}px)` });
+    pop(r.querySelector(".ck"), t, at + .3, .35);
+    r.querySelector("path").style.strokeDashoffset = 24 * (1 - easeOut(prog(t, at + .45, .3)));
+  });
+
+  // S6 CTA
+  const l6 = B[5];
+  rise("s6h", t, l6 + .1, .45, 100);
+  rise("s6n", t, l6 + .5, .45, 40);
+  const bt = prog(t, l6 + .8, .45);
+  const press = t > CLICK && t < CLICK + .15 ? 1 : 0;
+  style("btn", { opacity: clamp(bt * 3), transform: `scale(${bt ? back(bt) * (press ? .96 : 1) : 0}) translateY(${press * 8}px)`,
+                 boxShadow: press ? "0 6px 0 #2F4F8C" : "0 14px 0 #2F4F8C" });
+  const cp = easeInOut(prog(t, l6 + 1.2, .7));
+  style("cursor", { opacity: t > l6 + 1.1 ? 1 : 0, transform: `translate(${(1 - cp) * 220}px,${(1 - cp) * 420}px) scale(${press ? .85 : 1})` });
+  const rp = prog(t, CLICK, .6);
+  style("ripple", { left: "580px", top: "40px", opacity: rp > 0 && rp < 1 ? 1 - rp : 0, transform: `translate(-50%,-50%) scale(${rp * 40})` });
+  ["i1", "i2", "i3"].forEach((r, i) => {
+    const p = easeOut(prog(t, CLICK + .35 + i * .25, .45));
+    style(r, { opacity: p, transform: `translateX(${(1 - p) * (i % 2 ? 600 : -600)}px)` });
+  });
+  pop("endLogo", t, CLICK + 1.3, .5);
+  rise("disc", t, CLICK + 1.6, .5, 20);
+}
+window.render = render;
+window.DURATION = DURATION;
+window.SCENES = B;
+window.CLICK_TIME = CLICK;
+// pop sounds: flow steps, cavity stages, treatment levels, tip checkmarks
+window.CARD_TIMES = [
+  B[1] + .6, B[1] + 1.6, B[1] + 2.7,
+  ...STAGE_T,
+  B[3] + .7, B[3] + 1.6, B[3] + 2.5,
+  ...TIPS.map((_, i) => TIP_T0 + i * TIP_GAP + .3),
+];
+render(0);
+</script>
+</body>
+</html>

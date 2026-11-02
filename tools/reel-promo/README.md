@@ -5,6 +5,7 @@ Video vertikal 1080×1920 dengan animasi dan musik buatan sendiri, tanpa layanan
 - `reel.html`: reel promo layanan klinik (26 detik)
 - `gusi-berdarah.html`: reel edukasi gusi berdarah (31 detik)
 - `karang-gigi.html`: reel edukasi karang gigi (33 detik)
+- `gigi-berlubang.html`: reel edukasi gigi berlubang (33 detik)
 - Tiap halaman punya `render(t)` yang menggambar detik ke-t
 - `music.py`: musik dan efek suara yang disintesis dengan numpy
 - `render.mjs`: merender tiap frame lewat Chromium (Playwright), lalu menggabungkannya dengan ffmpeg
