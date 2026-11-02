@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Poster Serangan Bakteri</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1350px;overflow:hidden;background:#1b1310}
+  #poster{position:relative;width:1080px;height:1350px;overflow:hidden;color:#f3ead0;font-family:"Oswald",sans-serif}
+  svg.bg{position:absolute;inset:0}
+  .abs{position:absolute}
+  #kicker{left:0;right:0;top:48px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:24px;letter-spacing:6px;color:#E8853A}
+  #t1{left:0;right:0;top:80px;text-align:center;font-family:"Cinzel",serif;font-weight:900;font-size:124px;letter-spacing:6px;line-height:1;
+    color:#f3ead0;text-shadow:0 6px 0 #3a2418,0 0 40px rgba(232,133,58,.35)}
+  #t2{left:0;right:0;top:204px;text-align:center;font-family:"Cinzel",serif;font-weight:900;font-size:76px;letter-spacing:4px;line-height:1;
+    color:#E0533A;text-shadow:0 5px 0 #3a1410}
+  #sub{left:0;right:0;top:284px;text-align:center;font-size:34px;font-weight:500;letter-spacing:1px;color:#e9d9b8}
+  #sub b{color:#fff;font-weight:700}
+  #card{left:60px;right:60px;top:975px;padding:22px 32px 20px;background:rgba(20,13,10,.88);border:2px solid #8a6a3a;border-radius:6px;
+    box-shadow:0 0 0 6px rgba(20,13,10,.5)}
+  #card h3{font-size:34px;letter-spacing:5px;color:#E8853A;font-weight:700}
+  .rows{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
+  .w{background:#2a1c15;border:1px solid #5a4330;border-radius:4px;padding:14px 12px;text-align:center}
+  .w .i{font-size:44px;line-height:1}
+  .w .k{font-size:28px;font-weight:700;margin-top:8px;line-height:1.1}
+  .w .v{font-size:21px;color:#c9b28e;margin-top:4px}
+  #warn{margin-top:14px;font-size:28px;font-weight:700;color:#ff7a5c;text-align:center;letter-spacing:.5px}
+  #foot{left:0;right:0;top:1296px;display:flex;justify-content:center;align-items:center;gap:16px;font-size:30px;font-weight:700;letter-spacing:2px}
+  #foot img{width:44px;border-radius:8px;background:#fff}
+  #foot span{color:#E8853A}
+</style>
+</head>
+<body>
+<div id="poster">
+<svg class="bg" width="1080" height="1350" viewBox="0 0 1080 1350">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#140d0a"/><stop offset=".45" stop-color="#3d2318"/><stop offset=".72" stop-color="#a4542a"/><stop offset="1" stop-color="#2a1510"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="540" cy="620" r="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff9a4a" stop-opacity=".55"/><stop offset="1" stop-color="#ff9a4a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="skin" cx="520" cy="430" r="230" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9aa556"/><stop offset=".7" stop-color="#5f6b30"/><stop offset="1" stop-color="#36401b"/>
+    </radialGradient>
+    <linearGradient id="enamel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6eedb"/><stop offset=".55" stop-color="#d9ccae"/><stop offset="1" stop-color="#8f7f63"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a2a2a"/><stop offset="1" stop-color="#2a0e10"/>
+    </linearGradient>
+    <clipPath id="toothClip"><path id="toothShape" d="M160 1010C170 900 165 760 185 680C200 610 250 580 320 580C400 580 460 620 540 630C620 620 680 580 760 580C830 580 880 610 895 680C915 760 910 900 920 1010Z"/></clipPath>
+    <filter id="blur18"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="blur8"><feGaussianBlur stdDeviation="8"/></filter>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0"/></filter>
+    <radialGradient id="vig" cx="540" cy="640" r="820" gradientUnits="userSpaceOnUse">
+      <stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".75"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1080" height="1350" fill="url(#sky)"/>
+  <rect width="1080" height="1350" fill="url(#glow)"/>
+  <!-- smoke -->
+  <g filter="url(#blur18)" fill="#1e140f" opacity=".75">
+    <ellipse cx="140" cy="560" rx="220" ry="70"/><ellipse cx="960" cy="520" rx="240" ry="80"/>
+    <ellipse cx="300" cy="380" rx="160" ry="40"/><ellipse cx="820" cy="360" rx="170" ry="45"/>
+  </g>
+
+  <!-- the giant: plaque bacteria rising behind the tooth wall -->
+  <g transform="translate(0 12)">
+  <g filter="url(#blur18)" fill="#f3ead0" opacity=".22">
+    <ellipse cx="380" cy="420" rx="60" ry="120"/><ellipse cx="700" cy="400" rx="70" ry="130"/><ellipse cx="540" cy="330" rx="120" ry="40"/>
+  </g>
+  <path d="M330 640C300 560 310 470 350 420C380 370 430 345 470 350C490 330 530 322 560 334C600 322 650 340 680 372C730 400 760 470 750 540C760 590 750 620 740 640Z"
+        fill="url(#skin)" stroke="#1b1310" stroke-width="6"/>
+  <g fill="#3f4a22" opacity=".7">
+    <circle cx="420" cy="420" r="16"/><circle cx="660" cy="410" r="12"/><circle cx="600" cy="370" r="9"/><circle cx="380" cy="500" r="10"/>
+    <circle cx="700" cy="500" r="14"/><circle cx="500" cy="380" r="7"/>
+  </g>
+  <!-- tiny bacteria rods on the skin -->
+  <g stroke="#2c3515" stroke-width="5" stroke-linecap="round" opacity=".6">
+    <path d="M450 395l18 -6"/><path d="M640 450l14 10"/><path d="M400 450l-6 16"/><path d="M690 430l12 -10"/>
+  </g>
+  <!-- eyes -->
+  <path d="M415 440q40 -40 95 -6" fill="none" stroke="#1b1310" stroke-width="10" stroke-linecap="round"/>
+  <path d="M570 434q55 -34 95 6" fill="none" stroke="#1b1310" stroke-width="10" stroke-linecap="round"/>
+  <ellipse cx="465" cy="468" rx="40" ry="27" fill="#f3ead0" stroke="#1b1310" stroke-width="5"/>
+  <ellipse cx="618" cy="468" rx="40" ry="27" fill="#f3ead0" stroke="#1b1310" stroke-width="5"/>
+  <circle cx="472" cy="470" r="7" fill="#1b1310"/><circle cx="611" cy="470" r="7" fill="#1b1310"/>
+  <!-- grin -->
+  <path d="M405 545Q540 615 690 540Q690 600 540 618Q395 600 405 545Z" fill="#2a0e10" stroke="#1b1310" stroke-width="5"/>
+  <g fill="#e9dcae" stroke="#1b1310" stroke-width="2">
+    <path d="M425 557l14 5 -2 16z"/><path d="M450 568l16 5 -4 18z"/><path d="M478 576l17 3 -6 19z"/><path d="M508 581l18 1 -9 19z"/>
+    <path d="M540 583l18 -1 -8 19z"/><path d="M572 580l17 -3 -5 19z"/><path d="M603 573l16 -5 -3 18z"/><path d="M632 563l15 -6 -1 17z"/><path d="M658 551l13 -6 0 15z"/>
+  </g>
+
+  </g>
+
+  <!-- tooth wall (enamel) -->
+  <use href="#toothShape" fill="url(#enamel)"/>
+  <g clip-path="url(#toothClip)" stroke="#8f8068" stroke-width="3" opacity=".55">
+    <path d="M150 700H930M150 760H930M150 820H930M150 880H930M150 940H930"/>
+    <path d="M260 640V700M420 650V700M600 650V700M780 640V700M330 700V760M510 700V760M690 700V760M860 700V760
+             M250 760V820M430 760V820M610 760V820M790 760V820M340 820V880M520 820V880M700 820V880M870 820V880
+             M260 880V940M440 880V940M620 880V940M800 880V940M350 940V1010M530 940V1010M710 940V1010"/>
+  </g>
+  <!-- shading on the right side of the wall -->
+  <path d="M760 580C830 580 880 610 895 680C915 760 910 900 920 1010L820 1010C830 900 840 760 820 690C810 640 790 600 760 580Z" fill="#5a4a36" opacity=".28"/>
+  <use href="#toothShape" fill="none" stroke="#1b1310" stroke-width="7"/>
+  <!-- cracks and a cavity: the wall is starting to break -->
+  <g fill="none" stroke="#2a1a12" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M300 585l14 40 -18 30 22 46 -10 30"/><path d="M314 625l26 14"/><path d="M296 655l-22 22"/>
+    <path d="M770 590l-10 36 20 28 -14 44"/><path d="M760 626l-26 10"/>
+  </g>
+  <path d="M520 640Q512 662 524 680Q540 694 556 680Q566 660 556 641Q540 650 520 640Z" fill="#2b1d14" stroke="#1b1310" stroke-width="3"/>
+  <path d="M512 636Q500 668 520 690Q540 704 562 688Q578 664 562 634" fill="none" stroke="#8b5a2b" stroke-width="5" opacity=".6"/>
+
+  <!-- giant hands gripping the wall -->
+  <g fill="#7f8b42" stroke="#1b1310" stroke-width="5" stroke-linejoin="round">
+    <rect x="232" y="560" width="26" height="58" rx="13" transform="rotate(-8 245 590)"/>
+    <rect x="262" y="552" width="26" height="64" rx="13" transform="rotate(-3 275 585)"/>
+    <rect x="292" y="552" width="26" height="62" rx="13" transform="rotate(4 305 585)"/>
+    <rect x="322" y="560" width="24" height="54" rx="12" transform="rotate(10 334 588)"/>
+    <rect x="740" y="562" width="24" height="54" rx="12" transform="rotate(-10 752 590)"/>
+    <rect x="768" y="552" width="26" height="62" rx="13" transform="rotate(-4 781 585)"/>
+    <rect x="798" y="552" width="26" height="64" rx="13" transform="rotate(3 811 585)"/>
+    <rect x="828" y="560" width="26" height="58" rx="13" transform="rotate(8 841 590)"/>
+  </g>
+
+  <!-- gum ground -->
+  <path d="M0 950C180 930 300 960 540 952C780 944 900 928 1080 950V1350H0Z" fill="url(#ground)"/>
+
+  <!-- defenders: toothbrush squad swinging on floss lines -->
+  <g stroke="#f3ead0" stroke-width="2" opacity=".7">
+    <path d="M190 470L300 590"/><path d="M190 470L330 380"/>
+    <path d="M900 430L790 590"/><path d="M900 430L700 390"/>
+    <path d="M150 700L180 640"/>
+  </g>
+  <g id="soldier" transform="translate(190 470) rotate(-18) scale(1.5)">
+    <path d="M-4 -6L-40 22L-20 26L-30 40L4 10Z" fill="#1E3A6E" stroke="#0d1830" stroke-width="2"/>
+    <circle cx="0" cy="-14" r="8" fill="#1b1310"/>
+    <path d="M-5 -6h10l3 22h-16z" fill="#1b1310"/>
+    <path d="M-5 16l-6 16M5 16l8 14" stroke="#1b1310" stroke-width="5" stroke-linecap="round"/>
+    <path d="M5 -2l26 -16" stroke="#1b1310" stroke-width="4" stroke-linecap="round"/>
+    <rect x="28" y="-24" width="34" height="6" rx="3" fill="#4C7FDB" transform="rotate(-30 28 -20)"/>
+    <rect x="52" y="-44" width="14" height="10" rx="2" fill="#fff" transform="rotate(-30 52 -40)"/>
+  </g>
+  <g transform="translate(900 430) scale(-1.5 1.5) rotate(-14)">
+    <path d="M-4 -6L-40 22L-20 26L-30 40L4 10Z" fill="#1E3A6E" stroke="#0d1830" stroke-width="2"/>
+    <circle cx="0" cy="-14" r="8" fill="#1b1310"/>
+    <path d="M-5 -6h10l3 22h-16z" fill="#1b1310"/>
+    <path d="M-5 16l-6 16M5 16l8 14" stroke="#1b1310" stroke-width="5" stroke-linecap="round"/>
+    <path d="M5 -2l26 -16" stroke="#1b1310" stroke-width="4" stroke-linecap="round"/>
+    <rect x="28" y="-24" width="34" height="6" rx="3" fill="#4C7FDB" transform="rotate(-30 28 -20)"/>
+    <rect x="52" y="-44" width="14" height="10" rx="2" fill="#fff" transform="rotate(-30 52 -40)"/>
+  </g>
+  <g transform="translate(150 700) rotate(8) scale(1.1)">
+    <path d="M-4 -6L-36 18L-18 22L-26 34L4 10Z" fill="#1E3A6E" stroke="#0d1830" stroke-width="2"/>
+    <circle cx="0" cy="-14" r="8" fill="#1b1310"/>
+    <path d="M-5 -6h10l3 22h-16z" fill="#1b1310"/>
+    <path d="M-5 16l-6 16M5 16l8 14" stroke="#1b1310" stroke-width="5" stroke-linecap="round"/>
+    <path d="M5 -2l26 -16" stroke="#1b1310" stroke-width="4" stroke-linecap="round"/>
+    <rect x="28" y="-24" width="34" height="6" rx="3" fill="#4C7FDB" transform="rotate(-30 28 -20)"/>
+    <rect x="52" y="-44" width="14" height="10" rx="2" fill="#fff" transform="rotate(-30 52 -40)"/>
+  </g>
+
+  <!-- embers -->
+  <g fill="#ffb066">
+    <circle cx="90" cy="300" r="3"/><circle cx="220" cy="250" r="2"/><circle cx="980" cy="280" r="3"/><circle cx="860" cy="200" r="2"/>
+    <circle cx="60" cy="820" r="3"/><circle cx="1010" cy="760" r="3"/><circle cx="960" cy="880" r="2"/><circle cx="120" cy="930" r="2"/>
+    <circle cx="700" cy="300" r="2"/><circle cx="380" cy="300" r="2"/>
+  </g>
+  <rect width="1080" height="1350" fill="url(#vig)"/>
+  <rect width="1080" height="1350" filter="url(#grain)" opacity=".35"/>
+</svg>
+
+<div class="abs" id="kicker">EDUKASI GIGI</div>
+<div class="abs" id="t1">SERANGAN</div>
+<div class="abs" id="t2">BAKTERI RAKSASA</div>
+<div class="abs" id="sub">Email gigi adalah <b>tembok terakhir</b> gigimu.</div>
+
+<div class="abs" id="card">
+  <h3>SENJATA MELAWAN PLAK</h3>
+  <div class="rows">
+    <div class="w"><div class="i">⚔️</div><div class="k">Sikat gigi</div><div class="v">2× sehari, pasta ber-fluoride</div></div>
+    <div class="w"><div class="i">🧵</div><div class="k">Benang gigi</div><div class="v">Bersihkan sela tiap hari</div></div>
+    <div class="w"><div class="i">🛡️</div><div class="k">Scaling</div><div class="v">Ke dokter gigi tiap 6 bulan</div></div>
+  </div>
+  <div id="warn">Tembok sudah retak (gigi berlubang)? Segera tambal!</div>
+</div>
+
+<div class="abs" id="foot"><img src="../../public/assets/images/logo.webp" alt="">Klinik Gigi Payakumbuh <span>Zanak Dental Care</span></div>
+</div>
+</body>
+</html>

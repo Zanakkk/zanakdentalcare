@@ -7,6 +7,7 @@ Video vertikal 1080×1920 dengan animasi dan musik buatan sendiri, tanpa layanan
 - `karang-gigi.html`: reel edukasi karang gigi (33 detik)
 - `gigi-berlubang.html`: reel edukasi gigi berlubang (33 detik)
 - `behel.html`: reel edukasi behel (34 detik)
+- `poster-titan.html`: poster IG 1080×1350 "Serangan Bakteri Raksasa" (hasil: out/poster-titan.jpg)
 - Tiap halaman punya `render(t)` yang menggambar detik ke-t
 - `music.py`: musik dan efek suara yang disintesis dengan numpy
 - `render.mjs`: merender tiap frame lewat Chromium (Playwright), lalu menggabungkannya dengan ffmpeg
