@@ -129,7 +129,6 @@
     <div class="abs" id="docTag">
       <div class="t1">Dokter gigi kami</div>
       <div class="t2">drg. Muhammad Daffa Safra</div>
-      <span class="chip" id="c1">😊 Ramah &amp; sabar</span><span class="chip" id="c2">💬 Penjelasan jelas</span>
     </div>
   </section>
 
@@ -277,7 +276,6 @@ function render(t) {
   style("docImg", { opacity: dp, transform: `translateY(${(1 - dp) * 400}px) scale(${1 + (t - l4) * .012})` });
   const tg = easeOut(prog(t, l4 + .9, .5));
   style("docTag", { opacity: tg, transform: `translateX(${(1 - tg) * -700}px)` });
-  pop("c1", t, l4 + 1.5, .4); pop("c2", t, l4 + 1.8, .4);
 
   // S5 photos
   const l5 = B[4];
