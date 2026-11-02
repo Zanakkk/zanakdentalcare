@@ -84,7 +84,9 @@
     <svg class="abs" id="g1" style="left:290px;top:800px" width="500" height="560" viewBox="0 0 200 224">
       <path d="M58 150C52 105 42 62 54 36c8-18 30-22 46-11 16-11 38-7 46 11 12 26 2 69-4 114z" fill="#fff" stroke="#14294D" stroke-width="5" stroke-linejoin="round"/>
       <path d="M72 50q10-10 22-4" fill="none" stroke="#C9D8F5" stroke-width="6" stroke-linecap="round"/>
-      <path id="hole1" d="" fill="#3A2A1F"/>
+      <path id="hole1a" d="" fill="#9A6A3A" opacity=".45"/>
+      <path id="hole1" d="" fill="#2B1D14"/>
+      <path id="hole1b" d="" fill="#120B07"/>
       <path d="M0 112Q22 96 48 110Q100 152 152 110Q178 96 200 112L200 224L0 224z" fill="#F4A3A8" stroke="#14294D" stroke-width="5" stroke-linejoin="round"/>
     </svg>
     <div class="tag" id="t0" style="left:640px;top:920px">← lubang</div>
@@ -106,17 +108,55 @@
   <section class="scene" id="s3">
     <div class="label mono">// di dalam gigi</div>
     <div class="abs head big" id="s3h" style="font-size:100px">Lubangnya<br>makin <span class="red">dalam.</span></div>
-    <svg class="abs" id="xs" style="left:240px;top:420px" width="600" height="780" viewBox="0 0 200 260">
-      <rect x="0" y="128" width="200" height="132" fill="#F4A3A8"/>
-      <path d="M0 128H200" stroke="#14294D" stroke-width="3"/>
-      <path d="M40 50Q38 14 72 16Q100 28 128 16Q162 14 160 50Q160 100 146 120L134 236Q130 252 118 244L104 150L96 150L82 244Q70 252 66 236L54 120Q40 100 40 50Z" fill="#fff" stroke="#14294D" stroke-width="4" stroke-linejoin="round"/>
-      <path d="M54 56Q54 32 76 32Q100 42 124 32Q146 32 146 56Q146 98 134 116L124 226Q120 236 114 228L104 140L96 140L86 228Q80 236 76 226L66 116Q54 98 54 56Z" fill="#F6E7C1"/>
-      <path id="pulp" d="M82 72Q100 62 118 72L118 110L112 200Q110 208 106 200L102 130L98 130L94 200Q90 208 88 200L82 110Z" fill="#F08A8A"/>
-      <path id="hole3" d="" fill="#3A2A1F"/>
+    <svg class="abs" id="xs" style="left:60px;top:420px" width="960" height="780" viewBox="-60 0 320 260">
+      <defs>
+        <clipPath id="toothClip"><path d="M52 105C44 90 38 70 40 52C42 34 50 24 62 22C74 21 86 26 100 34C114 26 126 21 138 22C150 24 158 34 160 52C162 70 156 90 148 105C146 140 142 190 132 236C129 246 118 246 116 236C114 200 110 160 104 132C102 126 98 126 96 132C90 160 86 200 84 236C82 246 71 246 68 236C58 190 54 140 52 105Z"/></clipPath>
+        <pattern id="bonePat" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.3" fill="#D9B99E"/><circle cx="7.5" cy="7" r=".9" fill="#D9B99E"/></pattern>
+      </defs>
+      <!-- gum and alveolar bone around the roots -->
+      <path d="M-10 122C14 120 34 108 47 97L153 97C166 108 186 120 210 122L210 252Q210 258 204 258L-4 258Q-10 258 -10 252Z" fill="#F4A3A8" stroke="#14294D" stroke-width="2.5"/>
+      <path d="M-4 146C18 144 38 136 53 128L147 128C162 136 182 144 204 146L204 252L-4 252Z" fill="#EED9C4"/>
+      <path d="M-4 146C18 144 38 136 53 128L147 128C162 136 182 144 204 146L204 252L-4 252Z" fill="url(#bonePat)"/>
+      <!-- tooth: dentin body, enamel cap on the crown only, pulp chamber + root canals -->
+      <path d="M52 105C44 90 38 70 40 52C42 34 50 24 62 22C74 21 86 26 100 34C114 26 126 21 138 22C150 24 158 34 160 52C162 70 156 90 148 105C146 140 142 190 132 236C129 246 118 246 116 236C114 200 110 160 104 132C102 126 98 126 96 132C90 160 86 200 84 236C82 246 71 246 68 236C58 190 54 140 52 105Z" fill="#F3E2B8"/>
+      <path d="M52 105C44 90 38 70 40 52C42 34 50 24 62 22C74 21 86 26 100 34C114 26 126 21 138 22C150 24 158 34 160 52C162 70 156 90 148 105C150 88 150 72 148 58C146 44 140 36 136 34C124 33 112 38 100 46C88 38 76 33 64 34C58 38 52 46 52 58C50 72 50 88 52 105Z" fill="#FCFDFF" stroke="#C9D3E3" stroke-width="1"/>
+      <path id="pulp" d="M76 52C79 60 84 67 92 69C97 70 103 70 108 69C116 67 121 60 124 52C131 64 132 88 128 108C126 150 124 190 124 232L120 232C120 190 118 150 114 120C110 112 90 112 86 120C82 150 80 190 80 232L76 232C76 190 74 150 72 108C68 88 69 64 76 52Z" fill="#F08A8A"/>
+      <g clip-path="url(#toothClip)">
+        <path id="hole3a" d="" fill="#9A6A3A" opacity=".45"/>
+        <path id="hole3" d="" fill="#2B1D14"/>
+      </g>
+      <path d="M52 105C44 90 38 70 40 52C42 34 50 24 62 22C74 21 86 26 100 34C114 26 126 21 138 22C150 24 158 34 160 52C162 70 156 90 148 105C146 140 142 190 132 236C129 246 118 246 116 236C114 200 110 160 104 132C102 126 98 126 96 132C90 160 86 200 84 236C82 246 71 246 68 236C58 190 54 140 52 105Z" fill="none" stroke="#14294D" stroke-width="3.5" stroke-linejoin="round"/>
+      <g id="lb1">
+        <circle cx="153" cy="42" r="2.6" fill="#14294D"/>
+        <path d="M153 42L178 32" stroke="#14294D" stroke-width="1.4"/>
+        <rect x="178" y="21" width="56" height="22" rx="6" fill="#fff" stroke="#D9D3C4" stroke-width="1.2"/>
+        <text x="206.0" y="36.5" text-anchor="middle" font-family="Inter Display" font-weight="800" font-size="12" fill="#14294D">Email</text>
+      </g>
+      <g id="lb2">
+        <circle cx="139" cy="84" r="2.6" fill="#14294D"/>
+        <path d="M139 84L178 84" stroke="#14294D" stroke-width="1.4"/>
+        <rect x="178" y="73" width="62" height="22" rx="6" fill="#fff" stroke="#D9D3C4" stroke-width="1.2"/>
+        <text x="209.0" y="88.5" text-anchor="middle" font-family="Inter Display" font-weight="800" font-size="12" fill="#14294D">Dentin</text>
+      </g>
+      <g id="lb3">
+        <circle cx="78" cy="92" r="2.6" fill="#14294D"/>
+        <path d="M78 92L24 92" stroke="#14294D" stroke-width="1.4"/>
+        <rect x="-56" y="81" width="80" height="22" rx="6" fill="#fff" stroke="#D9D3C4" stroke-width="1.2"/>
+        <text x="-16.0" y="96.5" text-anchor="middle" font-family="Inter Display" font-weight="800" font-size="12" fill="#14294D">Saraf (pulpa)</text>
+      </g>
+      <g id="lb4">
+        <circle cx="42" cy="106" r="2.6" fill="#14294D"/>
+        <path d="M42 106L24 116" stroke="#14294D" stroke-width="1.4"/>
+        <rect x="-56" y="107" width="48" height="22" rx="6" fill="#fff" stroke="#D9D3C4" stroke-width="1.2"/>
+        <text x="-32.0" y="122.5" text-anchor="middle" font-family="Inter Display" font-weight="800" font-size="12" fill="#14294D">Gusi</text>
+      </g>
+      <g id="lb5">
+        <circle cx="36" cy="180" r="2.6" fill="#14294D"/>
+        <path d="M36 180L24 180" stroke="#14294D" stroke-width="1.4"/>
+        <rect x="-56" y="169" width="58" height="22" rx="6" fill="#fff" stroke="#D9D3C4" stroke-width="1.2"/>
+        <text x="-27.0" y="184.5" text-anchor="middle" font-family="Inter Display" font-weight="800" font-size="12" fill="#14294D">Tulang</text>
+      </g>
     </svg>
-    <div class="tag" id="lb1" style="left:770px;top:440px">Email</div>
-    <div class="tag" id="lb2" style="left:770px;top:620px">Dentin</div>
-    <div class="tag" id="lb3" style="left:40px;top:690px">Saraf (pulpa)</div>
     <div class="abs" id="stageBox">
       <div class="stg" id="st1"><div class="k">1 · Di email</div><div class="v">Belum terasa apa-apa</div></div>
       <div class="stg" id="st2"><div class="k">2 · Sampai dentin</div><div class="v">Ngilu kena manis atau dingin</div></div>
@@ -190,11 +230,34 @@ function pop(el, t, at, d = .5) {
   const p = prog(t, at, d);
   style(el, { opacity: clamp(p * 3), transform: `scale(${p ? back(p) : 0})` });
 }
-// an irregular dark hole that starts at the biting surface (y0) and digs down `depth`
-function holePath(cx, y0, rx, depth) {
-  if (depth <= 0) return "";
-  return `M${cx - rx} ${y0 - 2}Q${cx - rx * 1.15} ${y0 + depth * .7} ${cx - rx * .3} ${y0 + depth}` +
-         `Q${cx} ${y0 + depth * 1.08} ${cx + rx * .4} ${y0 + depth * .95}Q${cx + rx * 1.2} ${y0 + depth * .6} ${cx + rx} ${y0 - 2}Z`;
+// smooth closed path through points (Catmull-Rom -> cubic Bezier)
+function smooth(pts) {
+  const n = pts.length, f = v => v.toFixed(2);
+  let d = `M${f(pts[0][0])} ${f(pts[0][1])}`;
+  for (let i = 0; i < n; i++) {
+    const [p0, p1, p2, p3] = [pts[(i - 1 + n) % n], pts[i], pts[(i + 1) % n], pts[(i + 2) % n]];
+    d += `C${f(p1[0] + (p2[0] - p0[0]) / 6)} ${f(p1[1] + (p2[1] - p0[1]) / 6)} ${f(p2[0] - (p3[0] - p1[0]) / 6)} ${f(p2[1] - (p3[1] - p1[1]) / 6)} ${f(p2[0])} ${f(p2[1])}`;
+  }
+  return d + "Z";
+}
+// round-ish lesion with a ragged edge (front view of the tooth)
+function spot(cx, cy, r) {
+  if (r <= .2) return "";
+  const pts = [];
+  for (let i = 0; i < 14; i++) {
+    const a = i / 14 * Math.PI * 2;
+    const k = 1 + .16 * Math.sin(3 * a + 1) + .09 * Math.sin(5 * a + 2) + .05 * Math.sin(9 * a);
+    pts.push([cx + Math.cos(a) * r * k * 1.1, cy + Math.sin(a) * r * k * .9]);
+  }
+  return smooth(pts);
+}
+// occlusal caries in cross-section: narrow at the fissure, spreading in dentin toward the pulp
+function caries(d, grow = 1) {
+  if (d <= 0) return "";
+  const w0 = (2.5 + Math.min(d, 12) * .15) * grow, w1 = (3 + d * .18) * grow, w2 = (3 + d * .38) * grow, w3 = (2 + d * .22) * grow;
+  const y = 34;
+  return smooth([[100 - w0, 26], [100 - w1, y + d * .3], [100 - w2, y + d * .7], [100 - w3, y + d], [100, y + d * 1.06],
+                 [100 + w3 * 1.1, y + d * .98], [100 + w2 * 1.05, y + d * .68], [100 + w1, y + d * .32], [100 + w0, 26]]);
 }
 
 const tips = $("tips");
@@ -223,7 +286,9 @@ function render(t) {
   const gp = easeOut(prog(t, .2, .6));
   style("g1", { opacity: gp, transform: `translateY(${(1 - gp) * 200}px)` });
   const hp = easeOut(prog(t, .9, 1.2));
-  $("hole1").setAttribute("d", holePath(118, 30, 6 + hp * 10, hp * 26));
+  $("hole1a").setAttribute("d", spot(116, 56, hp * 16));
+  $("hole1").setAttribute("d", spot(116, 56, hp * 10));
+  $("hole1b").setAttribute("d", spot(117, 57, hp * 4.5));
   pop("t0", t, 2.0, .4);
 
   // S2 cause flow
@@ -236,12 +301,13 @@ function render(t) {
   const l3 = B[2];
   rise("s3h", t, l3 + .1, .45, 100);
   rise("xs", t, l3 + .2, .5, 120);
-  pop("lb1", t, l3 + .6, .35); pop("lb2", t, l3 + .75, .35); pop("lb3", t, l3 + .9, .35);
+  ["lb1", "lb2", "lb3", "lb4", "lb5"].forEach((l, i) => style(l, { opacity: easeOut(prog(t, l3 + .6 + i * .12, .35)) }));
   rise("stageBox", t, l3 + .8, .4, 60);
-  const depths = [10, 30, 56];
+  const depths = [10, 26, 40]; // enamel, dentin, reaching the pulp roof
   let depth = 0;
   STAGE_T.forEach((at, i) => { depth += (depths[i] - (i ? depths[i - 1] : 0)) * easeInOut(prog(t, at, .9)); });
-  $("hole3").setAttribute("d", holePath(100, 20, 10 + depth * .25, depth));
+  $("hole3a").setAttribute("d", caries(depth + 3, 1.35));
+  $("hole3").setAttribute("d", caries(depth));
   const pulpHit = prog(t, STAGE_T[2] + .7, .3);
   style("pulp", { fill: pulpHit ? `rgb(${240 - 40 * pulpHit},${138 - 90 * pulpHit},${138 - 90 * pulpHit})` : "#F08A8A",
                   opacity: pulpHit ? .75 + .25 * Math.abs(Math.sin(t * 8)) : 1 });
