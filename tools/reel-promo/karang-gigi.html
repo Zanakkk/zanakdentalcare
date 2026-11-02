@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Reel Karang Gigi</title>
+<style>
+  :root{
+    --bg:#F4F1EA; --ink:#14294D; --navy:#1E3A6E; --hot:#4C7FDB; --hotDark:#2F4F8C; --soft:#E9EEF7;
+    --card:#FFFFFF; --muted:#6B7A90; --tartar:#B8893A; --bad:#D93636; --good:#15803D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+  body{font-family:"Inter Display","Inter",sans-serif;color:var(--ink)}
+  #stage{position:relative;width:1080px;height:1920px;overflow:hidden;
+    background:radial-gradient(circle,#d9d3c4 1.6px,transparent 1.7px) 0 0/36px 36px,var(--bg)}
+  .scene{position:absolute;inset:0;opacity:0}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .label{position:absolute;top:70px;left:70px;font-size:26px;color:var(--muted)}
+  .step{position:absolute;top:70px;right:70px;font-size:26px;color:var(--hot);font-weight:700}
+  .big{font-weight:900;letter-spacing:-2px;line-height:.95}
+  .hl{color:var(--hot)}
+  .brown{color:#9A6B1F}
+  .abs{position:absolute}
+  .head{left:70px;right:70px;top:160px;font-size:112px}
+  .u{display:inline-block;background:linear-gradient(transparent 62%,#C9D8F5 62%)}
+  .wipe{position:absolute;top:-200px;height:2400px;width:1500px;background:var(--navy);transform:skewX(-12deg);z-index:50}
+  .wipe2{position:absolute;top:-200px;height:2400px;width:1500px;background:var(--hot);transform:skewX(-12deg);z-index:49}
+  #bar{position:absolute;left:0;bottom:0;height:12px;background:var(--hot);z-index:60}
+
+  .note{left:70px;right:70px;font-size:48px;font-weight:700;line-height:1.2}
+  .tag{position:absolute;padding:16px 26px;border-radius:20px;background:#fff;font-weight:800;font-size:38px;
+    box-shadow:0 14px 30px rgba(20,41,77,.15);border:3px solid #E6E1D6;white-space:nowrap}
+
+  .flow{position:absolute;left:90px;width:900px;height:200px;background:#fff;border-radius:30px;border:3px solid #E6E1D6;
+    box-shadow:0 18px 40px rgba(20,41,77,.12);display:flex;align-items:center;gap:34px;padding:0 40px}
+  .flow .lv{width:110px;height:110px;border-radius:28px;font-size:58px;display:flex;align-items:center;justify-content:center;flex:none}
+  .flow .k{font-size:50px;font-weight:900}
+  .flow .v{font-size:32px;color:var(--muted);margin-top:6px}
+  .arrow{position:absolute;left:520px;width:40px;height:70px}
+
+  .card{position:absolute;width:450px;height:330px;background:var(--card);border-radius:30px;
+    box-shadow:0 18px 40px rgba(20,41,77,.12);padding:34px;border:3px solid #E6E1D6}
+  .card .ic{font-size:72px;line-height:1}
+  .card .nm{font-weight:800;font-size:46px;margin-top:24px;line-height:1.05}
+  .card .ds{font-size:28px;color:var(--muted);margin-top:10px}
+
+  .myth{position:absolute;left:90px;width:900px;background:#fff;border-radius:28px;border:3px solid #E6E1D6;padding:28px 36px}
+  .myth .m{font-size:32px;color:var(--bad);font-weight:700;text-decoration:line-through;text-decoration-thickness:3px}
+  .myth .f{font-size:42px;font-weight:800;margin-top:10px;display:flex;gap:18px;align-items:flex-start;line-height:1.15}
+  .myth .f b{color:var(--good)}
+
+  .info{position:absolute;left:90px;width:900px;height:130px;background:#fff;border-radius:28px;border:3px solid #E6E1D6;
+    display:flex;align-items:center;padding:0 36px;gap:28px}
+  .info .ic{width:76px;height:76px;border-radius:20px;background:var(--soft);display:flex;align-items:center;justify-content:center;flex:none;font-size:40px}
+  .info .k{font-size:24px;color:var(--muted);font-weight:600}
+  .info .v{font-size:38px;font-weight:800;margin-top:2px}
+  #btn{left:90px;top:640px;width:900px;height:170px;border-radius:85px;background:var(--hot);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:900;font-size:58px;
+    box-shadow:0 14px 0 var(--hotDark);overflow:hidden}
+  #ripple{position:absolute;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.5)}
+  #cursor{left:700px;top:780px;width:70px}
+  #endLogo{left:0;right:0;top:1440px;display:flex;justify-content:center;align-items:center;gap:22px;font-weight:900;font-size:44px}
+  #endLogo img{width:84px;border-radius:16px;background:#fff}
+  #disc{left:0;right:0;top:1580px;text-align:center;font-size:26px;color:var(--muted)}
+  .x{position:absolute;font-size:150px;font-weight:900;color:var(--bad)}
+  .spark{position:absolute;font-size:70px}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- S1: hook -->
+  <section class="scene" id="s1">
+    <div class="label mono">// edukasi gigi · karang gigi</div>
+    <div class="abs head big" id="h1">Ada kerak <span class="brown">kuning</span></div>
+    <div class="abs head big" id="h2" style="top:280px">di gigimu?</div>
+    <div class="abs note" id="h3" style="top:520px">👀 Itu namanya <b>karang gigi</b>.</div>
+    <div class="abs" id="g1" style="left:240px;top:720px"></div>
+    <div class="tag" id="t0" style="left:620px;top:1080px">← karang gigi</div>
+  </section>
+
+  <!-- S2: how it forms -->
+  <section class="scene" id="s2">
+    <div class="label mono">// gimana terbentuknya</div>
+    <div class="abs head big" id="s2h">Dari mana<br><span class="u">asalnya?</span></div>
+    <div class="flow" id="f1" style="top:520px"><div class="lv" style="background:#E9EEF7">🍚</div><div><div class="k">Sisa makanan</div><div class="v">+ bakteri di mulut</div></div></div>
+    <svg class="arrow" id="a1" style="top:740px" viewBox="0 0 40 70"><path d="M20 4v52M6 44l14 16 14-16" fill="none" stroke="#14294D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="flow" id="f2" style="top:830px"><div class="lv" style="background:#FFF4D6">🦠</div><div><div class="k">Plak</div><div class="v">Lapisan lengket, masih bisa disikat</div></div></div>
+    <svg class="arrow" id="a2" style="top:1050px" viewBox="0 0 40 70"><path d="M20 4v52M6 44l14 16 14-16" fill="none" stroke="#14294D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="flow" id="f3" style="top:1140px"><div class="lv" style="background:#F3E3C3">🪨</div><div><div class="k">Karang gigi</div><div class="v">Plak mengeras dalam beberapa hari</div></div></div>
+    <div class="abs note" id="s2n" style="top:1420px">Makin lama dibiarkan, makin <span class="brown">tebal</span> dan menempel kuat.</div>
+  </section>
+
+  <!-- S3: signs -->
+  <section class="scene" id="s3">
+    <div class="label mono">// tanda-tandanya</div>
+    <div class="step mono">CEK SEKARANG</div>
+    <div class="abs head big" id="s3h">Kenali<br><span class="hl">tandanya.</span></div>
+    <div id="cards"></div>
+  </section>
+
+  <!-- S4: brushing won't remove it -->
+  <section class="scene" id="s4">
+    <div class="label mono">// fakta penting</div>
+    <div class="abs head big" id="s4h" style="font-size:96px">Bisa hilang<br>pakai <span class="hl">sikat gigi?</span></div>
+    <div class="abs" id="g4" style="left:240px;top:560px"></div>
+    <svg class="abs" id="brush" style="left:330px;top:620px" width="520" height="150" viewBox="0 0 520 150">
+      <rect x="150" y="70" width="370" height="40" rx="20" fill="#4C7FDB" stroke="#14294D" stroke-width="5"/>
+      <rect x="10" y="62" width="160" height="56" rx="14" fill="#fff" stroke="#14294D" stroke-width="5"/>
+      <g stroke="#14294D" stroke-width="5" stroke-linecap="round">
+        <line x1="30" y1="62" x2="30" y2="20"/><line x1="60" y1="62" x2="60" y2="20"/><line x1="90" y1="62" x2="90" y2="20"/>
+        <line x1="120" y1="62" x2="120" y2="20"/><line x1="150" y1="62" x2="150" y2="20"/>
+      </g>
+    </svg>
+    <div class="x" id="x1" style="left:780px;top:560px">✕</div>
+    <svg class="abs" id="scaler" style="left:560px;top:880px" width="420" height="120" viewBox="0 0 420 120">
+      <rect x="60" y="50" width="360" height="30" rx="15" fill="#C9D3E3" stroke="#14294D" stroke-width="5"/>
+      <path d="M62 65 L20 60 Q4 58 8 40" fill="none" stroke="#14294D" stroke-width="6" stroke-linecap="round"/>
+    </svg>
+    <div class="spark" id="sp1" style="left:300px;top:620px">✨</div>
+    <div class="spark" id="sp2" style="left:700px;top:700px">✨</div>
+    <div class="abs note" id="s4a" style="top:1340px"><span style="color:#D93636">❌ Tidak bisa.</span> Karang gigi sudah keras, sikat gigi tidak mempan.</div>
+    <div class="abs note" id="s4b" style="top:1540px"><span style="color:#15803D">✅ Harus di-<b>scaling</b></span> oleh dokter gigi.</div>
+  </section>
+
+  <!-- S5: myths -->
+  <section class="scene" id="s5">
+    <div class="label mono">// mitos vs fakta</div>
+    <div class="abs head big" id="s5h">Takut <span class="hl">scaling?</span></div>
+    <div class="myth" id="m1" style="top:440px"><div class="m">Scaling bikin gigi keropos</div><div class="f">✅ <span>Tidak. Yang dibersihkan hanya karangnya, <b>email gigi aman</b>.</span></div></div>
+    <div class="myth" id="m2" style="top:740px"><div class="m">Setelah scaling gigi jadi renggang</div><div class="f">✅ <span>Sela itu memang sudah ada, <b>tertutup karang</b> sebelumnya.</span></div></div>
+    <div class="myth" id="m3" style="top:1040px"><div class="m">Linu setelah scaling = gigi rusak</div><div class="f">✅ <span>Linu ringan itu <b>normal</b> dan biasanya hilang sendiri.</span></div></div>
+    <div class="abs note" id="s5n" style="top:1380px">💡 Disarankan scaling rutin <span class="hl">tiap 6 bulan</span>.</div>
+  </section>
+
+  <!-- S6: CTA -->
+  <section class="scene" id="s6">
+    <div class="label mono">// yuk, periksa</div>
+    <div class="abs head big" id="s6h">Waktunya <span class="hl">scaling!</span></div>
+    <div class="abs note" id="s6n" style="top:420px;font-size:52px">Gigi bersih, napas segar, gusi lebih sehat.</div>
+    <div class="abs" id="btn">Reservasi Scaling<div id="ripple"></div></div>
+    <svg class="abs" id="cursor" viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z" fill="#14294D" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <div class="info" id="i1" style="top:900px"><div class="ic">🕙</div><div><div class="k">Jam buka</div><div class="v">Setiap hari · 10.00–21.00</div></div></div>
+    <div class="info" id="i2" style="top:1060px"><div class="ic">📍</div><div><div class="k">Alamat</div><div class="v">Jl. Sudirman No.7, Payakumbuh</div></div></div>
+    <div class="info" id="i3" style="top:1220px"><div class="ic">💬</div><div><div class="k">WhatsApp</div><div class="v">0895-2669-7902</div></div></div>
+    <div class="abs" id="endLogo"><img src="../../public/assets/images/logo.webp" alt="">ZANAK DENTAL CARE</div>
+    <div class="abs" id="disc">Konten edukasi, bukan pengganti pemeriksaan langsung.</div>
+  </section>
+
+  <div class="wipe2" id="wipe2"></div>
+  <div class="wipe" id="wipe"></div>
+  <div id="bar"></div>
+</div>
+
+<script>
+const DURATION = 33;
+const B = [0, 3.6, 9.8, 15.4, 22.0, 27.6, DURATION];
+
+const SIGNS = [
+  ["🟡", "Kerak kuning / cokelat", "Biasanya dekat garis gusi"],
+  ["😮‍💨", "Bau mulut", "Walau sudah sikat gigi"],
+  ["🩸", "Gusi mudah berdarah", "Gusi meradang karena karang"],
+  ["👅", "Gigi terasa kasar", "Kalau diraba pakai lidah"],
+];
+const CARD_T0 = B[2] + .9, CARD_GAP = .7;
+const CLICK = B[5] + 1.9;
+
+// ---- helpers
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, d) => clamp((t - a) / d);
+const easeOut = p => 1 - Math.pow(1 - p, 3);
+const easeInOut = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const back = p => { const c = 1.9; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+const style = (el, o) => Object.assign((typeof el === "string" ? $(el) : el).style, o);
+function rise(el, t, at, d = .5, dist = 80) {
+  const p = easeOut(prog(t, at, d));
+  style(el, { opacity: p, transform: `translateY(${(1 - p) * dist}px)` });
+}
+function pop(el, t, at, d = .5, extra = "") {
+  const p = prog(t, at, d);
+  style(el, { opacity: clamp(p * 3), transform: `scale(${p ? back(p) : 0}) ${extra}` });
+}
+
+// tooth + gum with a tartar band along the gum line (ids prefixed per scene)
+function toothSVG(id, size) {
+  return `<svg width="${size}" height="${size * 1.1}" viewBox="0 0 200 220">
+    <path d="M58 150C52 105 42 62 54 36c8-18 30-22 46-11 16-11 38-7 46 11 12 26 2 69-4 114z" fill="#fff" stroke="#14294D" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M72 50q10-10 22-4" fill="none" stroke="#C9D8F5" stroke-width="6" stroke-linecap="round"/>
+    <g id="${id}tartar" fill="#C9A04F" stroke="#8A6424" stroke-width="2.5">
+      <path d="M52 104Q60 96 72 104Q86 112 100 114Q114 112 128 104Q140 96 148 104L146 122Q100 152 54 122z"/>
+      <circle cx="70" cy="112" r="3" fill="#8A6424" stroke="none"/><circle cx="96" cy="122" r="2.5" fill="#8A6424" stroke="none"/>
+      <circle cx="122" cy="116" r="3" fill="#8A6424" stroke="none"/><circle cx="138" cy="108" r="2" fill="#8A6424" stroke="none"/>
+    </g>
+    <path d="M0 112Q22 96 48 110Q100 152 152 110Q178 96 200 112L200 220L0 220z" fill="#F4A3A8" stroke="#14294D" stroke-width="5" stroke-linejoin="round"/>
+  </svg>`;
+}
+$("g1").innerHTML = toothSVG("a", 600);
+$("g4").innerHTML = toothSVG("b", 600);
+
+const cards = $("cards");
+SIGNS.forEach(([ic, nm, ds], i) => {
+  const c = document.createElement("div");
+  c.className = "card";
+  c.style.left = (i % 2 ? 560 : 70) + "px";
+  c.style.top = (560 + Math.floor(i / 2) * 370) + "px";
+  c.innerHTML = `<div class="ic">${ic}</div><div class="nm">${nm}</div><div class="ds">${ds}</div>`;
+  cards.appendChild(c);
+});
+
+function tartarGrow(id, p) {
+  const g = $(id);
+  g.style.transformOrigin = "100px 118px"; g.style.transformBox = "view-box";
+  g.style.opacity = clamp(p * 2);
+  g.style.transform = `scaleY(${.3 + .7 * easeOut(p)})`;
+}
+
+function render(t) {
+  for (let i = 1; i <= 6; i++) $("s" + i).style.opacity = (t >= B[i - 1] && t < B[i]) || (i === 6 && t >= B[6]) ? 1 : 0;
+  let wx = 2000;
+  for (let i = 1; i < B.length - 1; i++) {
+    const p = prog(t, B[i] - .32, .64);
+    if (p > 0 && p < 1) wx = 1300 - easeInOut(p) * 3000;
+  }
+  style("wipe", { left: wx + "px" });
+  style("wipe2", { left: (wx === 2000 ? 2000 : wx - 140) + "px" });
+  style("bar", { width: (t / DURATION * 1080) + "px" });
+
+  // S1 hook: tartar builds up on the tooth
+  rise("h1", t, .1, .45, 120); rise("h2", t, .5, .45, 120); rise("h3", t, 1.9, .4, 40);
+  const gp = easeOut(prog(t, .2, .6));
+  style("g1", { opacity: gp, transform: `translateY(${(1 - gp) * 200}px)` });
+  tartarGrow("atartar", prog(t, .9, 1.0));
+  pop("t0", t, 2.1, .4);
+
+  // S2 formation flow
+  const l2 = B[1];
+  rise("s2h", t, l2 + .1, .45, 100);
+  [["f1", .6], ["a1", 1.3], ["f2", 1.6], ["a2", 2.4], ["f3", 2.7]].forEach(([id, d]) => rise(id, t, l2 + d, .45, 60));
+  rise("s2n", t, l2 + 3.6, .5, 40);
+
+  // S3 signs
+  const l3 = B[2];
+  rise("s3h", t, l3 + .1, .45, 100);
+  [...cards.children].forEach((c, i) => {
+    const p = prog(t, CARD_T0 + i * CARD_GAP, .45);
+    style(c, { opacity: clamp(p * 3), transform: `translateY(${(1 - easeOut(p)) * 160}px) rotate(${(1 - easeOut(p)) * (i % 2 ? 6 : -6)}deg)` });
+  });
+
+  // S4 brushing fails, scaling works
+  const l4 = B[3];
+  rise("s4h", t, l4 + .1, .45, 100);
+  rise("g4", t, l4 + .2, .5, 120);
+  const brushOn = t > l4 + .6 && t < l4 + 2.9;
+  style("brush", { opacity: brushOn ? 1 : 0, transform: `translate(${Math.sin(t * 14) * 60}px,${180}px) rotate(-8deg)` });
+  pop("x1", t, l4 + 1.9, .35);
+  if (t > l4 + 2.9) style("x1", { opacity: 0 });
+  rise("s4a", t, l4 + 1.9, .45, 40);
+  // scaler sweeps along the gum line and the tartar fades away
+  const sc = prog(t, l4 + 3.4, 1.8);
+  style("scaler", { opacity: sc > 0 && sc < 1 ? 1 : 0, transform: `translate(${-40 + Math.sin(sc * Math.PI * 4) * 110}px, -30px) rotate(-10deg)` });
+  const clean = easeOut(prog(t, l4 + 3.6, 1.6));
+  style("btartar", { opacity: 1 - clean });
+  pop("sp1", t, l4 + 5.2, .4); pop("sp2", t, l4 + 5.4, .4);
+  rise("s4b", t, l4 + 3.4, .45, 40);
+
+  // S5 myths
+  const l5 = B[4];
+  rise("s5h", t, l5 + .1, .45, 100);
+  ["m1", "m2", "m3"].forEach((m, i) => {
+    const p = easeOut(prog(t, l5 + .7 + i * 1.2, .45));
+    style(m, { opacity: p, transform: `translateX(${(1 - p) * (i % 2 ? 600 : -600)}px)` });
+  });
+  rise("s5n", t, l5 + 4.4, .45, 40);
+
+  // S6 CTA
+  const l6 = B[5];
+  rise("s6h", t, l6 + .1, .45, 100);
+  rise("s6n", t, l6 + .5, .45, 40);
+  const bt = prog(t, l6 + .8, .45);
+  const press = t > CLICK && t < CLICK + .15 ? 1 : 0;
+  style("btn", { opacity: clamp(bt * 3), transform: `scale(${bt ? back(bt) * (press ? .96 : 1) : 0}) translateY(${press * 8}px)`,
+                 boxShadow: press ? "0 6px 0 #2F4F8C" : "0 14px 0 #2F4F8C" });
+  const cp = easeInOut(prog(t, l6 + 1.2, .7));
+  style("cursor", { opacity: t > l6 + 1.1 ? 1 : 0, transform: `translate(${(1 - cp) * 220}px,${(1 - cp) * 420}px) scale(${press ? .85 : 1})` });
+  const rp = prog(t, CLICK, .6);
+  style("ripple", { left: "580px", top: "40px", opacity: rp > 0 && rp < 1 ? 1 - rp : 0, transform: `translate(-50%,-50%) scale(${rp * 40})` });
+  ["i1", "i2", "i3"].forEach((r, i) => {
+    const p = easeOut(prog(t, CLICK + .35 + i * .25, .45));
+    style(r, { opacity: p, transform: `translateX(${(1 - p) * (i % 2 ? 600 : -600)}px)` });
+  });
+  pop("endLogo", t, CLICK + 1.3, .5);
+  rise("disc", t, CLICK + 1.6, .5, 20);
+}
+window.render = render;
+window.DURATION = DURATION;
+window.SCENES = B;
+window.CLICK_TIME = CLICK;
+// pop sounds: flow steps, sign cards, the X, sparkles, myth cards
+window.CARD_TIMES = [
+  B[1] + .6, B[1] + 1.6, B[1] + 2.7,
+  ...SIGNS.map((_, i) => CARD_T0 + i * CARD_GAP),
+  B[3] + 1.9, B[3] + 5.2,
+  B[4] + .7, B[4] + 1.9, B[4] + 3.1,
+];
+render(0);
+</script>
+</body>
+</html>
