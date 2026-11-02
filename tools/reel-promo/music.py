@@ -110,7 +110,7 @@ for b in cfg["scenes"][1:-1]:
     add(whoosh(), b - 0.3, 0.45)
 for c in cfg["cards"]:
     add(pop(), c + 0.05, 0.35)
-add(pop(), cfg["scenes"][5] + 1.8, 0.6)   # button click
+add(pop(), cfg["click"], 0.6)  # button click
 add(ding(), cfg["scenes"][1] + 0.3, 0.25)  # logo reveal
 
 # fade in/out + normalize

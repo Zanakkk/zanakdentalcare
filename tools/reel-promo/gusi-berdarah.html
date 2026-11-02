@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Reel Gusi Berdarah</title>
+<style>
+  :root{
+    --bg:#F4F1EA; --ink:#14294D; --navy:#1E3A6E; --hot:#4C7FDB; --hotDark:#2F4F8C; --soft:#E9EEF7;
+    --card:#FFFFFF; --muted:#6B7A90; --blood:#D93636; --gum:#F4A3A8; --plaque:#E9C46A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+  body{font-family:"Inter Display","Inter",sans-serif;color:var(--ink)}
+  #stage{position:relative;width:1080px;height:1920px;overflow:hidden;
+    background:radial-gradient(circle,#d9d3c4 1.6px,transparent 1.7px) 0 0/36px 36px,var(--bg)}
+  .scene{position:absolute;inset:0;opacity:0}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .label{position:absolute;top:70px;left:70px;font-size:26px;color:var(--muted)}
+  .step{position:absolute;top:70px;right:70px;font-size:26px;color:var(--hot);font-weight:700}
+  .big{font-weight:900;letter-spacing:-2px;line-height:.95}
+  .hl{color:var(--hot)}
+  .red{color:var(--blood)}
+  .abs{position:absolute}
+  .head{left:70px;right:70px;top:160px;font-size:112px}
+  .u{display:inline-block;background:linear-gradient(transparent 62%,#C9D8F5 62%)}
+  .wipe{position:absolute;top:-200px;height:2400px;width:1500px;background:var(--navy);transform:skewX(-12deg);z-index:50}
+  .wipe2{position:absolute;top:-200px;height:2400px;width:1500px;background:var(--hot);transform:skewX(-12deg);z-index:49}
+  #bar{position:absolute;left:0;bottom:0;height:12px;background:var(--hot);z-index:60}
+
+  .note{left:70px;right:70px;font-size:48px;font-weight:700;line-height:1.2}
+  .tag{position:absolute;padding:16px 26px;border-radius:20px;background:#fff;font-weight:800;font-size:38px;
+    box-shadow:0 14px 30px rgba(20,41,77,.15);border:3px solid #E6E1D6;white-space:nowrap}
+
+  .card{position:absolute;width:450px;height:250px;background:var(--card);border-radius:30px;
+    box-shadow:0 18px 40px rgba(20,41,77,.12);padding:34px;border:3px solid #E6E1D6}
+  .card .num{font-family:"JetBrains Mono";font-weight:800;font-size:28px;color:#fff;background:var(--navy);
+    display:inline-block;padding:6px 14px;border-radius:10px}
+  .card .nm{font-weight:800;font-size:44px;margin-top:22px;line-height:1.02}
+  .card .ds{font-size:27px;color:var(--muted);margin-top:10px}
+
+  .chain{position:absolute;left:90px;width:900px;height:220px;background:#fff;border-radius:30px;border:3px solid #E6E1D6;
+    box-shadow:0 18px 40px rgba(20,41,77,.12);display:flex;align-items:center;gap:34px;padding:0 40px}
+  .chain .lv{width:110px;height:110px;border-radius:28px;color:#fff;font-weight:900;font-size:52px;
+    display:flex;align-items:center;justify-content:center;flex:none}
+  .chain .k{font-size:50px;font-weight:900}
+  .chain .v{font-size:32px;color:var(--muted);margin-top:6px}
+  .arrow{position:absolute;left:520px;width:40px;height:70px}
+
+  .row{position:absolute;left:90px;width:900px;min-height:170px;background:#fff;border-radius:28px;border:3px solid #E6E1D6;
+    display:flex;align-items:center;padding:24px 36px;gap:30px}
+  .row .ck{width:86px;height:86px;border-radius:50%;background:var(--hot);display:flex;align-items:center;justify-content:center;flex:none}
+  .row .k{font-size:44px;font-weight:800;line-height:1.1}
+  .row .v{font-size:30px;color:var(--muted);margin-top:6px}
+  .info{position:absolute;left:90px;width:900px;height:130px;background:#fff;border-radius:28px;border:3px solid #E6E1D6;
+    display:flex;align-items:center;padding:0 36px;gap:28px}
+  .info .ic{width:76px;height:76px;border-radius:20px;background:var(--soft);display:flex;align-items:center;justify-content:center;flex:none;font-size:40px}
+  .info .k{font-size:24px;color:var(--muted);font-weight:600}
+  .info .v{font-size:38px;font-weight:800;margin-top:2px}
+
+  #btn{left:90px;top:640px;width:900px;height:170px;border-radius:85px;background:var(--hot);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:900;font-size:58px;
+    box-shadow:0 14px 0 var(--hotDark);overflow:hidden}
+  #ripple{position:absolute;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.5)}
+  #cursor{left:700px;top:780px;width:70px}
+  #endLogo{left:0;right:0;top:1440px;display:flex;justify-content:center;align-items:center;gap:22px;font-weight:900;font-size:44px}
+  #endLogo img{width:84px;border-radius:16px;background:#fff}
+  #disc{left:0;right:0;top:1580px;text-align:center;font-size:26px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- S1: hook -->
+  <section class="scene" id="s1">
+    <div class="label mono">// edukasi gigi · gusi</div>
+    <div class="abs head big" id="h1">Gusi <span class="red">berdarah</span></div>
+    <div class="abs head big" id="h2" style="top:280px">waktu sikat gigi?</div>
+    <div class="abs note" id="h3" style="top:520px">⚠️ Jangan dianggap sepele.</div>
+    <div class="abs" id="g1" style="left:240px;top:720px"></div>
+    <svg class="abs" id="brush" style="left:330px;top:780px" width="520" height="150" viewBox="0 0 520 150">
+      <rect x="150" y="70" width="370" height="40" rx="20" fill="#4C7FDB" stroke="#14294D" stroke-width="5"/>
+      <rect x="10" y="62" width="160" height="56" rx="14" fill="#fff" stroke="#14294D" stroke-width="5"/>
+      <g stroke="#14294D" stroke-width="5" stroke-linecap="round">
+        <line x1="30" y1="62" x2="30" y2="20"/><line x1="60" y1="62" x2="60" y2="20"/><line x1="90" y1="62" x2="90" y2="20"/>
+        <line x1="120" y1="62" x2="120" y2="20"/><line x1="150" y1="62" x2="150" y2="20"/>
+      </g>
+    </svg>
+  </section>
+
+  <!-- S2: main cause -->
+  <section class="scene" id="s2">
+    <div class="label mono">// penyebab utama</div>
+    <div class="step mono">PALING SERING</div>
+    <div class="abs head big" id="s2h">Biang keroknya:<br><span class="u">plak.</span></div>
+    <div class="abs" id="g2" style="left:240px;top:560px"></div>
+    <div class="tag" id="t1" style="left:60px;top:1180px">🟡 Plak &amp; karang gigi</div>
+    <div class="tag" id="t2" style="left:470px;top:1290px"><span class="red">🔴 Gusi meradang</span></div>
+    <div class="abs note" id="s2n" style="top:1480px">Gusi jadi <span class="red">merah, bengkak,</span> dan gampang berdarah. Namanya <b>gingivitis</b>.</div>
+  </section>
+
+  <!-- S3: other causes -->
+  <section class="scene" id="s3">
+    <div class="label mono">// penyebab lain</div>
+    <div class="step mono">6 PEMICU</div>
+    <div class="abs head big" id="s3h">Bisa juga<br>karena <span class="hl">ini.</span></div>
+    <div id="cards"></div>
+  </section>
+
+  <!-- S4: if ignored -->
+  <section class="scene" id="s4">
+    <div class="label mono">// kalau dibiarkan</div>
+    <div class="abs head big" id="s4h">Kalau <span class="red">dibiarkan?</span></div>
+    <div class="chain" id="k1" style="top:480px"><div class="lv" style="background:#F08A8A">1</div><div><div class="k">Radang gusi</div><div class="v">Gingivitis · masih bisa pulih</div></div></div>
+    <svg class="arrow" id="a1" style="top:720px" viewBox="0 0 40 70"><path d="M20 4v52M6 44l14 16 14-16" fill="none" stroke="#14294D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="chain" id="k2" style="top:810px"><div class="lv" style="background:#E05252">2</div><div><div class="k">Periodontitis</div><div class="v">Jaringan penyangga gigi rusak</div></div></div>
+    <svg class="arrow" id="a2" style="top:1050px" viewBox="0 0 40 70"><path d="M20 4v52M6 44l14 16 14-16" fill="none" stroke="#14294D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="chain" id="k3" style="top:1140px"><div class="lv" style="background:#B32020">3</div><div><div class="k">Gigi goyang</div><div class="v">Bahkan bisa lepas sendiri</div></div></div>
+    <div class="abs" id="g4" style="left:410px;top:1420px"></div>
+  </section>
+
+  <!-- S5: prevention -->
+  <section class="scene" id="s5">
+    <div class="label mono">// cara mencegah</div>
+    <div class="abs head big" id="s5h">Cara <span class="hl">mencegahnya.</span></div>
+    <div id="tips"></div>
+  </section>
+
+  <!-- S6: CTA -->
+  <section class="scene" id="s6">
+    <div class="label mono">// yuk, periksa</div>
+    <div class="abs head big" id="s6h">Masih <span class="red">berdarah?</span></div>
+    <div class="abs note" id="s6n" style="top:420px;font-size:52px">Periksa ke dokter gigi. Biasanya cukup <span class="hl">scaling</span>.</div>
+    <div class="abs" id="btn">Reservasi Sekarang<div id="ripple"></div></div>
+    <svg class="abs" id="cursor" viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z" fill="#14294D" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <div class="info" id="i1" style="top:900px"><div class="ic">🕙</div><div><div class="k">Jam buka</div><div class="v">Setiap hari · 10.00–21.00</div></div></div>
+    <div class="info" id="i2" style="top:1060px"><div class="ic">📍</div><div><div class="k">Alamat</div><div class="v">Jl. Sudirman No.7, Payakumbuh</div></div></div>
+    <div class="info" id="i3" style="top:1220px"><div class="ic">💬</div><div><div class="k">WhatsApp</div><div class="v">0895-2669-7902</div></div></div>
+    <div class="abs" id="endLogo"><img src="../../public/assets/images/logo.webp" alt="">ZANAK DENTAL CARE</div>
+    <div class="abs" id="disc">Konten edukasi, bukan pengganti pemeriksaan langsung.</div>
+  </section>
+
+  <div class="wipe2" id="wipe2"></div>
+  <div class="wipe" id="wipe"></div>
+  <div id="bar"></div>
+</div>
+
+<script>
+const DURATION = 31.5;
+const B = [0, 3.6, 9.6, 15.8, 20.8, 26.0, DURATION];
+
+const CAUSES = [
+  ["Sikat terlalu keras", "Gusi jadi luka"],
+  ["Jarang pakai benang gigi", "Sisa makanan numpuk"],
+  ["Perubahan hormon", "Misalnya saat hamil"],
+  ["Kurang vitamin C", "Gusi jadi rapuh"],
+  ["Obat tertentu", "Misal pengencer darah"],
+  ["Merokok", "Memperparah penyakit gusi"],
+];
+const TIPS = [
+  ["Sikat gigi 2× sehari", "Pakai sikat berbulu lembut, gerakan pelan"],
+  ["Bersihkan sela gigi", "Pakai benang gigi setiap hari"],
+  ["Scaling rutin", "Ke dokter gigi tiap 6 bulan"],
+  ["Gaya hidup sehat", "Perbanyak sayur & buah, kurangi rokok"],
+];
+const CARD_T0 = B[2] + .9, CARD_GAP = .55;
+const TIP_T0 = B[4] + .8, TIP_GAP = 1.0;
+const CLICK = B[5] + 1.9;
+
+// ---- helpers
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, d) => clamp((t - a) / d);
+const easeOut = p => 1 - Math.pow(1 - p, 3);
+const easeInOut = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const back = p => { const c = 1.9; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+const mixColor = (a, b, p) => {
+  const h = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+  const [x, y] = [h(a), h(b)];
+  return `rgb(${x.map((v, i) => Math.round(v + (y[i] - v) * p)).join(",")})`;
+};
+const style = (el, o) => Object.assign((typeof el === "string" ? $(el) : el).style, o);
+function rise(el, t, at, d = .5, dist = 80) {
+  const p = easeOut(prog(t, at, d));
+  style(el, { opacity: p, transform: `translateY(${(1 - p) * dist}px)` });
+}
+function pop(el, t, at, d = .5) {
+  const p = prog(t, at, d);
+  style(el, { opacity: clamp(p * 3), transform: `scale(${p ? back(p) : 0})` });
+}
+
+// tooth + gum illustration (ids are prefixed so it can be reused per scene)
+function toothSVG(id, size) {
+  return `<svg width="${size}" height="${size * 1.1}" viewBox="0 0 200 220">
+    <g id="${id}tooth">
+      <path d="M58 150C52 105 42 62 54 36c8-18 30-22 46-11 16-11 38-7 46 11 12 26 2 69-4 114z" fill="#fff" stroke="#14294D" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M72 50q10-10 22-4" fill="none" stroke="#C9D8F5" stroke-width="6" stroke-linecap="round"/>
+    </g>
+    <g id="${id}plaque" fill="#E9C46A" stroke="#C99A2E" stroke-width="2">
+      <ellipse cx="66" cy="118" rx="12" ry="8"/><ellipse cx="88" cy="128" rx="14" ry="8"/>
+      <ellipse cx="114" cy="128" rx="13" ry="7"/><ellipse cx="136" cy="117" rx="11" ry="8"/>
+    </g>
+    <path id="${id}gum" d="M0 112Q22 96 48 110Q100 152 152 110Q178 96 200 112L200 220L0 220z" fill="#F4A3A8" stroke="#14294D" stroke-width="5" stroke-linejoin="round"/>
+    <g id="${id}drops" fill="#A11212" stroke="#fff" stroke-width="2.5">
+      <path id="${id}d1" d="M84 134q6 10 0 15q-6-5 0-15z"/>
+      <path id="${id}d2" d="M110 136q6 10 0 15q-6-5 0-15z"/>
+      <path id="${id}d3" d="M130 126q6 10 0 15q-6-5 0-15z"/>
+    </g>
+  </svg>`;
+}
+$("g1").innerHTML = toothSVG("a", 600);
+$("g2").innerHTML = toothSVG("b", 600);
+$("g4").innerHTML = toothSVG("c", 260);
+
+const cards = $("cards");
+CAUSES.forEach(([nm, ds], i) => {
+  const c = document.createElement("div");
+  c.className = "card";
+  c.style.left = (i % 2 ? 560 : 70) + "px";
+  c.style.top = (560 + Math.floor(i / 2) * 290) + "px";
+  c.innerHTML = `<span class="num">${String(i + 1).padStart(2, "0")}</span><div class="nm">${nm}</div><div class="ds">${ds}</div>`;
+  cards.appendChild(c);
+});
+const tips = $("tips");
+TIPS.forEach(([k, v], i) => {
+  const r = document.createElement("div");
+  r.className = "row";
+  r.style.top = (470 + i * 230) + "px";
+  r.innerHTML = `<div class="ck"><svg width="46" height="46" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="24" stroke-dashoffset="24"/></svg></div>
+    <div><div class="k">${k}</div><div class="v">${v}</div></div>`;
+  tips.appendChild(r);
+});
+
+// falling drops: each drop loops from the gum line downward
+function drops(prefix, t, start) {
+  ["d1", "d2", "d3"].forEach((d, i) => {
+    const local = t - start - i * .35;
+    const cyc = local > 0 ? (local % 1.1) / 1.1 : 0;
+    style(prefix + d, { opacity: local > 0 ? (cyc < .85 ? 1 : 0) : 0, transform: `translateY(${easeOut(cyc) * 60}px)` });
+  });
+}
+
+function render(t) {
+  for (let i = 1; i <= 6; i++) $("s" + i).style.opacity = (t >= B[i - 1] && t < B[i]) || (i === 6 && t >= B[6]) ? 1 : 0;
+  let wx = 2000;
+  for (let i = 1; i < B.length - 1; i++) {
+    const p = prog(t, B[i] - .32, .64);
+    if (p > 0 && p < 1) wx = 1300 - easeInOut(p) * 3000;
+  }
+  style("wipe", { left: wx + "px" });
+  style("wipe2", { left: (wx === 2000 ? 2000 : wx - 140) + "px" });
+  style("bar", { width: (t / DURATION * 1080) + "px" });
+
+  // S1 hook: brushing, then bleeding
+  rise("h1", t, .1, .45, 120); rise("h2", t, .5, .45, 120); rise("h3", t, 1.8, .4, 40);
+  const gp = easeOut(prog(t, .2, .6));
+  style("g1", { opacity: gp, transform: `translateY(${(1 - gp) * 200}px)` });
+  style("aplaque", { opacity: 0 });
+  style("agum", { fill: mixColor("#F4A3A8", "#E0606A", prog(t, 1.0, .8)) });
+  style("brush", { opacity: gp, transform: `translateX(${Math.sin(t * 14) * 60}px) rotate(-8deg)` });
+  drops("a", t, 1.1);
+
+  // S2 plaque builds up, gum inflames
+  const l2 = B[1];
+  rise("s2h", t, l2 + .1, .45, 100);
+  rise("g2", t, l2 + .2, .5, 120);
+  [...$("bplaque").children].forEach((e, i) => {
+    const p = prog(t, l2 + .8 + i * .2, .4);
+    e.style.transformOrigin = "center"; e.style.transformBox = "fill-box";
+    e.style.transform = `scale(${p ? back(p) : 0})`;
+  });
+  const inf = prog(t, l2 + 2.0, 1.2);
+  style("bgum", { fill: mixColor("#F4A3A8", "#E0505A", inf), transformOrigin: "100px 150px", transformBox: "view-box",
+                  transform: `scaleY(${1 + inf * .06 + Math.sin(t * 6) * .01 * inf})` });
+  drops("b", t, l2 + 3.0);
+  pop("t1", t, l2 + 1.2, .45); pop("t2", t, l2 + 2.3, .45);
+  rise("s2n", t, l2 + 3.0, .5, 60);
+
+  // S3 cause cards
+  const l3 = B[2];
+  rise("s3h", t, l3 + .1, .45, 100);
+  [...cards.children].forEach((c, i) => {
+    const p = prog(t, CARD_T0 + i * CARD_GAP, .45);
+    style(c, { opacity: clamp(p * 3), transform: `translateY(${(1 - easeOut(p)) * 160}px) rotate(${(1 - easeOut(p)) * (i % 2 ? 6 : -6)}deg)` });
+  });
+
+  // S4 progression chain
+  const l4 = B[3];
+  rise("s4h", t, l4 + .1, .45, 100);
+  [["k1", .6], ["a1", 1.2], ["k2", 1.5], ["a2", 2.1], ["k3", 2.4]].forEach(([id, d]) => rise(id, t, l4 + d, .45, 60));
+  const shake = t > l4 + 3 ? Math.sin(t * 30) * 5 * clamp((t - l4 - 3) * 2) : 0;
+  pop("g4", t, l4 + 2.8, .45);
+  style("ctooth", { transformOrigin: "100px 150px", transformBox: "view-box", transform: `rotate(${shake}deg)` });
+  style("cplaque", { opacity: .9 });
+  style("cgum", { fill: "#D9505A" });
+  drops("c", t, l4 + 3.0);
+
+  // S5 tips
+  const l5 = B[4];
+  rise("s5h", t, l5 + .1, .45, 100);
+  [...tips.children].forEach((r, i) => {
+    const at = TIP_T0 + i * TIP_GAP;
+    const p = easeOut(prog(t, at, .45));
+    style(r, { opacity: p, transform: `translateX(${(1 - p) * (i % 2 ? 600 : -600)}px)` });
+    pop(r.querySelector(".ck"), t, at + .3, .35);
+    r.querySelector("path").style.strokeDashoffset = 24 * (1 - easeOut(prog(t, at + .45, .3)));
+  });
+
+  // S6 CTA
+  const l6 = B[5];
+  rise("s6h", t, l6 + .1, .45, 100);
+  rise("s6n", t, l6 + .5, .45, 40);
+  const bt = prog(t, l6 + .8, .45);
+  const press = t > CLICK && t < CLICK + .15 ? 1 : 0;
+  style("btn", { opacity: clamp(bt * 3), transform: `scale(${bt ? back(bt) * (press ? .96 : 1) : 0}) translateY(${press * 8}px)`,
+                 boxShadow: press ? "0 6px 0 #2F4F8C" : "0 14px 0 #2F4F8C" });
+  const cp = easeInOut(prog(t, l6 + 1.2, .7));
+  style("cursor", { opacity: t > l6 + 1.1 ? 1 : 0, transform: `translate(${(1 - cp) * 220}px,${(1 - cp) * 420}px) scale(${press ? .85 : 1})` });
+  const rp = prog(t, CLICK, .6);
+  style("ripple", { left: "580px", top: "40px", opacity: rp > 0 && rp < 1 ? 1 - rp : 0, transform: `translate(-50%,-50%) scale(${rp * 40})` });
+  ["i1", "i2", "i3"].forEach((r, i) => {
+    const p = easeOut(prog(t, CLICK + .35 + i * .25, .45));
+    style(r, { opacity: p, transform: `translateX(${(1 - p) * (i % 2 ? 600 : -600)}px)` });
+  });
+  pop("endLogo", t, CLICK + 1.3, .5);
+  rise("disc", t, CLICK + 1.6, .5, 20);
+}
+window.render = render;
+window.DURATION = DURATION;
+window.SCENES = B;
+window.CLICK_TIME = CLICK;
+// pop sounds: cause cards, chain steps, tip checkmarks
+window.CARD_TIMES = [
+  ...CAUSES.map((_, i) => CARD_T0 + i * CARD_GAP),
+  B[3] + .6, B[3] + 1.5, B[3] + 2.4,
+  ...TIPS.map((_, i) => TIP_T0 + i * TIP_GAP + .3),
+];
+render(0);
+</script>
+</body>
+</html>

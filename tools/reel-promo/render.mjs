@@ -1,7 +1,8 @@
 // Render reel.html to an MP4 (1080x1920, 30fps) using Chromium + ffmpeg.
 // Usage:
-//   node render.mjs                 -> out/reel.mp4 (with music from music.py)
-//   node render.mjs --stills 1,5,9  -> out/still-<t>.jpg previews
+//   node render.mjs [page.html]                 -> out/<page>.mp4 (with music from music.py)
+//   node render.mjs [page.html] --stills 1,5,9  -> out/still-<t>.jpg previews
+// page defaults to reel.html (the clinic promo).
 import { createRequire } from "node:module";
 import { spawn, execFileSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
@@ -15,10 +16,12 @@ const here = dirname(fileURLToPath(import.meta.url));
 const out = join(here, "out");
 mkdirSync(out, { recursive: true });
 const FPS = 30;
+const pageFile = process.argv[2] && !process.argv[2].startsWith("--") ? process.argv[2] : "reel.html";
+const name = pageFile.replace(/\.html$/, "");
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
-await page.goto("file://" + join(here, "reel.html"));
+await page.goto("file://" + join(here, pageFile));
 await page.evaluate(() => document.fonts.ready);
 await page.waitForLoadState("networkidle");
 
@@ -32,15 +35,16 @@ if (stillsArg > 0) {
   process.exit(0);
 }
 
-const { duration, scenes, cards } = await page.evaluate(() => ({
+const { duration, scenes, cards, click } = await page.evaluate(() => ({
   duration: window.DURATION, scenes: window.SCENES, cards: window.CARD_TIMES,
+  click: window.CLICK_TIME ?? window.SCENES[5] + 1.8,
 }));
 
 // music + sound effects synced to the animation timeline
 const audio = join(out, "music.wav");
-execFileSync("python3", ["-I", join(here, "music.py"), audio, JSON.stringify({ duration, scenes, cards })], { stdio: "inherit" });
+execFileSync("python3", ["-I", join(here, "music.py"), audio, JSON.stringify({ duration, scenes, cards, click })], { stdio: "inherit" });
 
-const video = join(out, "reel.mp4");
+const video = join(out, name + ".mp4");
 const ff = spawn("ffmpeg", [
   "-y", "-v", "error",
   "-f", "image2pipe", "-framerate", String(FPS), "-c:v", "mjpeg", "-i", "-",
