@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Reel Promo Zanak</title>
+<style>
+  :root{
+    --bg:#F4F1EA; --ink:#14294D; --navy:#1E3A6E; --acc:#4C7FDB; --hot:#E8492F;
+    --card:#FFFFFF; --muted:#6B7A90;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+  body{font-family:"Inter Display","Inter",sans-serif;color:var(--ink)}
+  #stage{position:relative;width:1080px;height:1920px;overflow:hidden;
+    background:radial-gradient(circle,#d9d3c4 1.6px,transparent 1.7px) 0 0/36px 36px,var(--bg)}
+  .scene{position:absolute;inset:0;opacity:0}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .label{position:absolute;top:70px;left:70px;font-size:26px;color:var(--muted)}
+  .step{position:absolute;top:70px;right:70px;font-size:26px;color:var(--hot);font-weight:700}
+  .big{font-weight:900;letter-spacing:-2px;line-height:.95}
+  .hl{color:var(--hot)}
+  .abs{position:absolute}
+  .wipe{position:absolute;top:-200px;height:2400px;width:1500px;background:var(--navy);transform:skewX(-12deg);z-index:50}
+  .wipe2{position:absolute;top:-200px;height:2400px;width:1500px;background:var(--hot);transform:skewX(-12deg);z-index:49}
+
+  /* S1 hook */
+  .hook{left:80px;right:80px;font-size:104px}
+  .hook span.u{display:inline-block;background:linear-gradient(transparent 62%,#F9C9BE 62%)}
+
+  /* S2 brand */
+  #logo{width:380px;height:380px;left:350px;top:520px;border-radius:60px;background:#fff;
+    box-shadow:0 30px 60px rgba(20,41,77,.18);display:flex;align-items:center;justify-content:center}
+  #logo img{width:300px}
+  #brand{left:0;right:0;top:980px;text-align:center;font-size:110px}
+  #brand span{display:inline-block}
+  #brandSub{left:0;right:0;top:1230px;text-align:center;font-size:44px;font-weight:600;color:var(--navy)}
+  #stamp{left:620px;top:420px;padding:18px 30px;border:6px solid var(--hot);color:var(--hot);
+    font-weight:900;font-size:40px;border-radius:14px;background:rgba(244,241,234,.9);line-height:1.05;text-align:center}
+
+  /* S3 services */
+  #svcTitle{left:70px;top:170px;font-size:120px}
+  .card{position:absolute;width:450px;height:250px;background:var(--card);border-radius:30px;
+    box-shadow:0 18px 40px rgba(20,41,77,.12);padding:34px;border:3px solid #E6E1D6}
+  .card .num{font-family:"JetBrains Mono";font-weight:800;font-size:28px;color:#fff;background:var(--navy);
+    display:inline-block;padding:6px 14px;border-radius:10px}
+  .card .nm{font-weight:800;font-size:46px;margin-top:22px;line-height:1.02}
+  .card .ds{font-size:27px;color:var(--muted);margin-top:10px}
+  .card .ck{position:absolute;right:28px;top:28px;width:56px;height:56px;border-radius:50%;background:var(--hot);
+    display:flex;align-items:center;justify-content:center}
+
+  /* S4 doctor */
+  #docBg{left:90px;top:300px;width:900px;height:1150px;border-radius:50px;background:var(--navy);overflow:hidden}
+  #docBg:before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(255,255,255,.08) 2px,transparent 2.5px) 0 0/40px 40px}
+  #docImg{left:250px;top:340px;height:1110px}
+  #docTag{left:60px;top:1330px;width:960px;background:#fff;border-radius:34px;padding:40px 46px;
+    box-shadow:0 24px 50px rgba(20,41,77,.2)}
+  #docTag .t1{font-size:30px;color:var(--muted);font-weight:600}
+  #docTag .t2{font-size:62px;font-weight:900;margin-top:6px;letter-spacing:-1px}
+  .chip{display:inline-block;margin:22px 14px 0 0;padding:12px 24px;border-radius:999px;background:#E9EEF7;
+    color:var(--navy);font-weight:700;font-size:30px}
+  #docHead{left:70px;top:150px;font-size:84px}
+
+  /* S5 photos */
+  .pol{position:absolute;background:#fff;padding:24px 24px 90px;box-shadow:0 30px 60px rgba(20,41,77,.22);border-radius:8px}
+  .pol .ph{overflow:hidden;position:relative}
+  .pol .ph img{position:absolute;left:50%;top:50%}
+  .pol .cap{position:absolute;bottom:24px;left:28px;font-family:"JetBrains Mono";font-size:30px;font-weight:700;color:var(--ink)}
+  #photoHead{left:70px;top:150px;font-size:96px}
+
+  /* S6 CTA */
+  #ctaHead{left:70px;top:170px;font-size:132px}
+  #ctaSub{left:74px;top:470px;font-size:48px;font-weight:600;color:var(--navy)}
+  #btn{left:90px;top:620px;width:900px;height:170px;border-radius:85px;background:var(--hot);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:900;font-size:58px;
+    box-shadow:0 14px 0 #A9301C;overflow:hidden}
+  #ripple{position:absolute;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.5)}
+  #cursor{left:700px;top:760px;width:70px}
+  .row{position:absolute;left:90px;width:900px;height:150px;background:#fff;border-radius:28px;border:3px solid #E6E1D6;
+    display:flex;align-items:center;padding:0 36px;gap:30px}
+  .row .ic{width:86px;height:86px;border-radius:22px;background:#E9EEF7;display:flex;align-items:center;justify-content:center;flex:none;font-size:46px}
+  .row .k{font-size:26px;color:var(--muted);font-weight:600}
+  .row .v{font-size:40px;font-weight:800;margin-top:2px}
+  #endLogo{left:0;right:0;top:1660px;display:flex;justify-content:center;align-items:center;gap:22px;font-weight:900;font-size:44px}
+  #endLogo img{width:84px;border-radius:16px;background:#fff}
+
+  #bar{position:absolute;left:0;bottom:0;height:12px;background:var(--hot);z-index:60}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- S1: hook -->
+  <section class="scene" id="s1">
+    <div class="label mono">// zanak · cek gigi</div>
+    <div class="abs hook big" id="h1" style="top:360px">Gigi <span class="u">ngilu?</span></div>
+    <div class="abs hook big" id="h2" style="top:560px">Karang gigi <span class="u">numpuk?</span></div>
+    <div class="abs hook big" id="h3" style="top:840px">Gigi bungsu bikin <span class="u hl">nyeri?</span></div>
+    <svg class="abs" id="tooth" style="left:390px;top:1260px" width="300" height="340" viewBox="0 0 100 114">
+      <path d="M50 14C40 4 18 2 10 18c-7 14 0 30 5 44 4 12 4 34 12 44 7 9 12-4 14-14 2-9 4-16 9-16s7 7 9 16c2 10 7 23 14 14 8-10 8-32 12-44 5-14 12-30 5-44C82 2 60 4 50 14z" fill="#fff" stroke="#14294D" stroke-width="4" stroke-linejoin="round"/>
+      <circle cx="36" cy="40" r="4.5" fill="#14294D"/><circle cx="64" cy="40" r="4.5" fill="#14294D"/>
+      <path id="mouth" d="M38 58q12 -8 24 0" fill="none" stroke="#14294D" stroke-width="4" stroke-linecap="round"/>
+      <path id="sweat" d="M82 22q5 8 0 12q-5 -4 0 -12z" fill="#4C7FDB"/>
+    </svg>
+  </section>
+
+  <!-- S2: brand -->
+  <section class="scene" id="s2">
+    <div class="label mono">// kenalan dulu</div>
+    <div class="abs" id="logo"><img src="../../public/assets/images/logo.webp" alt=""></div>
+    <div class="abs big" id="brand"></div>
+    <div class="abs" id="brandSub">Klinik Gigi Keluarga · Payakumbuh</div>
+    <div class="abs" id="stamp">SATU KLINIK<br>LENGKAP</div>
+  </section>
+
+  <!-- S3: services -->
+  <section class="scene" id="s3">
+    <div class="label mono">// layanan kami</div>
+    <div class="step mono">8 LAYANAN</div>
+    <div class="abs big" id="svcTitle">Semua <span class="hl">ada</span><br>di sini.</div>
+    <div id="cards"></div>
+  </section>
+
+  <!-- S4: doctor -->
+  <section class="scene" id="s4">
+    <div class="label mono">// ditangani langsung</div>
+    <div class="abs big" id="docHead">Oleh <span class="hl">dokter gigi</span></div>
+    <div class="abs" id="docBg"></div>
+    <img class="abs" id="docImg" src="../../public/assets/images/dokter.webp" alt="">
+    <div class="abs" id="docTag">
+      <div class="t1">Dokter gigi kami</div>
+      <div class="t2">drg. Muhammad Daffa Safra</div>
+      <span class="chip" id="c1">🎓 Alumni Universitas Andalas</span><span class="chip" id="c2">✅ STR aktif</span>
+    </div>
+  </section>
+
+  <!-- S5: photos -->
+  <section class="scene" id="s5">
+    <div class="label mono">// tempatnya</div>
+    <div class="abs big" id="photoHead">Klinik yang<br><span class="hl">nyaman.</span></div>
+    <div class="pol" id="p1" style="left:110px;top:520px">
+      <div class="ph" style="width:820px;height:574px"><img id="p1i" src="../../public/assets/images/RuangPeriksa.webp" alt="" style="width:900px"></div>
+      <div class="cap">ruang periksa</div>
+    </div>
+    <div class="pol" id="p2" style="left:470px;top:1000px">
+      <div class="ph" style="width:460px;height:560px"><img id="p2i" src="../../public/assets/images/depan.webp" alt="" style="width:470px"></div>
+      <div class="cap">Jl. Sudirman No.7</div>
+    </div>
+  </section>
+
+  <!-- S6: CTA -->
+  <section class="scene" id="s6">
+    <div class="label mono">// yuk, periksa</div>
+    <div class="abs big" id="ctaHead">Reservasi<br><span class="hl">online.</span></div>
+    <div class="abs" id="ctaSub">Pilih tanggal &amp; jam sendiri.</div>
+    <div class="abs" id="btn">Reservasi Sekarang<div id="ripple"></div></div>
+    <svg class="abs" id="cursor" viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z" fill="#14294D" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <div class="row" id="r1" style="top:880px"><div class="ic">🕙</div><div><div class="k">Jam buka</div><div class="v">Senin–Sabtu · 10.00–21.00</div></div></div>
+    <div class="row" id="r2" style="top:1060px"><div class="ic">📍</div><div><div class="k">Alamat</div><div class="v">Jl. Sudirman No.7, Payakumbuh</div></div></div>
+    <div class="row" id="r3" style="top:1240px"><div class="ic">💬</div><div><div class="k">WhatsApp</div><div class="v">0895-2669-7902</div></div></div>
+    <div class="row" id="r4" style="top:1420px"><div class="ic">📷</div><div><div class="k">Instagram &amp; TikTok</div><div class="v">@zanakdentalcare</div></div></div>
+    <div class="abs" id="endLogo"><img src="../../public/assets/images/logo.webp" alt="">ZANAK DENTAL CARE</div>
+  </section>
+
+  <div class="wipe2" id="wipe2"></div>
+  <div class="wipe" id="wipe"></div>
+  <div id="bar"></div>
+</div>
+
+<script>
+const DURATION = 26;
+// scene boundaries (seconds)
+const B = [0, 3.4, 6.6, 13.8, 17.4, 20.6, DURATION];
+
+const SERVICES = [
+  ["Scaling", "Bersihkan karang gigi"],
+  ["Tambal Gigi", "Gigi berlubang"],
+  ["Cabut Gigi", "Aman & nyaman"],
+  ["Saluran Akar", "Selamatkan gigi"],
+  ["Gigi Bungsu", "Odontektomi"],
+  ["Behel", "Rapikan gigi"],
+  ["Gigi Tiruan", "Ganti gigi hilang"],
+  ["Gigi Anak", "Ramah si kecil"],
+];
+const CARD_T0 = 7.5, CARD_GAP = 0.42;
+
+// ---- helpers
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, d) => clamp((t - a) / d);
+const easeOut = p => 1 - Math.pow(1 - p, 3);
+const easeIn = p => p * p * p;
+const easeInOut = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const back = p => { const c = 1.9; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+const style = (el, o) => Object.assign((typeof el === "string" ? $(el) : el).style, o);
+// slide-up + fade
+function rise(el, t, at, d = .5, dist = 80) {
+  const p = easeOut(prog(t, at, d));
+  style(el, { opacity: p, transform: `translateY(${(1 - p) * dist}px)` });
+}
+function pop(el, t, at, d = .5, extra = "") {
+  const p = prog(t, at, d);
+  const s = p === 0 ? 0 : back(p);
+  style(el, { opacity: clamp(p * 3), transform: `scale(${s}) ${extra}` });
+}
+
+// ---- build dynamic DOM
+const brand = $("brand");
+"ZANAK".split("").forEach(ch => { const s = document.createElement("span"); s.textContent = ch; brand.appendChild(s); });
+brand.appendChild(document.createElement("br"));
+const brand2 = document.createElement("span");
+brand2.style.fontSize = "62px"; brand2.style.letterSpacing = "8px"; brand2.style.color = "#1E3A6E";
+brand2.textContent = "DENTAL CARE"; brand.appendChild(brand2);
+
+const cards = $("cards");
+SERVICES.forEach(([nm, ds], i) => {
+  const c = document.createElement("div");
+  c.className = "card";
+  c.style.left = (i % 2 ? 560 : 70) + "px";
+  c.style.top = (560 + Math.floor(i / 2) * 290) + "px";
+  c.innerHTML = `<span class="num">${String(i + 1).padStart(2, "0")}</span>
+    <div class="nm">${nm}</div><div class="ds">${ds}</div>
+    <div class="ck"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="24" stroke-dashoffset="24"/></svg></div>`;
+  cards.appendChild(c);
+});
+
+// ---- render one moment in time
+function render(t) {
+  // scene visibility (switch while the wipe covers the screen)
+  for (let i = 1; i <= 6; i++) $("s" + i).style.opacity = (t >= B[i - 1] && t < B[i]) || (i === 6 && t >= B[6]) ? 1 : 0;
+
+  // wipes at each boundary
+  let wx = 2000;
+  for (let i = 1; i < B.length - 1; i++) {
+    const p = prog(t, B[i] - .32, .64);
+    if (p > 0 && p < 1) wx = 1300 - easeInOut(p) * 3000;
+  }
+  style("wipe", { left: wx + "px" });
+  style("wipe2", { left: (wx === 2000 ? 2000 : wx - 140) + "px" }); // red edge leads the navy wipe
+  style("bar", { width: (t / DURATION * 1080) + "px" });
+
+  // S1 hook
+  rise("h1", t, .15, .45, 120); rise("h2", t, .85, .45, 120); rise("h3", t, 1.55, .45, 120);
+  const tp = prog(t, .1, .6);
+  const wob = Math.sin(t * 9) * 6 * clamp(t - .6);
+  style("tooth", { opacity: clamp(tp * 2), transform: `translateY(${(1 - back(tp)) * 300}px) rotate(${wob}deg)` });
+  style("sweat", { opacity: t > 1.6 ? 1 : 0, transform: `translateY(${((t - 1.6) * 30) % 18}px)` });
+
+  // S2 brand
+  const l2 = B[1];
+  pop("logo", t, l2 + .2, .6, `rotate(${(1 - easeOut(prog(t, l2 + .2, .6))) * -20}deg)`);
+  [...brand.querySelectorAll("span")].forEach((s, i) => {
+    const p = easeOut(prog(t, l2 + .55 + i * .07, .4));
+    style(s, { opacity: p, transform: `translateY(${(1 - p) * 60}px)` });
+  });
+  rise("brandSub", t, l2 + 1.2, .5, 40);
+  const sp = prog(t, l2 + 1.7, .35);
+  style("stamp", { opacity: sp > 0 ? 1 : 0, transform: `rotate(12deg) scale(${sp ? 2.2 - 1.2 * easeIn(sp) : 0})` });
+
+  // S3 services
+  const l3 = B[2];
+  rise("svcTitle", t, l3 + .15, .5, 100);
+  [...cards.children].forEach((c, i) => {
+    const at = CARD_T0 + i * CARD_GAP;
+    const p = prog(t, at, .45);
+    style(c, { opacity: clamp(p * 3), transform: `translateY(${(1 - easeOut(p)) * 160}px) rotate(${(1 - easeOut(p)) * (i % 2 ? 6 : -6)}deg)` });
+    const ck = c.querySelector(".ck");
+    pop(ck, t, at + .3, .35);
+    c.querySelector("path").style.strokeDashoffset = 24 * (1 - easeOut(prog(t, at + .45, .3)));
+  });
+
+  // S4 doctor
+  const l4 = B[3];
+  rise("docHead", t, l4 + .1, .45, 80);
+  const bp = easeOut(prog(t, l4 + .15, .5));
+  style("docBg", { opacity: bp, transform: `scale(${.85 + .15 * bp})` });
+  const dp = easeOut(prog(t, l4 + .4, .6));
+  style("docImg", { opacity: dp, transform: `translateY(${(1 - dp) * 400}px) scale(${1 + (t - l4) * .012})` });
+  const tg = easeOut(prog(t, l4 + .9, .5));
+  style("docTag", { opacity: tg, transform: `translateX(${(1 - tg) * -700}px)` });
+  pop("c1", t, l4 + 1.5, .4); pop("c2", t, l4 + 1.8, .4);
+
+  // S5 photos
+  const l5 = B[4];
+  rise("photoHead", t, l5 + .1, .45, 80);
+  const p1 = prog(t, l5 + .3, .55), p2 = prog(t, l5 + 1.0, .55);
+  style("p1", { opacity: clamp(p1 * 3), transform: `translateX(${(1 - easeOut(p1)) * -900}px) rotate(${-4 + (1 - easeOut(p1)) * -15}deg)` });
+  style("p2", { opacity: clamp(p2 * 3), transform: `translateX(${(1 - easeOut(p2)) * 900}px) rotate(${5 + (1 - easeOut(p2)) * 15}deg)` });
+  const kb = (t - l5) / 3.2;
+  style("p1i", { transform: `translate(-50%,-50%) scale(${1.05 + kb * .12})` });
+  style("p2i", { transform: `translate(-50%,-42%) scale(${1.1 + kb * .1})` });
+
+  // S6 CTA
+  const l6 = B[5];
+  rise("ctaHead", t, l6 + .1, .45, 100);
+  rise("ctaSub", t, l6 + .5, .4, 40);
+  const bt = prog(t, l6 + .7, .45);
+  const click = l6 + 1.8;
+  const press = t > click && t < click + .15 ? 1 : 0;
+  style("btn", { opacity: clamp(bt * 3), transform: `scale(${bt ? back(bt) * (press ? .96 : 1) : 0}) translateY(${press * 8}px)`,
+                  boxShadow: press ? "0 6px 0 #A9301C" : "0 14px 0 #A9301C" });
+  const cp = easeInOut(prog(t, l6 + 1.1, .7));
+  style("cursor", { opacity: t > l6 + 1.0 ? 1 : 0, transform: `translate(${(1 - cp) * 220}px,${(1 - cp) * 420}px) scale(${press ? .85 : 1})` });
+  const rp = prog(t, click, .6);
+  style("ripple", { left: "580px", top: "40px", opacity: rp > 0 && rp < 1 ? 1 - rp : 0, transform: `translate(-50%,-50%) scale(${rp * 40})` });
+  ["r1", "r2", "r3", "r4"].forEach((r, i) => {
+    const p = easeOut(prog(t, click + .35 + i * .25, .45));
+    style(r, { opacity: p, transform: `translateX(${(1 - p) * (i % 2 ? 600 : -600)}px)` });
+  });
+  pop("endLogo", t, click + 1.6, .5);
+}
+window.render = render;
+window.DURATION = DURATION;
+window.SCENES = B;
+window.CARD_TIMES = SERVICES.map((_, i) => CARD_T0 + i * CARD_GAP);
+render(0);
+</script>
+</body>
+</html>
