@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Reel Behel</title>
+<style>
+  :root{
+    --bg:#F4F1EA; --ink:#14294D; --navy:#1E3A6E; --hot:#4C7FDB; --hotDark:#2F4F8C; --soft:#E9EEF7;
+    --card:#FFFFFF; --muted:#6B7A90; --bad:#D93636;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+  body{font-family:"Inter Display","Inter",sans-serif;color:var(--ink)}
+  #stage{position:relative;width:1080px;height:1920px;overflow:hidden;
+    background:radial-gradient(circle,#d9d3c4 1.6px,transparent 1.7px) 0 0/36px 36px,var(--bg)}
+  .scene{position:absolute;inset:0;opacity:0}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .label{position:absolute;top:70px;left:70px;font-size:26px;color:var(--muted)}
+  .step{position:absolute;top:70px;right:70px;font-size:26px;color:var(--hot);font-weight:700}
+  .big{font-weight:900;letter-spacing:-2px;line-height:.95}
+  .hl{color:var(--hot)}
+  .red{color:var(--bad)}
+  .abs{position:absolute}
+  .head{left:70px;right:70px;top:160px;font-size:112px}
+  .u{display:inline-block;background:linear-gradient(transparent 62%,#C9D8F5 62%)}
+  .wipe{position:absolute;top:-200px;height:2400px;width:1500px;background:var(--navy);transform:skewX(-12deg);z-index:50}
+  .wipe2{position:absolute;top:-200px;height:2400px;width:1500px;background:var(--hot);transform:skewX(-12deg);z-index:49}
+  #bar{position:absolute;left:0;bottom:0;height:12px;background:var(--hot);z-index:60}
+
+  .note{left:70px;right:70px;font-size:48px;font-weight:700;line-height:1.2}
+  .tag{position:absolute;padding:14px 24px;border-radius:20px;background:#fff;font-weight:800;font-size:36px;
+    box-shadow:0 14px 30px rgba(20,41,77,.15);border:3px solid #E6E1D6;white-space:nowrap}
+
+  .card{position:absolute;width:450px;height:330px;background:var(--card);border-radius:30px;
+    box-shadow:0 18px 40px rgba(20,41,77,.12);padding:34px;border:3px solid #E6E1D6}
+  .card .ic{font-size:72px;line-height:1}
+  .card .nm{font-weight:800;font-size:46px;margin-top:24px;line-height:1.05}
+  .card .ds{font-size:28px;color:var(--muted);margin-top:10px}
+
+  .mini{position:absolute;left:90px;width:900px;height:130px;background:#fff;border-radius:26px;border:3px solid #E6E1D6;
+    display:flex;align-items:center;gap:26px;padding:0 32px;box-shadow:0 12px 26px rgba(20,41,77,.08)}
+  .mini .n{width:70px;height:70px;border-radius:20px;background:var(--navy);color:#fff;font-weight:900;font-size:36px;
+    display:flex;align-items:center;justify-content:center;flex:none}
+  .mini .k{font-size:36px;font-weight:800;line-height:1.15}
+
+  #stat{left:70px;top:390px;padding:22px 40px;border-radius:999px;background:var(--navy);color:#fff;font-weight:900;font-size:64px}
+  #statSub{left:80px;top:530px;font-size:36px;color:var(--muted);font-weight:600}
+  #tl{position:absolute;left:150px;top:660px;width:8px;height:880px;background:#D9D3C4;border-radius:4px}
+  #tlFill{position:absolute;left:0;top:0;width:8px;background:var(--hot);border-radius:4px}
+  .tstep{position:absolute;left:110px;width:880px;display:flex;gap:34px;align-items:flex-start}
+  .tstep .dot{width:88px;height:88px;border-radius:50%;background:var(--hot);color:#fff;font-weight:900;font-size:42px;
+    display:flex;align-items:center;justify-content:center;flex:none;border:6px solid var(--bg)}
+  .tstep .k{font-size:46px;font-weight:900;margin-top:10px}
+  .tstep .v{font-size:32px;color:var(--muted);margin-top:6px}
+
+  .row{position:absolute;left:90px;width:900px;min-height:160px;background:#fff;border-radius:28px;border:3px solid #E6E1D6;
+    display:flex;align-items:center;padding:22px 34px;gap:28px}
+  .row .ck{width:80px;height:80px;border-radius:50%;background:var(--hot);display:flex;align-items:center;justify-content:center;flex:none}
+  .row .k{font-size:42px;font-weight:800;line-height:1.1}
+  .row .v{font-size:29px;color:var(--muted);margin-top:6px}
+  #warn{left:90px;top:1180px;width:900px;background:#FDECEC;border:4px solid var(--bad);border-radius:30px;padding:34px 38px}
+  #warn .k{font-size:48px;font-weight:900;color:var(--bad)}
+  #warn .v{font-size:34px;font-weight:600;margin-top:12px;line-height:1.3}
+
+  .info{position:absolute;left:90px;width:900px;height:130px;background:#fff;border-radius:28px;border:3px solid #E6E1D6;
+    display:flex;align-items:center;padding:0 36px;gap:28px}
+  .info .ic{width:76px;height:76px;border-radius:20px;background:var(--soft);display:flex;align-items:center;justify-content:center;flex:none;font-size:40px}
+  .info .k{font-size:24px;color:var(--muted);font-weight:600}
+  .info .v{font-size:38px;font-weight:800;margin-top:2px}
+  #btn{left:90px;top:640px;width:900px;height:170px;border-radius:85px;background:var(--hot);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:900;font-size:56px;
+    box-shadow:0 14px 0 var(--hotDark);overflow:hidden}
+  #ripple{position:absolute;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.5)}
+  #cursor{left:700px;top:780px;width:70px}
+  #endLogo{left:0;right:0;top:1440px;display:flex;justify-content:center;align-items:center;gap:22px;font-weight:900;font-size:44px}
+  #endLogo img{width:84px;border-radius:16px;background:#fff}
+  #disc{left:0;right:0;top:1580px;text-align:center;font-size:26px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- S1: hook -->
+  <section class="scene" id="s1">
+    <div class="label mono">// edukasi gigi · behel</div>
+    <div class="abs head big" id="h1">Mau pakai <span class="hl">behel?</span></div>
+    <div class="abs note" id="h2" style="top:420px">🤔 Kenali dulu faktanya sebelum pasang.</div>
+    <div class="abs" id="tw1" style="left:60px;top:720px"></div>
+    <div class="tag" id="bf1" style="left:120px;top:1340px">Sebelum</div>
+    <div class="tag" id="bf2" style="left:760px;top:1340px">Sesudah ✨</div>
+  </section>
+
+  <!-- S2: who needs it -->
+  <section class="scene" id="s2">
+    <div class="label mono">// untuk siapa</div>
+    <div class="step mono">4 KONDISI</div>
+    <div class="abs head big" id="s2h">Behel untuk<br><span class="hl">apa?</span></div>
+    <div id="cards"></div>
+    <div class="abs note" id="s2n" style="top:1360px;font-size:42px">Bukan cuma soal penampilan. Gigi rapi juga <span class="hl">lebih mudah dibersihkan</span>.</div>
+  </section>
+
+  <!-- S3: how it works -->
+  <section class="scene" id="s3">
+    <div class="label mono">// cara kerjanya</div>
+    <div class="abs head big" id="s3h" style="font-size:100px">Gimana gigi<br>bisa <span class="u">bergeser?</span></div>
+    <div class="abs" id="tw3" style="left:60px;top:430px"></div>
+    <div class="tag" id="lbB" style="left:110px;top:840px">▲ Bracket</div>
+    <div class="tag" id="lbW" style="left:700px;top:840px">Kawat ▲</div>
+    <div class="mini" id="m1" style="top:1150px"><div class="n">1</div><div class="k">Kawat memberi tekanan lembut terus-menerus</div></div>
+    <div class="mini" id="m2" style="top:1300px"><div class="n">2</div><div class="k">Tulang di sekitar akar ikut menyesuaikan</div></div>
+    <div class="mini" id="m3" style="top:1450px"><div class="n">3</div><div class="k">Gigi bergeser perlahan ke posisi rapi</div></div>
+  </section>
+
+  <!-- S4: how long -->
+  <section class="scene" id="s4">
+    <div class="label mono">// berapa lama</div>
+    <div class="abs head big" id="s4h" style="font-size:100px">Berapa <span class="hl">lama?</span></div>
+    <div class="abs" id="stat">± 1,5 – 3 tahun</div>
+    <div class="abs" id="statSub">Tergantung kondisi gigi masing-masing.</div>
+    <div id="tl"><div id="tlFill"></div></div>
+    <div class="tstep" id="ts1" style="top:640px"><div class="dot">1</div><div><div class="k">Konsultasi &amp; pemeriksaan</div><div class="v">Termasuk foto rontgen &amp; cetak gigi</div></div></div>
+    <div class="tstep" id="ts2" style="top:860px"><div class="dot">2</div><div><div class="k">Pemasangan behel</div><div class="v">Sesuai rencana perawatan</div></div></div>
+    <div class="tstep" id="ts3" style="top:1080px"><div class="dot">3</div><div><div class="k">Kontrol rutin</div><div class="v">Umumnya sekitar sebulan sekali</div></div></div>
+    <div class="tstep" id="ts4" style="top:1300px"><div class="dot">4</div><div><div class="k">Lepas behel + retainer</div><div class="v">Supaya gigi tidak kembali bergeser</div></div></div>
+  </section>
+
+  <!-- S5: tips + warning -->
+  <section class="scene" id="s5">
+    <div class="label mono">// selama pakai behel</div>
+    <div class="abs head big" id="s5h" style="font-size:100px">Tips <span class="hl">penting.</span></div>
+    <div id="tips"></div>
+    <div class="abs" id="warn"><div class="k">⚠️ Hindari behel abal-abal</div><div class="v">Pasang hanya di dokter gigi. Behel tanpa pemeriksaan bisa merusak gigi &amp; gusi.</div></div>
+  </section>
+
+  <!-- S6: CTA -->
+  <section class="scene" id="s6">
+    <div class="label mono">// yuk, konsultasi</div>
+    <div class="abs head big" id="s6h">Mau gigi <span class="hl">rapi?</span></div>
+    <div class="abs note" id="s6n" style="top:420px;font-size:50px">Konsultasi dulu, biar tahu rencana perawatanmu.</div>
+    <div class="abs" id="btn">Reservasi Konsultasi<div id="ripple"></div></div>
+    <svg class="abs" id="cursor" viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z" fill="#14294D" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <div class="info" id="i1" style="top:900px"><div class="ic">🕙</div><div><div class="k">Jam buka</div><div class="v">Setiap hari · 10.00–21.00</div></div></div>
+    <div class="info" id="i2" style="top:1060px"><div class="ic">📍</div><div><div class="k">Alamat</div><div class="v">Jl. Sudirman No.7, Payakumbuh</div></div></div>
+    <div class="info" id="i3" style="top:1220px"><div class="ic">💬</div><div><div class="k">WhatsApp</div><div class="v">0895-2669-7902</div></div></div>
+    <div class="abs" id="endLogo"><img src="../../public/assets/images/logo.webp" alt="">ZANAK DENTAL CARE</div>
+    <div class="abs" id="disc">Konten edukasi, bukan pengganti pemeriksaan langsung.</div>
+  </section>
+
+  <div class="wipe2" id="wipe2"></div>
+  <div class="wipe" id="wipe"></div>
+  <div id="bar"></div>
+</div>
+
+<script>
+const DURATION = 34.5;
+const B = [0, 4.4, 10.4, 17.2, 23.4, 29.0, DURATION];
+
+const CASES = [
+  ["😬", "Gigi berjejal", "Tumpang tindih, susah dibersihkan"],
+  ["🦷", "Gigi tonggos", "Gigi depan terlalu maju"],
+  ["↔️", "Gigi renggang", "Ada celah di antara gigi"],
+  ["👄", "Gigitan tidak pas", "Gigi atas & bawah tidak bertemu baik"],
+];
+const TIPS = [
+  ["Sikat lebih teliti", "Pakai sikat khusus behel & sikat sela"],
+  ["Hindari makanan keras & lengket", "Seperti es batu dan permen karet"],
+  ["Jangan lewatkan kontrol", "Supaya hasil sesuai rencana"],
+];
+const CARD_T0 = B[1] + .9, CARD_GAP = .7;
+const TS_T0 = B[3] + 1.4, TS_GAP = .9;
+const TIP_T0 = B[4] + .7, TIP_GAP = .8;
+const CLICK = B[5] + 1.9;
+
+// ---- helpers
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, d) => clamp((t - a) / d);
+const easeOut = p => 1 - Math.pow(1 - p, 3);
+const easeInOut = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const back = p => { const c = 1.9; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+const style = (el, o) => Object.assign((typeof el === "string" ? $(el) : el).style, o);
+function rise(el, t, at, d = .5, dist = 80) {
+  const p = easeOut(prog(t, at, d));
+  style(el, { opacity: p, transform: `translateY(${(1 - p) * dist}px)` });
+}
+function pop(el, t, at, d = .5) {
+  const p = prog(t, at, d);
+  style(el, { opacity: clamp(p * 3), transform: `scale(${p ? back(p) : 0})` });
+}
+
+// ---- upper front teeth (canine to canine) with braces
+// widths/heights per tooth and how crooked each one starts
+const TEETH = [
+  { w: 46, h: 104, dx: 6, dy: 4, r: -9 },
+  { w: 50, h: 94, dx: -8, dy: 14, r: 16 },
+  { w: 62, h: 112, dx: 6, dy: -2, r: -7 },
+  { w: 62, h: 112, dx: -4, dy: 10, r: 10 },
+  { w: 50, h: 94, dx: 9, dy: -6, r: -15 },
+  { w: 46, h: 104, dx: -4, dy: 6, r: 8 },
+];
+const GAP = 3, TOP = 46;
+let xCur = (400 - TEETH.reduce((a, t) => a + t.w + GAP, -GAP)) / 2;
+TEETH.forEach(t => { t.x = xCur; xCur += t.w + GAP; });
+
+function toothPath(t) {
+  const { x, w, h } = t, y = TOP, r = w * .42;
+  return `M${x} ${y}L${x + w} ${y}L${x + w} ${y + h - r}Q${x + w} ${y + h} ${x + w - r} ${y + h}L${x + r} ${y + h}Q${x} ${y + h} ${x} ${y + h - r}Z`;
+}
+function teethSVG(p) {
+  let teeth = "", brackets = "";
+  TEETH.forEach((t, i) => {
+    teeth += `<g id="${p}t${i}"><path d="${toothPath(t)}" fill="#fff" stroke="#14294D" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M${t.x + t.w * .3} ${TOP + 28}q${t.w * .12} -6 ${t.w * .26} -2" fill="none" stroke="#C9D8F5" stroke-width="4" stroke-linecap="round"/></g>`;
+    brackets += `<g id="${p}b${i}"><rect x="-11" y="-10" width="22" height="20" rx="4" fill="#DDE4EE" stroke="#14294D" stroke-width="2.5"/>
+      <rect x="-11" y="-2" width="22" height="4" fill="#9AA8BD"/></g>`;
+  });
+  // gum with scallops between teeth
+  let gum = `M-10 0L410 0L410 ${TOP + 8}`;
+  for (let i = TEETH.length - 1; i >= 0; i--) {
+    const t = TEETH[i];
+    gum += `L${t.x + t.w + GAP / 2} ${TOP + 14}Q${t.x + t.w / 2} ${TOP - 10} ${t.x - GAP / 2} ${TOP + 14}`;
+  }
+  gum += `L-10 ${TOP + 8}Z`;
+  return `<svg width="960" height="560" viewBox="0 0 400 233">
+    ${teeth}
+    <path d="${gum}" fill="#F4A3A8" stroke="#14294D" stroke-width="3.5" stroke-linejoin="round"/>
+    <path id="${p}wire" d="" fill="none" stroke="#7D8CA3" stroke-width="3.5" stroke-linecap="round"/>
+    ${brackets}
+  </svg>`;
+}
+// s: 0 crooked -> 1 straight; bp: brackets shown; wp: wire drawn
+function setTeeth(p, s, bp, wp) {
+  const pts = [];
+  TEETH.forEach((t, i) => {
+    const k = 1 - easeInOut(s);
+    const dx = t.dx * k, dy = t.dy * k, r = t.r * k;
+    const cx = t.x + t.w / 2, cy = TOP + t.h / 2;
+    $(`${p}t${i}`).setAttribute("transform", `translate(${dx} ${dy}) rotate(${r} ${cx} ${cy})`);
+    // bracket sits on the tooth face; rotate its position with the tooth
+    const by = TOP + t.h * .6, a = r * Math.PI / 180;
+    const bx = cx + dx - Math.sin(a) * (by - cy), byy = cy + dy + Math.cos(a) * (by - cy);
+    pts.push([bx, byy]);
+    const bpi = prog(bp, i / TEETH.length * .7, .3);
+    const sc = bpi ? back(bpi) : 0;
+    $(`${p}b${i}`).setAttribute("transform", `translate(${bx} ${byy}) rotate(${r}) scale(${sc})`);
+  });
+  // wire runs through every bracket, extended slightly past both ends
+  const ext = [[pts[0][0] - 26, pts[0][1] - 4], ...pts, [pts[pts.length - 1][0] + 26, pts[pts.length - 1][1] - 4]];
+  let d = `M${ext[0][0]} ${ext[0][1]}`;
+  for (let i = 1; i < ext.length; i++) {
+    const [x0, y0] = ext[i - 1], [x1, y1] = ext[i];
+    d += `C${x0 + (x1 - x0) / 2} ${y0} ${x0 + (x1 - x0) / 2} ${y1} ${x1} ${y1}`;
+  }
+  const w = $(`${p}wire`);
+  w.setAttribute("d", d);
+  const len = 460;
+  w.style.strokeDasharray = len;
+  w.style.strokeDashoffset = len * (1 - wp);
+}
+$("tw1").innerHTML = teethSVG("a");
+$("tw3").innerHTML = teethSVG("c");
+
+const cards = $("cards");
+CASES.forEach(([ic, nm, ds], i) => {
+  const c = document.createElement("div");
+  c.className = "card";
+  c.style.left = (i % 2 ? 560 : 70) + "px";
+  c.style.top = (560 + Math.floor(i / 2) * 370) + "px";
+  c.innerHTML = `<div class="ic">${ic}</div><div class="nm">${nm}</div><div class="ds">${ds}</div>`;
+  cards.appendChild(c);
+});
+const tips = $("tips");
+TIPS.forEach(([k, v], i) => {
+  const r = document.createElement("div");
+  r.className = "row";
+  r.style.top = (420 + i * 240) + "px";
+  r.innerHTML = `<div class="ck"><svg width="42" height="42" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="24" stroke-dashoffset="24"/></svg></div>
+    <div><div class="k">${k}</div><div class="v">${v}</div></div>`;
+  tips.appendChild(r);
+});
+
+function render(t) {
+  for (let i = 1; i <= 6; i++) $("s" + i).style.opacity = (t >= B[i - 1] && t < B[i]) || (i === 6 && t >= B[6]) ? 1 : 0;
+  let wx = 2000;
+  for (let i = 1; i < B.length - 1; i++) {
+    const p = prog(t, B[i] - .32, .64);
+    if (p > 0 && p < 1) wx = 1300 - easeInOut(p) * 3000;
+  }
+  style("wipe", { left: wx + "px" });
+  style("wipe2", { left: (wx === 2000 ? 2000 : wx - 140) + "px" });
+  style("bar", { width: (t / DURATION * 1080) + "px" });
+
+  // S1 hook: crooked teeth -> braces -> straight (teaser)
+  rise("h1", t, .1, .45, 120); rise("h2", t, .6, .45, 40);
+  rise("tw1", t, .2, .6, 160);
+  setTeeth("a", prog(t, 2.5, 1.3), prog(t, 1.0, .9), easeOut(prog(t, 1.8, .6)));
+  pop("bf1", t, .7, .4);
+  style("bf1", { opacity: t > 2.5 ? 0 : $("bf1").style.opacity });
+  pop("bf2", t, 3.6, .4);
+
+  // S2 cases
+  const l2 = B[1];
+  rise("s2h", t, l2 + .1, .45, 100);
+  [...cards.children].forEach((c, i) => {
+    const p = prog(t, CARD_T0 + i * CARD_GAP, .45);
+    style(c, { opacity: clamp(p * 3), transform: `translateY(${(1 - easeOut(p)) * 160}px) rotate(${(1 - easeOut(p)) * (i % 2 ? 6 : -6)}deg)` });
+  });
+  rise("s2n", t, l2 + 4.0, .5, 40);
+
+  // S3 how it works: braces on, teeth slowly move
+  const l3 = B[2];
+  rise("s3h", t, l3 + .1, .45, 100);
+  rise("tw3", t, l3 + .2, .5, 120);
+  setTeeth("c", prog(t, l3 + 1.6, 4.4), 1, 1);
+  pop("lbB", t, l3 + .8, .35); pop("lbW", t, l3 + 1.0, .35);
+  rise("m1", t, l3 + 1.5, .45, 50); rise("m2", t, l3 + 2.7, .45, 50); rise("m3", t, l3 + 3.9, .45, 50);
+
+  // S4 duration + timeline
+  const l4 = B[3];
+  rise("s4h", t, l4 + .1, .45, 100);
+  pop("stat", t, l4 + .5, .45);
+  rise("statSub", t, l4 + .8, .4, 30);
+  style("tl", { opacity: t > TS_T0 - .2 ? 1 : 0 });
+  style("tlFill", { height: (880 * easeInOut(prog(t, TS_T0, TS_GAP * 3 + .3))) + "px" });
+  ["ts1", "ts2", "ts3", "ts4"].forEach((s, i) => rise(s, t, TS_T0 + i * TS_GAP, .45, 40));
+
+  // S5 tips + warning
+  const l5 = B[4];
+  rise("s5h", t, l5 + .1, .45, 100);
+  [...tips.children].forEach((r, i) => {
+    const at = TIP_T0 + i * TIP_GAP;
+    const p = easeOut(prog(t, at, .45));
+    style(r, { opacity: p, transform: `translateX(${(1 - p) * (i % 2 ? 600 : -600)}px)` });
+    pop(r.querySelector(".ck"), t, at + .3, .35);
+    r.querySelector("path").style.strokeDashoffset = 24 * (1 - easeOut(prog(t, at + .45, .3)));
+  });
+  const wp = prog(t, TIP_T0 + 3 * TIP_GAP + .2, .45);
+  const shake = wp >= 1 && t < TIP_T0 + 3 * TIP_GAP + 1.2 ? Math.sin(t * 40) * 4 : 0;
+  style("warn", { opacity: clamp(wp * 3), transform: `scale(${wp ? back(wp) : 0}) translateX(${shake}px)` });
+
+  // S6 CTA
+  const l6 = B[5];
+  rise("s6h", t, l6 + .1, .45, 100);
+  rise("s6n", t, l6 + .5, .45, 40);
+  const bt = prog(t, l6 + .8, .45);
+  const press = t > CLICK && t < CLICK + .15 ? 1 : 0;
+  style("btn", { opacity: clamp(bt * 3), transform: `scale(${bt ? back(bt) * (press ? .96 : 1) : 0}) translateY(${press * 8}px)`,
+                 boxShadow: press ? "0 6px 0 #2F4F8C" : "0 14px 0 #2F4F8C" });
+  const cp = easeInOut(prog(t, l6 + 1.2, .7));
+  style("cursor", { opacity: t > l6 + 1.1 ? 1 : 0, transform: `translate(${(1 - cp) * 220}px,${(1 - cp) * 420}px) scale(${press ? .85 : 1})` });
+  const rp = prog(t, CLICK, .6);
+  style("ripple", { left: "580px", top: "40px", opacity: rp > 0 && rp < 1 ? 1 - rp : 0, transform: `translate(-50%,-50%) scale(${rp * 40})` });
+  ["i1", "i2", "i3"].forEach((r, i) => {
+    const p = easeOut(prog(t, CLICK + .35 + i * .25, .45));
+    style(r, { opacity: p, transform: `translateX(${(1 - p) * (i % 2 ? 600 : -600)}px)` });
+  });
+  pop("endLogo", t, CLICK + 1.3, .5);
+  rise("disc", t, CLICK + 1.6, .5, 20);
+}
+window.render = render;
+window.DURATION = DURATION;
+window.SCENES = B;
+window.CLICK_TIME = CLICK;
+// pop sounds: brackets on, cases, steps, timeline, tips, warning
+window.CARD_TIMES = [
+  1.0, 1.6,
+  ...CASES.map((_, i) => CARD_T0 + i * CARD_GAP),
+  B[2] + 1.5, B[2] + 2.7, B[2] + 3.9,
+  ...[0, 1, 2, 3].map(i => TS_T0 + i * TS_GAP),
+  ...TIPS.map((_, i) => TIP_T0 + i * TIP_GAP + .3),
+  TIP_T0 + 3 * TIP_GAP + .2,
+];
+render(0);
+</script>
+</body>
+</html>
