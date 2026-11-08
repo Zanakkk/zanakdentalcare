@@ -1,6 +1,6 @@
 ---
 title: Gigi Sensitif dan Ngilu — Penyebab dan Cara Mengatasinya
-seoTitle: Gigi Ngilu & Sensitif: Penyebab, Cara Mengatasi | Dokter Gigi Payakumbuh
+seoTitle: Gigi Ngilu & Sensitif: Penyebab & Cara Mengatasi
 description: Ngilu saat minum dingin atau makan manis? Kenali penyebab gigi sensitif, perawatan di rumah yang aman, dan tanda ngilu yang perlu diperiksa dokter gigi.
 date: 2026-10-24
 category: Keluhan gigi

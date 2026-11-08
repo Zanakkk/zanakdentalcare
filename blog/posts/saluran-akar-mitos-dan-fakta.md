@@ -1,7 +1,7 @@
 ---
 title: Perawatan Saluran Akar — Mitos "Sakit dan Mahal" vs. Kenyataannya
-seoTitle: Perawatan Saluran Akar (PSA): Mitos dan Fakta | Dokter Gigi Payakumbuh
-description: Takut perawatan saluran akar? Luruskan mitos yang paling sering didengar, pahami prosesnya, dan kenapa mempertahankan gigi sendiri sering lebih baik daripada mencabutnya.
+seoTitle: Perawatan Saluran Akar (PSA): Mitos dan Fakta | Payakumbuh
+description: Takut perawatan saluran akar? Luruskan mitos yang sering didengar, pahami prosesnya, dan kenapa mempertahankan gigi sendiri sering lebih baik daripada dicabut.
 date: 2026-10-24
 category: Setelah tindakan
 service: saluran-akar-payakumbuh

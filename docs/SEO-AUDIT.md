@@ -62,3 +62,32 @@ Urut dari dampak terbesar untuk pencarian lokal:
 - Font Awesome (±100 KB) dimuat penuh dari CDN hanya untuk beberapa ikon; bisa diganti SVG inline untuk performa.
 - `meta keywords` diabaikan Google — aman dibiarkan.
 - `FAQPage` schema tetap boleh, tetapi Google kini jarang menampilkan rich result FAQ untuk situs non-pemerintah.
+
+---
+
+## Pembaruan 8 November 2026
+
+Audit otomatis ulang atas 43 halaman (judul, deskripsi, canonical, H1, gambar,
+tautan internal, JSON-LD, sitemap): tidak ada tautan rusak, canonical salah,
+atau schema tidak valid. Yang ditemukan dan diperbaiki:
+
+| # | Temuan | Perbaikan |
+|---|---|---|
+| 1 | **20 judul artikel** lebih dari 60 karakter (dipotong Google, kata kunci di ujung hilang) dan **10 deskripsi** lebih dari 160 karakter | Ditulis ulang, kata kunci utama di depan, "Payakumbuh" dipertahankan bila muat. Judul pembukanya jadi lebih jelas tanpa label "Dokter Gigi Anak" (klinik ini dokter gigi umum, bukan spesialis anak) |
+| 2 | Deskripsi **beranda** 183 karakter, **galeri** 167, **indeks blog** 165 | Dipersingkat ≤160 |
+| 3 | Alat build tidak memberi peringatan | `tools/build-blog.mjs` sekarang memperingatkan judul >60 / deskripsi >160 karakter |
+| 4 | Halaman **galeri** hampir tanpa teks statis (isi dimuat dari API) | Ditambah paragraf pengantar dengan tautan ke 7 halaman layanan, blog, dan reservasi |
+| 5 | Belum ada konten untuk pencarian lokal berniat tinggi | 3 artikel baru: *Dokter gigi buka malam di Payakumbuh*, *Reservasi dokter gigi online di Payakumbuh*, *Cara memakai benang gigi*. Dua pertama hanya memuat fakta resmi klinik (jam buka, alur reservasi) |
+| 6 | HTML dikirim dengan `Cache-Control: no-store` | Diganti `no-cache, must-revalidate`: tetap selalu segar setelah deploy, tetapi memungkinkan *back/forward cache* dan permintaan bersyarat (lebih cepat) |
+| 7 | `lastmod` sitemap | Diperbarui hanya untuk halaman yang benar-benar berubah |
+
+### Tetap perlu dari pemilik klinik
+
+Urutan dampak untuk peringkat "dokter gigi Payakumbuh" (belum bisa dari kode):
+
+1. **Google Business Profile**: faktor terbesar untuk pencarian lokal dan Google Maps. Nama, alamat, nomor WA harus persis sama dengan website, kategori utama *Dokter Gigi*, jam buka Senin–Sabtu 10.00–21.00.
+2. **Ulasan Google**: minta pasien menulis ulasan secara rutin. Tautan "Tulis ulasan" di website (`g.page/r/zanakdentalcare/review`) kemungkinan tidak valid; ambil tautan asli dari Business Profile (*Minta ulasan*) dan kirimkan untuk dipasang. Tidak ada skema `aggregateRating` yang dipasang karena nilainya harus berasal dari ulasan nyata.
+3. **Google Search Console**: daftarkan situs, kirim `sitemap.xml`, minta pengindeksan untuk artikel baru.
+4. **Tinjauan medis**: minta drg. Muhammad Daffa Safra membaca artikel, lalu isi `reviewer:` di front matter (kredibilitas medis penting untuk konten kesehatan).
+5. **Domain sendiri** dan **tautan masuk** (Instagram, TikTok, direktori kesehatan lokal, komunitas Payakumbuh/Lima Puluh Kota).
+6. **Halaman harga/estimasi biaya** menjawab pencarian yang sangat umum ("biaya scaling gigi Payakumbuh"). Itu keputusan klinik; bila mau dipublikasikan, kami bisa buatkan halamannya.

@@ -1,6 +1,6 @@
 ---
 title: Scaling Gigi: Pertanyaan yang Paling Sering Ditanyakan Pasien
-seoTitle: Scaling Gigi Aman? Sakit? Berapa Lama? Jawaban Pertanyaan Umum
+seoTitle: Scaling Gigi Aman? Sakit? Berapa Lama? Pertanyaan Umum
 description: Jawaban jujur untuk pertanyaan umum tentang scaling: apakah sakit, aman, bikin gigi renggang, berapa lama, dan apakah bisa saat hamil atau berkawat gigi.
 date: 2026-10-24
 category: Pencegahan

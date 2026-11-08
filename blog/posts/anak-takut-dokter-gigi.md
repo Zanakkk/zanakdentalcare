@@ -1,6 +1,6 @@
 ---
 title: Anak Takut ke Dokter Gigi? Tips untuk Orang Tua agar Kunjungan Lebih Tenang
-seoTitle: Anak Takut ke Dokter Gigi: Tips Orang Tua | Dokter Gigi Anak Payakumbuh
+seoTitle: Anak Takut ke Dokter Gigi? Tips Orang Tua | Payakumbuh
 description: Cara menyiapkan anak sebelum ke dokter gigi, kalimat yang sebaiknya dihindari, dan tips agar pengalaman pertama anak menyenangkan dan tidak traumatis.
 date: 2026-10-24
 category: Gigi anak

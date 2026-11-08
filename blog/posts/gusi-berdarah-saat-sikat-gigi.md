@@ -1,6 +1,6 @@
 ---
 title: Gusi Berdarah Saat Sikat Gigi — Normal atau Tanda Masalah?
-seoTitle: Gusi Berdarah Saat Sikat Gigi: Penyebab & Cara Mengatasi | Zanak Dental Care
+seoTitle: Gusi Berdarah Saat Sikat Gigi: Penyebab & Solusi
 description: Gusi berdarah bukan hal sepele. Kenali penyebab paling umum, kesalahan menyikat yang sering terjadi, dan kapan perlu diperiksa ke dokter gigi di Payakumbuh.
 date: 2026-10-24
 category: Pencegahan

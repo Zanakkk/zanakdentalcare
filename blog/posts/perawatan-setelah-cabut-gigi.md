@@ -1,7 +1,7 @@
 ---
 title: Perawatan Setelah Cabut Gigi — Yang Boleh, Tidak Boleh, dan Tanda Bahaya
-seoTitle: Perawatan Setelah Cabut Gigi: Panduan Lengkap dan Tanda Bahaya
-description: Panduan 24 jam pertama setelah cabut gigi, makanan yang aman, kebiasaan yang harus dihindari agar tidak terjadi dry socket, dan tanda yang perlu segera kembali ke dokter.
+seoTitle: Perawatan Setelah Cabut Gigi dan Tanda Bahaya
+description: Panduan 24 jam pertama setelah cabut gigi, makanan yang aman, kebiasaan yang dihindari agar tak terjadi dry socket, dan tanda yang perlu segera ke dokter.
 date: 2026-10-24
 category: Setelah tindakan
 service: cabut-gigi-payakumbuh

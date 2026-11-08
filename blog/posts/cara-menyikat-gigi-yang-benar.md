@@ -1,6 +1,6 @@
 ---
 title: Cara Menyikat Gigi yang Benar — Kesalahan Umum dan Cara Memilih Sikat dan Pasta Gigi
-seoTitle: Cara Menyikat Gigi yang Benar: Teknik, Waktu, dan Kesalahan Umum
+seoTitle: Cara Menyikat Gigi yang Benar: Teknik, Waktu, Kesalahan
 description: Panduan menyikat gigi yang benar: teknik, durasi, waktu terbaik, memilih sikat dan pasta gigi, dan kesalahan yang sering dilakukan.
 date: 2026-10-24
 category: Kebiasaan sehat

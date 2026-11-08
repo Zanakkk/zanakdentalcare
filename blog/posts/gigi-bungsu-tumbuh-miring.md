@@ -1,7 +1,7 @@
 ---
 title: Gigi Bungsu Tumbuh Miring — Tanda, Risiko, dan Kapan Harus Dicabut
-seoTitle: Gigi Bungsu Tumbuh Miring & Odontektomi di Payakumbuh | Zanak Dental Care
-description: Gigi bungsu yang tumbuh miring atau terpendam bisa menyebabkan nyeri, gusi bengkak, hingga merusak gigi di sebelahnya. Kenali tandanya dan kapan perlu odontektomi.
+seoTitle: Gigi Bungsu Tumbuh Miring & Odontektomi | Payakumbuh
+description: Gigi bungsu miring atau terpendam bisa menyebabkan nyeri, gusi bengkak, hingga merusak gigi sebelahnya. Kenali tandanya dan kapan perlu odontektomi.
 date: 2026-10-24
 category: Bedah mulut
 service: odontektomi-gigi-bungsu-payakumbuh

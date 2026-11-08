@@ -1,7 +1,7 @@
 ---
 title: Sariawan — Kapan Cukup Dirawat Sendiri, Kapan Harus ke Dokter?
-seoTitle: Sariawan: Penyebab, Perawatan di Rumah, dan Kapan ke Dokter Gigi
-description: Sariawan umumnya sembuh sendiri dalam 1–2 minggu. Ketahui perawatan di rumah yang membantu, pemicu yang perlu dihindari, dan tanda sariawan yang tidak boleh diabaikan.
+seoTitle: Sariawan: Penyebab, Perawatan, dan Kapan ke Dokter Gigi
+description: Sariawan umumnya sembuh sendiri dalam 1–2 minggu. Ketahui perawatan di rumah, pemicu yang perlu dihindari, dan tanda sariawan yang tak boleh diabaikan.
 date: 2026-10-24
 category: Keluhan gigi
 ---

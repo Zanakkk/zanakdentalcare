@@ -1,7 +1,7 @@
 ---
 title: Gigi Goyang pada Orang Dewasa — Jangan Dicabut Sendiri, Ini Penyebabnya
-seoTitle: Gigi Goyang pada Dewasa: Penyebab dan Penanganan | Dokter Gigi Payakumbuh
-description: Gigi dewasa seharusnya tidak goyang. Kenali penyebabnya, dari radang penyangga gigi sampai benturan, kenapa tidak boleh dicabut sendiri, dan kapan harus segera ke dokter.
+seoTitle: Gigi Goyang pada Dewasa: Penyebab & Penanganan | Payakumbuh
+description: Gigi dewasa seharusnya tidak goyang. Kenali penyebabnya, dari radang penyangga gigi sampai benturan, kenapa tak boleh dicabut sendiri, dan kapan ke dokter.
 date: 2026-10-24
 category: Keluhan gigi
 service: cabut-gigi-payakumbuh

@@ -1,7 +1,7 @@
 ---
 title: Dari Lima Puluh Kota ke Dokter Gigi di Payakumbuh — Panduan agar Perjalanan Tidak Sia-sia
-seoTitle: Dokter Gigi Terdekat untuk Warga Lima Puluh Kota | Zanak Dental Care Payakumbuh
-description: Panduan untuk warga Kabupaten Lima Puluh Kota — Harau, Luak, Situjuah, Akabiluru, Guguak, Lareh Sago Halaban, Suliki, dan sekitarnya — yang ingin periksa gigi di Payakumbuh.
+seoTitle: Dokter Gigi Terdekat untuk Warga Lima Puluh Kota
+description: Warga Lima Puluh Kota (Harau, Luak, Situjuah, Akabiluru, Guguak, Lareh Sago Halaban, Suliki) yang ingin periksa gigi di Payakumbuh: panduan lengkap.
 date: 2026-10-24
 featured: true
 category: Info klinik

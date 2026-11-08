@@ -30,7 +30,7 @@ const OG_IMAGE = `${SITE}/assets/images/og-zanak.jpg`;
 
 /* Halaman statis untuk sitemap. Perbarui lastmod bila isi halaman berubah. */
 const STATIC_PAGES = [
-  { path: '/', lastmod: '2026-10-24', changefreq: 'weekly', priority: '1.0' },
+  { path: '/', lastmod: '2026-11-08', changefreq: 'weekly', priority: '1.0' },
   { path: '/treatment', lastmod: '2026-10-24', changefreq: 'monthly', priority: '0.9' },
   { path: '/scaling-gigi-payakumbuh', lastmod: '2026-10-24', changefreq: 'monthly', priority: '0.8' },
   { path: '/tambal-gigi-payakumbuh', lastmod: '2026-10-24', changefreq: 'monthly', priority: '0.8' },
@@ -39,7 +39,7 @@ const STATIC_PAGES = [
   { path: '/odontektomi-gigi-bungsu-payakumbuh', lastmod: '2026-10-24', changefreq: 'monthly', priority: '0.8' },
   { path: '/kawat-gigi-payakumbuh', lastmod: '2026-10-24', changefreq: 'monthly', priority: '0.8' },
   { path: '/gigi-tiruan-payakumbuh', lastmod: '2026-10-24', changefreq: 'monthly', priority: '0.8' },
-  { path: '/galeri', lastmod: '2026-10-24', changefreq: 'weekly', priority: '0.7' },
+  { path: '/galeri', lastmod: '2026-11-08', changefreq: 'weekly', priority: '0.7' },
 ];
 
 /* Nama tampilan halaman tindakan (dipakai kolom `service` di artikel). */
@@ -145,6 +145,9 @@ const headCommon = `
   <link rel="stylesheet" href="/css/home.css?v=${ASSET_V}">`;
 
 function metaTags({ title, description, url, type = 'website', published, modified }) {
+  // Google memotong judul >±60 karakter dan deskripsi >±160 karakter di hasil pencarian.
+  if (title.length > 60) console.warn(`⚠ judul ${title.length} karakter (maks 60): ${url}`);
+  if (description.length > 160) console.warn(`⚠ deskripsi ${description.length} karakter (maks 160): ${url}`);
   return `  <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -437,7 +440,7 @@ function renderIndex(posts) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-${metaTags({ title: 'Blog Kesehatan Gigi — Zanak Dental Care Payakumbuh', description: 'Tips dan informasi kesehatan gigi dari dokter gigi di Payakumbuh: sakit gigi, karang gigi, gigi anak, behel, gigi bungsu. Untuk warga Payakumbuh dan Lima Puluh Kota.', url })}
+${metaTags({ title: 'Blog Kesehatan Gigi — Zanak Dental Care Payakumbuh', description: 'Tips kesehatan gigi dari dokter gigi di Payakumbuh: sakit gigi, karang gigi, gigi anak, behel, gigi bungsu. Untuk warga Payakumbuh dan Lima Puluh Kota.', url })}
   ${jsonLd(ld)}
 ${headCommon}
 </head>

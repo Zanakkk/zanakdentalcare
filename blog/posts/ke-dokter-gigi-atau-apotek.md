@@ -1,6 +1,6 @@
 ---
 title: Kapan Cukup ke Apotek, Kapan Harus ke Dokter Gigi? Panduan Tanda Bahaya
-seoTitle: Sakit Gigi: Kapan ke Dokter Gigi, Kapan Cukup ke Apotek, Kapan ke IGD
+seoTitle: Sakit Gigi: Kapan ke Dokter, Apotek, atau IGD?
 description: Panduan sederhana membedakan keluhan gigi yang aman dirawat sementara di rumah, yang perlu ke dokter gigi dalam beberapa hari, dan yang harus segera ke IGD.
 date: 2026-10-24
 category: Info klinik

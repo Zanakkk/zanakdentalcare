@@ -1,6 +1,6 @@
 ---
 title: Gigi Berlubang — Dari Bercak Putih Sampai Sakit, dan Kapan Harus Ditambal
-seoTitle: Gigi Berlubang: Tahapan, Gejala, dan Kapan Ditambal | Zanak Dental Care
+seoTitle: Gigi Berlubang: Tahapan, Gejala, dan Kapan Ditambal
 description: Gigi berlubang berkembang pelan-pelan. Kenali tahapannya dari bercak putih hingga infeksi saraf, dan kenapa menambal lebih awal lebih ringan dan hemat waktu.
 date: 2026-10-24
 category: Keluhan gigi

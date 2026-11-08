@@ -544,3 +544,9 @@ body.home .zdc-modal { border-radius: 24px; }
 .post-toc summary::-webkit-details-marker { display: none; }
 .post-toc summary::after { content: '+'; font-size: 16px; color: var(--ink-3); }
 .post-toc[open] summary::after { content: '−'; }
+
+/* Teks pengantar galeri (konten statis agar terbaca mesin pencari) */
+.gallery-about { max-width: 760px; margin: 40px 0 0; line-height: 1.7; }
+.gallery-about h2 { font-size: 1.15rem; margin: 0 0 10px; }
+.gallery-about p { margin: 0 0 10px; }
+.gallery-about a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }

@@ -1,6 +1,6 @@
 ---
 title: Tambal Gigi Depan — GIC atau Resin Komposit, Mana yang Cocok?
-seoTitle: Tambal Gigi Depan: GIC vs Resin Komposit | Dokter Gigi Payakumbuh
+seoTitle: Tambal Gigi Depan: GIC vs Resin Komposit | Payakumbuh
 description: Perbedaan GIC dan resin komposit untuk tambal gigi, kelebihan dan kekurangannya, dan kenapa gigi depan biasanya memakai komposit sewarna gigi.
 date: 2026-10-24
 category: Setelah tindakan

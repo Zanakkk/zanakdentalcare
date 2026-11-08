@@ -1,6 +1,6 @@
 ---
 title: Mau Pasang Behel? 7 Hal yang Perlu Diketahui Sebelum Memulai
-seoTitle: Pasang Behel di Payakumbuh: 7 Hal Sebelum Memulai | Zanak Dental Care
+seoTitle: Pasang Behel di Payakumbuh: 7 Hal Sebelum Memulai
 description: Behel bukan sekadar aksesori. Pahami proses pemasangan, lamanya perawatan, kontrol rutin, retainer, dan bahaya behel abal-abal sebelum memasang kawat gigi.
 date: 2026-10-24
 category: Kawat gigi

@@ -1,6 +1,6 @@
 ---
 title: Bau Mulut yang Tak Hilang — Penyebab di Gigi dan di Luar Gigi
-seoTitle: Bau Mulut (Halitosis): Penyebab dan Cara Mengatasi | Dokter Gigi Payakumbuh
+seoTitle: Bau Mulut: Penyebab & Cara Mengatasi | Payakumbuh
 description: Bau mulut tidak selalu karena kurang sikat gigi. Pahami penyebab dari karang gigi, gusi, lidah, hingga kondisi kesehatan umum, dan langkah yang efektif.
 date: 2026-10-24
 category: Keluhan gigi

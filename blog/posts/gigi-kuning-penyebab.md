@@ -1,6 +1,6 @@
 ---
 title: Gigi Kuning — Penyebabnya dan Apa yang Bisa Dilakukan
-seoTitle: Gigi Kuning: Penyebab dan Cara Mengatasinya | Zanak Dental Care Payakumbuh
+seoTitle: Gigi Kuning: Penyebab dan Cara Mengatasinya | Payakumbuh
 description: Gigi kuning atau kusam bisa karena noda, karang gigi, atau warna alami gigi. Pahami bedanya, apa yang bisa dibersihkan, dan hal yang perlu dihindari.
 date: 2026-10-24
 category: Keluhan gigi

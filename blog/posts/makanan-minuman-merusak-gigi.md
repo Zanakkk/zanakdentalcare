@@ -1,7 +1,7 @@
 ---
 title: Makanan dan Minuman Sehari-hari yang Diam-diam Merusak Gigi
-seoTitle: Makanan dan Minuman yang Merusak Gigi: Teh Manis, Es Sirup, dan Lainnya
-description: Teh manis, sirup, kue manis, dan camilan lengket sering tidak terasa merusak gigi. Kenali yang berisiko, dan cara menyiasatinya tanpa harus berhenti menikmatinya.
+seoTitle: Makanan & Minuman yang Merusak Gigi: Teh Manis, Sirup
+description: Teh manis, sirup, kue manis, dan camilan lengket sering tak terasa merusak gigi. Kenali yang berisiko dan cara menyiasatinya tanpa berhenti menikmatinya.
 date: 2026-10-24
 category: Kebiasaan sehat
 service: tambal-gigi-payakumbuh

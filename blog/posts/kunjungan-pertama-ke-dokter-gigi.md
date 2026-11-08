@@ -1,6 +1,6 @@
 ---
 title: Pertama Kali ke Dokter Gigi? Ini yang Akan Terjadi dan Cara Mempersiapkannya
-seoTitle: Kunjungan Pertama ke Dokter Gigi: Apa yang Terjadi | Zanak Dental Care
+seoTitle: Kunjungan Pertama ke Dokter Gigi: Apa yang Terjadi?
 description: Gambaran kunjungan pertama ke dokter gigi: dari reservasi, pemeriksaan, pertanyaan dokter, hingga rencana perawatan, supaya Anda datang dengan tenang.
 date: 2026-10-24
 category: Info klinik

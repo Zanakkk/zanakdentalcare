@@ -1,6 +1,6 @@
 ---
 title: Merokok dan Minum Kopi — Dampaknya pada Gigi dan Gusi
-seoTitle: Dampak Rokok dan Kopi pada Gigi dan Gusi | Dokter Gigi Payakumbuh
+seoTitle: Dampak Rokok dan Kopi pada Gigi dan Gusi | Payakumbuh
 description: Rokok dan kopi bukan hanya membuat gigi kuning. Pahami dampaknya ke gusi, penyembuhan luka, dan bau mulut, serta cara meminimalkan kerusakannya.
 date: 2026-10-24
 category: Kebiasaan sehat

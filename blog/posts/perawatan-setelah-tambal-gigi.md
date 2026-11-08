@@ -1,6 +1,6 @@
 ---
 title: Perawatan Setelah Tambal Gigi — Kapan Boleh Makan dan Apa yang Wajar Terasa
-seoTitle: Setelah Tambal Gigi: Kapan Boleh Makan, Ngilu, dan Tanda Perlu Kontrol
+seoTitle: Setelah Tambal Gigi: Kapan Boleh Makan dan Ngilu Normal
 description: Panduan setelah tambal gigi: kapan boleh makan, ngilu yang masih normal, tambalan terasa tinggi, dan tanda tambalan perlu diperbaiki.
 date: 2026-10-24
 category: Setelah tindakan

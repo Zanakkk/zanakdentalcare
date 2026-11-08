@@ -1,7 +1,7 @@
 ---
 title: Merawat Gigi Anak Sejak Gigi Susu Pertama — Panduan untuk Orang Tua
-seoTitle: Merawat Gigi Anak & Gigi Susu Berlubang | Dokter Gigi Anak Payakumbuh
-description: Kapan mulai menyikat gigi anak, berapa banyak pasta gigi, bahaya tidur sambil minum susu botol, dan kapan pertama kali ke dokter gigi. Panduan praktis untuk orang tua di Payakumbuh.
+seoTitle: Merawat Gigi Anak & Gigi Susu Berlubang | Payakumbuh
+description: Kapan mulai menyikat gigi anak, berapa pasta gigi, bahaya tidur sambil minum susu botol, dan kapan ke dokter gigi. Panduan orang tua di Payakumbuh.
 date: 2026-10-24
 category: Gigi anak
 service: tambal-gigi-payakumbuh

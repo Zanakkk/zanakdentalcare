@@ -3,7 +3,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://zanakdentalcare.web.app/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -57,15 +57,33 @@
   </url>
   <url>
     <loc>https://zanakdentalcare.web.app/galeri</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://zanakdentalcare.web.app/blog</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-11-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://zanakdentalcare.web.app/blog/cara-memakai-benang-gigi</loc>
+    <lastmod>2026-11-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zanakdentalcare.web.app/blog/reservasi-dokter-gigi-online-payakumbuh</loc>
+    <lastmod>2026-11-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://zanakdentalcare.web.app/blog/dokter-gigi-buka-malam-payakumbuh</loc>
+    <lastmod>2026-11-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://zanakdentalcare.web.app/blog/anak-takut-dokter-gigi</loc>

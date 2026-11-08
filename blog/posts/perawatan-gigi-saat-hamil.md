@@ -1,6 +1,6 @@
 ---
 title: Perawatan Gigi Saat Hamil — Aman atau Tidak? Panduan untuk Ibu Hamil
-seoTitle: Periksa Gigi Saat Hamil: Aman? Kapan Waktu Terbaik | Dokter Gigi Payakumbuh
+seoTitle: Periksa Gigi Saat Hamil: Aman? Kapan Waktu Terbaik
 description: Banyak ibu hamil ragu ke dokter gigi. Pahami kenapa gusi mudah bengkak saat hamil, waktu paling nyaman untuk perawatan, dan tindakan yang umumnya aman.
 date: 2026-10-24
 category: Kelompok khusus

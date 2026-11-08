@@ -1,6 +1,6 @@
 ---
 title: Perawatan Gigi Saat Puasa Ramadan — Kapan Waktu yang Tepat ke Dokter Gigi?
-seoTitle: Ke Dokter Gigi Saat Puasa Ramadan: Waktu dan Tips | Zanak Dental Care Payakumbuh
+seoTitle: Ke Dokter Gigi Saat Puasa Ramadan: Waktu & Tips
 description: Boleh tambal, scaling, atau cabut gigi saat puasa? Pahami waktu yang nyaman, cara menjaga gigi saat berpuasa, dan tips agar mulut tidak kering atau bau.
 date: 2026-10-24
 category: Kelompok khusus
