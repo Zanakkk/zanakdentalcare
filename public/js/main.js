@@ -426,6 +426,7 @@ async function loadStories() {
 /* ── Google Analytics 4 (bila gtag terpasang) ─────────────── */
 function trackEvent(name, params = {}) {
   if (typeof gtag === 'function') gtag('event', name, params);
+  if (typeof window.sodata === 'function') window.sodata('event', name, params);
 }
 
 document.addEventListener('click', (e) => {

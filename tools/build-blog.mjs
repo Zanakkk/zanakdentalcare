@@ -142,7 +142,9 @@ const headCommon = `
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
-  <link rel="stylesheet" href="/css/home.css?v=${ASSET_V}">`;
+  <link rel="stylesheet" href="/css/home.css?v=${ASSET_V}">
+  <!-- Sodata analytics -->
+  <script defer src="https://s0data.web.app/s/v1.js" data-site="sd_live_cSiv08hmmL"></script>`;
 
 function metaTags({ title, description, url, type = 'website', published, modified }) {
   // Google memotong judul >±60 karakter dan deskripsi >±160 karakter di hasil pencarian.
